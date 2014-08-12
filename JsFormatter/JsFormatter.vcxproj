@@ -92,6 +92,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CharString.h" />
+    <ClInclude Include="ConstString.h" />
     <ClInclude Include="FileCodes.h" />
     <ClInclude Include="jsparser.h" />
     <ClInclude Include="realjsformatter.h" />

@@ -30,6 +30,9 @@
     <ClInclude Include="alldefs.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ConstString.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="jsparser.cpp">

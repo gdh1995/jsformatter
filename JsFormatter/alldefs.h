@@ -1,3 +1,5 @@
+#ifndef _JSFORMATTER_ALL_DEFS_
+
 #define VERSION_VALUE "1.16.5.0"
 #define VERSION_DIGITALVALUE 1, 16, 5, 0
 
@@ -25,3 +27,8 @@
 #define _UNICODE
 #endif
 // */
+
+#define __TEST__ 0
+
+
+#endif

@@ -20,9 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #ifndef _JS_PARSER_H_
 #define _JS_PARSER_H_
-#include <stack>
-#include <queue>
-#include "CharString.h"
+// #include <queue>
+#include "ConstString.h"
 
 /*
 * if-i, else-e, else if-i,
@@ -49,51 +48,27 @@ public:
 #endif
 
 public:
-	enum JS_TOKEN_TYPE {
-		JS_IF		= _T('i'),
-		JS_ELSE		= _T('e'),
-		JS_FOR		= _T('f'),
-		JS_DO		= _T('d'),
-		JS_WHILE	= _T('w'),
-		JS_SWITCH	= _T('s'),
-		JS_CASE		= _T('c'),
-		JS_TRY		= _T('t'),
-		JS_CATCH	= _T('h'),
-		JS_FUNCTION	= _T('n'),
-		JS_ASSIGN	= _T('='),
-		JS_BLOCK	= _T('{'),
-		JS_BRACKET	= _T('('),
-		JS_SQUARE	= _T('['),
-		JS_HELPER	= _T('\\'),
-		JS_EMPTY	= 0
-	};
+	typedef ConstString<Char> ConstString; // Token item
+	// typedef std::queue<Token> TokenQueue;
 
 	enum TOKEN_TYPE {
-		STRING_TOKEN = 0,
+		REGULAR_TOKEN = 0,
 		OPER_TOKEN = 1,
-		REGULAR_TOKEN = 2,
+		STRING_TOKEN = 2,
 		// 为了配合PrepareRegular()
 		// Comment类的token需要大于任意其它token
-		COMMENT_1_TOKEN = 9, // 单行注释
-		COMMENT_2_TOKEN = 10, // 多行注释
+		COMMENT_1_TOKEN = 3, // 单行注释
+		COMMENT_2_TOKEN = 4, // 多行注释
+		// TODO: 增加一个注释类token表示行尾
+		//CRLF_TOKEN = 11,
 	};
-
-	// .type: Token 类型
-	typedef CharString<Char> CharString; // Token item
-protected:
-	typedef CharString Token;
+	// .more: Token 类型
+	typedef ConstString Token;
 	
 public:
-	typedef std::stack<Char> CharStack;
-	typedef std::stack<bool> BoolStack;
-	//typedef std::queue<Token> TokenQueue;
-
 	explicit JSParser() {
 		Init();
 	}
-
-	//virtual ~JSParser()
-	//{}
 
 	// bool m_debug;
 	// inline const char *GetDebugOutput() { return m_debugOutput; }
@@ -101,24 +76,9 @@ public:
 	
 	inline void Init() {
 		// m_debug = false;
-
-		// m_lineCount = 1; // 行号从 1 开始
-		// m_tokenCount = 0;
-
-
-		// m_bGetTokenInit = false;
 	}
 
-protected:
-	// char m_debugOutput[1024];
-
-	// Char m_charA;
-	Token m_tokenA;
-	mutable Token m_tokenB;
-	mutable Char m_charB;
-	// int m_lineCount;
-	// int m_tokenCount;
-	
+public:
 	static const Byte s_normalCharMap[128];
 	// 一般字符
 	static inline bool IsNormalChar(Char ch) { return ((UChar) ch > 126u) || s_normalCharMap[ch]; }
@@ -139,10 +99,22 @@ protected:
 	
 	static const Char s_operCharBeforeReg[]; // 判断正则时，正则前面可以出现的字符
 	
+protected:
+	// char m_debugOutput[1024];
 	
-	bool GetToken(); // 处理过负数, 正则等等的 GetToken 函数
+	Token m_tokenA;
+	mutable Token m_tokenB;
 
-	inline void StartParse() {
+	inline bool GetToken() {
+		PrepareTokenB();
+		// Attention: raw__debug() is so ugly and slow that we have to give up it.
+		//	m_tokenA.raw() = m_tokenB.raw();
+		(Token::BaseString&)m_tokenA = (const Token::BaseString&)m_tokenB;
+		GetTokenRaw();
+		return m_tokenA.length() != 0;
+	}
+
+	inline void StartParse() const {
 		// m_startClock = clock();
 		// m_bRegular = false;
 		m_bFlag = 0;
@@ -150,65 +122,54 @@ protected:
 		GetTokenRaw();
 	}
 
-	inline void EndParse() {
+	inline void EndParse() const {
 		// m_endClock = clock();
 		// m_duration = (double)(m_endClock - m_startClock) / CLOCKS_PER_SEC;
 		// PrintDebug();
 	}
 
-protected:
-	const Byte *m_in;
-	size_t m_len_in;
-	mutable size_t m_getPos;
+private:
+	const Char *m_in;
+	mutable const Char *m_in_cur;
+	const Char *m_in_last;
+	// 这种方式较好地照顾了m_in == NULL或者(int)len_in <= 0的情形
 	inline Char GetChar() const {
-		return (m_getPos < m_len_in) ? (((const Char*)m_in)[m_getPos++]) : 0;
+		return (m_in_cur < m_in_last) ? (*++m_in_cur)
+			: (m_in_cur = m_in_last + 1, 0);
 	}
-	inline const Char *CurPos() const {
-		return (Char *)(m_in + m_getPos);
-	}
+	inline const Char *CurPos() const { return m_in_cur; }
 
+public:
 	explicit JSParser(const Byte *in, size_t len_in)
-		: m_in(in), m_len_in(len_in / sizeof(Char)), m_getPos(0)
+		: m_in(in), m_in_cur(in - 1)
+		, m_in_last(in + (len_in / sizeof(Char)) - 1)
 	{
 		Init();
 	}
 
-	void setInput(const Byte *in, size_t len_in = 0) {
+	inline void setInput(const Byte *in, size_t len_in = 0) {
 		m_in = in;
-		m_getPos = 0;
-		m_len_in = len_in / sizeof(Char);
+		m_in_cur = in - 1;
+		m_in_last = in + (len_in / sizeof(Char)) - 1;
 	}
-
-private:
-	// Should be implemented in derived class
-	//virtual int GetChar() = 0; // JUST get next char from input
 	
-	// 注释
-	// inline bool IsComment() const { return (m_charA == _T('/') && (m_charB == _T('/') || m_charB == _T('*'))); } // 要联合判断 charA, charB
-
-	void GetTokenRaw() const;
-
-	void PrepareRegular() const; // 通过词法判断 tokenB 正则
-	void PreparePosNeg()  const; // 通过词法判断 tokenB 正负数
-	//void PrepareTokenB();
-
 protected:
-	// bool m_bRegular; // tokenB 实际是正则 GetToken 用到的两个成员状态
+	mutable Char m_charB;
 	mutable Byte m_bFlag;
 	enum BoolFlag {
 		PosNeg = 0x1, // tokenB 实际是正负数
 	};
-	//TokenQueue m_tokenBQueue;
-
-	// bool m_bGetTokenInit; // 是否是第一次执行 GetToken
-
-	// double m_duration;
 
 private:
+	void GetTokenRaw() const;
+	// 通过词法判断 tokenB 是正则或者正负数等等并加以处理
+	void PrepareTokenB() const;
 
-	// 阻止拷贝
+private: // 阻止拷贝
 	JSParser(const JSParser&);
+	JSParser(JSParser&&);
 	JSParser& operator =(const JSParser&);
+	JSParser& operator =(JSParser&&);
 };
 
 #endif

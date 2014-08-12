@@ -28,11 +28,10 @@
 #endif
 
 RealJSFormatter::FormatterOption g_options = {
-	'\t', 1,
-	RealJSFormatter::SKIP_READ_CR,
-	true ? RealJSFormatter::PUT_CR : RealJSFormatter::NOT_PUT_CR,
-	false ? RealJSFormatter::NEWLINE_BRAC : RealJSFormatter::NO_NEWLINE_BRAC,
-	false ? RealJSFormatter::INDENT_IN_EMPTYLINE : RealJSFormatter::NO_INDENT_IN_EMPTYLINE
+	1, '\t',
+	false, // bNotPutCR
+	false, // bBracketAtNewLine
+	false  // bEmpytLineIndent
 };
 
 int re = 0;
@@ -54,6 +53,7 @@ voidfunc *p[] = {read, jsFormat, write};
 Javascript formatter ", JS_FORMATTER_VERSION_VALUE, " - by <gdh1995@qq.com>\n\
 Thanks for & core code from: JSToolNpp (www.sunjw.us/jstoolnpp).\n")
 
+
 int main(int n, char *s[])
 {
 	argn = n;
@@ -63,14 +63,18 @@ int main(int n, char *s[])
 		return 0;
 	}
 
+#ifdef __TEST__
 	for (int i0 = 0; i0 < 1; i0++) {
+#endif
 		int i = 0;
-		for (; re == 0 && i < sizeof(p) / sizeof(p[0]); i++) {
+		do {
 			p[i]();
-		}
-		for (i = 0;  i < 0; i++) {
+		} while (re == 0 && ++i < sizeof(p) / sizeof(p[0]));
+#ifdef __TEST__
+		for (i = 0;  i < __TEST__; i++) {
 			jsFormat();
 		}
+#endif
 		if (re != 0) {
 			if (err_str) {
 				fprintf(stderr, "ERROR: %s.\n%s\n", err_str, err_msg ? ((const char *) err_msg) : "");
@@ -80,7 +84,9 @@ int main(int n, char *s[])
 		} else {
 			printf("%s => %s\n", args[argIndex], args[argIndex + 1]);
 		}
+#ifdef __TEST__
 	}
+#endif
 	return re;
 }
 
@@ -95,8 +101,8 @@ void write() {
 		re = 0x11;
 		err_str = "fail to open the file to write";
 		err_msg = args[argIndex + 1];
-	} else if (strJSFormat.length() > 0 &&
-		fwrite(strJSFormat.c_str(), strJSFormat.length() * sizeof(RealJSFormatter::Char), 1, fp) != 1)
+	} else if (strJSFormat.size() > 0 &&
+		fwrite(strJSFormat.c_str(), strJSFormat.size() * sizeof(RealJSFormatter::Char), 1, fp) != 1)
 	{
 		re = 0x12;
 		err_str = "fail to write data into the file";
@@ -115,7 +121,7 @@ void write() {
 void jsFormat()
 {
 	re = 0;
-	size_t jsLen = file.length();
+	size_t jsLen = file.size();
 	if (jsLen == 0) {
 		return;
 	}

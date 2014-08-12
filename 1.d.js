@@ -1,12 +1,13 @@
 (function ($)¹¬´óºº { //  a sdf
-	/=\a/.test(1);
+	/=\a/.test("asf 1 \
+		2 3");
 	$.browser = function () {
 		return new browser()
 	};
 	var a2 = 3e4,
 	a3 = -.3e4,
 	a4 = -4e-4;
-	/*ad
+	/*ad\n
 	fsd*/
 	/a/.test(1);
 	var browser = (function () {
