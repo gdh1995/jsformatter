@@ -119,8 +119,8 @@ void JSParser::GetTokenRaw(int bFlag) const {
 			if (chB == _T('\r') || chB == _T('\n')) {
 				// 更改/mod: 补回连续换行的处理逻辑
 				for (; chB = GetChar(), IsBlankChar(chB); ) {}
-				m_tokenB.setData(const_cast<Char *>(start1 - 1));
-				m_tokenB.setLength(CurPos() - start1);
+				m_tokenB.setData(_T("\r\n\r\n"));
+				m_tokenB.setLength(4);
 				m_tokenB.more = TOKEN_BLANK_LINE;
 				return;
 			}
@@ -128,12 +128,6 @@ void JSParser::GetTokenRaw(int bFlag) const {
 		start1 = CurPos();
 	}
 	const Char charA = LastChar();
-	if (charA == 0) {
-		m_tokenB.setData(_T(""));
-		m_tokenB.setLength(0);
-		m_tokenB.more = TOKEN_NULL;
-		return;
-	}
 	Char charB = GetChar();
 	if (IsNormalChar(charA)) {
 		// 更改/mod: 将_T('.')视为单词的一部分
@@ -155,6 +149,8 @@ void JSParser::GetTokenRaw(int bFlag) const {
 				m_tokenB.more = TOKEN_COMMON;
 				for (; chB = GetChar(), IsNormalChar(chB); ) {}
 			}
+			else if ((bFlag & BoolFlag::PosNeg) || charA < _T('a') || charA > ('z'))
+				m_tokenB.more = TOKEN_COMMON;
 			else
 				m_tokenB.more = TOKEN_ID;
 			goto L_notNumber;
@@ -165,7 +161,7 @@ void JSParser::GetTokenRaw(int bFlag) const {
 				chB = GetChar();
 			for (; chB >= _T('0') && chB <= _T('9'); chB = GetChar()) {}
 #ifdef _DEBUG
-			if (!IsNormalChar(chB))
+			if (IsNormalChar(chB))
 				throw chB;
 #endif
 		}
@@ -251,14 +247,21 @@ void JSParser::GetTokenRaw(int bFlag) const {
 	else { // 还是单字符的
 		m_tokenB.more = TOKEN_OPER;
 	}
-
-	m_tokenB.setData(const_cast<Char *>(start1 - 1));
-	m_tokenB.setLength(CurPos() - start1);
+	
+	if (CheckEnd(start1)) {
+		m_tokenB.setData(_T(""));
+		m_tokenB.setLength(0);
+		m_tokenB.more = TOKEN_NULL;
+	}
+	else {
+		m_tokenB.setData(const_cast<Char *>(start1 - 1));
+		m_tokenB.setLength(CurPos() - start1);
+	}
 }
 
 void JSParser::PrepareTokenB() const
 {
-	if (m_tokenB.more != TOKEN_OPER || m_tokenB.empty())
+	if (m_tokenB.more != TOKEN_OPER)
 		return;
 
 	switch (m_tokenB[0]) {
@@ -272,9 +275,14 @@ void JSParser::PrepareTokenB() const
 		* m_tokenA 不是 STRING (除了 m_tokenA == return)
 		* 而且 m_tokenA 的最后一个字符是下面这些
 		*/
-		if (m_tokenA.more >= TOKEN_COMMENT_LINE || (m_tokenA.more == TOKEN_OPER &&
-			ConstString::findIn(m_tokenA[m_tokenA.size() - 1], s_operCharBeforeReg)) ||
-			m_tokenA.equals(_T("return"), 6) ) 
+		if (m_tokenA.more >= TOKEN_COMMENT_LINE || m_tokenA.more == TOKEN_NULL) {
+		}
+		else if (m_tokenA.more == TOKEN_OPER) {
+			if (! ConstString::findIn(m_tokenA[m_tokenA.size() - 1], s_operCharBeforeReg))
+				return;
+		}
+		else if (! CanHaveSpecialToken())
+			return;
 		{
 			register Char chB = LastChar();
 			//	//	// TODO: what are '*' and '|'
@@ -288,16 +296,13 @@ void JSParser::PrepareTokenB() const
 				}
 			}
 			// 备注/info: 也可以只识别小写"g", "i", "m", 但用IsNormalChar可以产生更长的Token
-			while (IsNormalChar(chB)) // 正则的 flags 部分
+			while (chB >= _T('a') && chB <= _T('z')) // 正则的 flags 部分
 				chB = GetChar();
 			m_tokenB.setLength(CurPos() - m_tokenB.c_str() - 1);
 			m_tokenB.more = TOKEN_REGULAR;
 		}
 		break;
 	case _T('-'): case _T('+'):
-		if (m_tokenB.size() != 1) {
-			return;
-		}
 		// 更改/mod: 强制 m_tokenA 为 TOKEN_OPER 或者 return
 		/*
 		* 如果 m_tokenB 是 -,+ 号
@@ -306,13 +311,18 @@ void JSParser::PrepareTokenB() const
 		* 而且 m_charB 是一个 NormalChar
 		* 那么 m_tokenB 实际上是一个正负数
 		*/
-		if ( IsNormalChar(LastChar()) && ( (m_tokenA.more == TOKEN_OPER && m_tokenA != _T(']') &&
-			m_tokenA != _T(')') && m_tokenA.nequals(_T('+'), _T('+')) &&
-			m_tokenA.nequals(_T('-'), _T('-'))) || m_tokenA.equals(_T("return"), 6) ) )
-		{
-			// m_tokenB 实际上是正负数
-			GetTokenRaw(BoolFlag::PosNeg);
+		if (m_tokenB.size() != 1 || !IsNormalChar(LastChar()))
+			return;
+		else if (m_tokenA.more == TOKEN_OPER) {
+			if (m_tokenA == _T(']') || m_tokenA == _T(')') ||
+				m_tokenA.equals(_T('+'), _T('+')) || m_tokenA.equals(_T('-'), _T('-')))
+			{
+				return;
+			}
 		}
+		else if (! CanHaveSpecialToken())
+			return;
+		GetTokenRaw(BoolFlag::PosNeg);
 		break;
 	default:
 		break;

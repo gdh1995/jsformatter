@@ -47,7 +47,8 @@ public:
 		JS_TRY		=  6, // 't'; "finally"
 		// -
 		JS_FUNCTION	=  7, // 'n'; must: function = assign - 1 (L0313)
-		JS_ASSIGN	=  8, // means '='
+		// -
+		JS_START	=  8, // means the start of one statment (from JS_ASSIGN)
 		// -
 		JS_HELPER	=  9, // means '\\'
 		// -
@@ -56,6 +57,7 @@ public:
 		JS_CASE		= 11, // 'c'
 		JS_BRACKET	= 12, // means '('
 		JS_SQUARE	= 13, // means '['
+		// -
 		JS_BLOCK	= 14, // means '{'
 		JS_NULL		= 15
 	};
@@ -113,7 +115,7 @@ protected:
 	void PutLine(const Char *start, int len, bool insertBlank) const;
 	
 	// 带缩进输出行缓冲区到m_out
-	inline void PutLineBuffer() const {
+	inline void PutBufferLine() const {
 		PutLine(m_line.c_str(), m_line.size(), false);
 		m_line.setLength(0);
 	}
@@ -125,7 +127,7 @@ protected:
 	}
 	void EndParse() const {
 		this->JSParser::EndParse();
-		PutLineBuffer();
+		PutBufferLine();
 		m_out->c_str()[m_out->size()] = 0;
 	}
 	
@@ -133,18 +135,21 @@ protected:
 	mutable CharString m_line;
 	mutable int m_nIndents; // 缩进数量 (计算blockStack效果不好)
 	mutable unsigned short m_uhLineIndents;
-	// TODO: check if we can remove it
-	mutable bool m_bBlockStmt; // block 真正开始了
-	mutable bool m_bAssign;
+	//mutable bool m_bBlockStmt; // block 真正开始了
+	//mutable bool m_bAssign;
 
 	mutable ByteStack m_blockStack;
 	mutable BoolStack m_brcNeedStack; // if 之类的后面的括号 (使用栈是为了解决在判断条件中出现循环的问题)
 
 	void PopMultiBlock(const Char previousStackTop) const;
 	void ProcessOper() const;
+	void ProcessRegular() const;
 	void ProcessID() const;
-	void ProcessAndPutString() const;
+	void ProcessCommonToken() const;
+	void ProcessOrPutString() const;
+	void ProcessLineComment() const;
 	void ProcessAndPutBlockComment() const;
+	void ProcessAndPutBlankLine() const;
 
 public:
 	FormatterOption m_struOption; // 配置项

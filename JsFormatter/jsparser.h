@@ -53,20 +53,20 @@ public:
 	
 	// 严禁修改TOKEN_xxx的编号顺序, 除非到cpp里进行完全除错
 	enum TOKEN_TYPE {
-		TOKEN_REGULAR = 0,
+		TOKEN_NULL = 0,
 		TOKEN_OPER = 1,
-
-		TOKEN_ID = 2,
+		
 		TOKEN_COMMON = 2,
-		TOKEN_STRING = 3,
-		TOKEN_STRING_MULTI_LINE = 3,
+		TOKEN_ID = 3,
+		TOKEN_REGULAR = 4,
+		TOKEN_STRING = 5,
+		TOKEN_STRING_MULTI_LINE = 6,
 
 		// 为了配合PrepareTokenB()
 		// Comment类的token需要大于任意其它token
-		TOKEN_COMMENT_LINE = 4, // 单行注释
-		TOKEN_COMMENT_BLOCK = 5, // 多行注释
-		TOKEN_BLANK_LINE = 6, // 空行标记
-		TOKEN_NULL = 7,
+		TOKEN_COMMENT_LINE = 7, // 单行注释
+		TOKEN_COMMENT_BLOCK = 8, // 多行注释
+		TOKEN_BLANK_LINE = 9, // 空行标记
 	};
 	// .more: Token 类型
 	typedef ConstString Token;
@@ -100,6 +100,11 @@ public:
 	
 	// 判断正则时，正则前面可以出现的字符
 	static const  Char s_operCharBeforeReg[];
+
+	inline bool CanHaveSpecialToken() const {
+		return (m_tokenA.more == TOKEN_ID && (m_tokenA.equals(_T("return"), 6) ||
+			m_tokenA.equals(_T("case"), 4)));
+	}
 	
 public:
 	explicit JSParser() {
@@ -140,12 +145,14 @@ public:
 		//	m_tokenA.raw() = m_tokenB.raw();
 		(Token::BaseString&)m_tokenA = (const Token::BaseString&)m_tokenB;
 		GetTokenRaw();
-		return m_tokenA.length() != 0;
+		return m_tokenA.nempty();
 	}
 
 	inline void StartParse() const {
 		// m_startClock = clock();
 		// m_bRegular = false;
+		m_tokenA.more = TOKEN_NULL;
+		m_tokenB.more = TOKEN_NULL;
 		GetChar();
 		GetTokenRaw();
 	}
@@ -165,10 +172,14 @@ protected:
 		return (m_in_next < m_in_end) ? (*m_in_next++) : 0;
 	}
 	inline const Char *CurPos() const { return m_in_next; }
-	
+	inline bool CheckEnd(const Char *const pos) const {
+		if (pos == m_in_end) ++m_in_next;
+		return (pos > m_in_end);
+	}
+
 	// 一定要在StartParse()后才能调用
 	inline const Char LastChar() const {
-		return (m_in_next < m_in_end) ? (m_in_next[-1]) : 0;
+		return (m_in_next <= m_in_end) ? (m_in_next[-1]) : 0;
 	}
 
 	// 获取下一个token并存储到m_tokenB

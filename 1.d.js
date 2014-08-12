@@ -1,7 +1,96 @@
-//
-{
-	s = 1;
+with (a //
+) {
+	b = a
 }
+a = b = b = c = d = e = f = gOJBBPK4GAk //
+	= ds = fsd = sdf = 1;
+a //
+	in B;
+with //
+	(a) {
+	b = a
+}
+with ( //
+	a) {
+	b = a
+}
+for (a; b; c //
+) {
+	d = 1;
+}
+switch (_mKey) {
+case 'cont\
+e\
+n\
+tsdf': case 'con\
+t\ent2\\\
+': case 2: {
+		$(_data[n]).html(message);
+	}
+	break;
+case /asdf/:
+	a = 1;
+	break;
+case ab:
+	a = 1;
+	break;
+case //
+	Ab:
+	a = 1;
+	break;
+case .213 //
+	:
+	a = 1;
+	break;
+case +0123.5e6:
+	a = 1;
+	break;
+case "":
+	a = 1;
+	break;
+case '':
+	a = 1;
+	break;
+case "\
+":
+	a = 1;
+	break;
+case 'value':
+	$(_data[n]).val(message);
+	break;
+default:
+	$(_data[n]).attr(_mKey, message)
+}
+/sdfds/ //
+	.sdf;
+"sdfdsf" //
+	.sdfd;
+a //
+	.b;
+/123123/.sdfsd;
+/123123/ .5655;
+"dfds".cc;
+"dsfdsf" .0129;
+{
+	s = s *= d = f = g = h = j = //
+		q //
+		= werw = wer //
+		= fgf = hgh = 3 //
+	;
+	s *= //
+		12 //
+		in[12, 123];
+	12 //
+		in[12, 123];
+	return //
+		sdf;
+	( //
+		sdfasdf = 2; );
+	/asdf/ | b in df;
+}
+a //
+	in B;
+'a' in 'sdfsf';
 /*111sd
 f*/
 
@@ -40,7 +129,8 @@ f*/
 ]).append(c);
 if (1) ;
 a = b = c = 1;
-if (2) {}, if (3) {} //
+if (2) {},
+if (3) {} //
 (function a() { //asdfsdfdsafdsfa
 	if (1) ;
 	{
@@ -250,6 +340,9 @@ t\ent2\\\
 ': case 2: {
 							$(_data[n]).html(message);
 						}
+						break;
+					case /asdf/:
+						a = 1;
 						break;
 					case 'value':
 						$(_data[n]).val(message);
@@ -2648,7 +2741,8 @@ if (typeof _tmp_config != 'undefined') {
 		_config[i] = n
 	})
 }
-var screenWidth = window.screen.width, screenHeight = window.screen.height;
+var screenWidth = window.screen.width,
+screenHeight = window.screen.height;
 if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined') {
 	if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight]['num'] != "undefined") {
 		_config['privateSetup']['dialBoxNum'] = screenDialboxOptions[screenWidth + "*" + screenHeight]['num']
@@ -3145,7 +3239,11 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 		return oauth
 	})()
 })(jq);
-var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 0;
+var _dialogDown = false,
+_dialogX = 0,
+_dialogY = 0,
+_dialogCx = 0,
+_dialogCy = 0;
 (function ($) {
 	$(document).unbind("keyup.dialogEsc").bind('keyup.dialogEsc', function (e) {
 		if (e.keyCode == 27) {
@@ -3211,8 +3309,8 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 					return
 				}
 				var maskdiv = $('<div class="dialogMask"></div>').css({
-						"zIndex": self.zIndex
-					});
+					"zIndex": self.zIndex
+				});
 				$("body").append(maskdiv);
 				DBOX.container.css("opacity", "0.2")
 			},
@@ -3466,11 +3564,11 @@ var _bookmarksDialogFun = "";
 					},
 					"run": function () {
 						var weatherDialog = $.dialog({
-								id: "weatherDialog",
-								isLock: true,
-								content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>',
-								animate: "center center"
-							});
+							id: "weatherDialog",
+							isLock: true,
+							content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>',
+							animate: "center center"
+						});
 						return weatherDialog
 					},
 					"langVers": {
@@ -3527,24 +3625,24 @@ var _bookmarksDialogFun = "";
 					},
 					"run": function () {
 						var classificationDialog = $.dialog({
-								id: "classificationDialog",
-								hideClose: true,
-								style: {
-									"position": "relative",
-									"width": "100%",
-									"height": "100%",
-									"background": "rgba(0,0,0,0.8)",
-									"boxShadow": "none",
-									"borderRadius": "0"
-								},
-								content: '',
-								animate: "opacity",
-								callback: {
-									dialogClose: function () {
-										classification.isClear(3, true)
-									}
+							id: "classificationDialog",
+							hideClose: true,
+							style: {
+								"position": "relative",
+								"width": "100%",
+								"height": "100%",
+								"background": "rgba(0,0,0,0.8)",
+								"boxShadow": "none",
+								"borderRadius": "0"
+							},
+							content: '',
+							animate: "opacity",
+							callback: {
+								dialogClose: function () {
+									classification.isClear(3, true)
 								}
-							});
+							}
+						});
 						return classificationDialog
 					}
 				},
@@ -3553,11 +3651,11 @@ var _bookmarksDialogFun = "";
 					"css": "js/plugin/setup/css/skin_0.css",
 					"run": function () {
 						var setupDialog = $.dialog({
-								id: "setupDialog",
-								isLock: true,
-								content: setup.init(),
-								animate: "center center"
-							});
+							id: "setupDialog",
+							isLock: true,
+							content: setup.init(),
+							animate: "center center"
+						});
 						return setupDialog
 					},
 					"loadData": function (dialogObj, targetObj) {
@@ -3585,11 +3683,11 @@ var _bookmarksDialogFun = "";
 					},
 					"run": function () {
 						var lastVisitedDialog = $.dialog({
-								id: "lastVisitedDialog",
-								isLock: true,
-								animate: "center center",
-								content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>'
-							});
+							id: "lastVisitedDialog",
+							isLock: true,
+							animate: "center center",
+							content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>'
+						});
 						return lastVisitedDialog
 					}
 				},
@@ -3624,17 +3722,17 @@ var _bookmarksDialogFun = "";
 							})
 						});
 						_bookmarksDialogFun = setTimeout(function () {
-								showNotice(getI18nMsg('loadingTimeout').replace('%s', getI18nMsg('360Error')));
-								dialogObj.remove()
-							}, 5000)
+							showNotice(getI18nMsg('loadingTimeout').replace('%s', getI18nMsg('360Error')));
+							dialogObj.remove()
+						}, 5000)
 					},
 					"run": function () {
 						var bookmarksDialog = $.dialog({
-								id: "bookmarksDialog",
-								isLock: true,
-								animate: "center center",
-								content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>'
-							});
+							id: "bookmarksDialog",
+							isLock: true,
+							animate: "center center",
+							content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>'
+						});
 						return bookmarksDialog
 					}
 				},
@@ -3651,20 +3749,20 @@ var _bookmarksDialogFun = "";
 					},
 					"run": function () {
 						var extensionsDialog = $.dialog({
-								id: "extensionsDialog",
-								isLock: true,
-								animate: "center center",
-								content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>',
-								callback: {
-									dialogClose: function () {
-										if (_isRefresh != false) {
-											DBOX.getBoxes();
-											DBOX.loadBoxes(DBOX.totalPage);
-											_isRefresh = false
-										}
+							id: "extensionsDialog",
+							isLock: true,
+							animate: "center center",
+							content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>',
+							callback: {
+								dialogClose: function () {
+									if (_isRefresh != false) {
+										DBOX.getBoxes();
+										DBOX.loadBoxes(DBOX.totalPage);
+										_isRefresh = false
 									}
 								}
-							});
+							}
+						});
 						return extensionsDialog
 					}
 				},
@@ -3679,11 +3777,11 @@ var _bookmarksDialogFun = "";
 					},
 					"run": function () {
 						var skinsDialog = $.dialog({
-								id: "skinsDialog",
-								isLock: true,
-								animate: "center center",
-								content: skins.init()
-							});
+							id: "skinsDialog",
+							isLock: true,
+							animate: "center center",
+							content: skins.init()
+						});
 						return skinsDialog
 					}
 				},
@@ -3755,31 +3853,31 @@ var _bookmarksDialogFun = "";
 					},
 					"run": function () {
 						var cloudDialog = $.dialog({
-								id: "cloudDialog",
-								isLock: true,
-								animate: "center center",
-								content: cloud.init(),
-								callback: {
-									dialogClose: function () {
-										if (_isRefresh != false) {
-											if (_isRefresh == "lastPage") {
-												DBOX.getBoxes();
-												DBOX.loadBoxes(DBOX.totalPage)
-											} else if (_isRefresh == "curPage") {
-												DBOX.init()
-											} else if (_isRefresh == "remove") {
-												setTimeout(function () {
-													var updateOptions = createWebsite.isUpdate.split("_");
-													if (updateOptions.length > 1) {
-														$("." + updateOptions[0] + "Dialbox").find("#" + updateOptions[1] + "_" + updateOptions[2]).find('.boxClose').get(0).click()
-													}
-												}, 200)
-											}
-											_isRefresh = false
+							id: "cloudDialog",
+							isLock: true,
+							animate: "center center",
+							content: cloud.init(),
+							callback: {
+								dialogClose: function () {
+									if (_isRefresh != false) {
+										if (_isRefresh == "lastPage") {
+											DBOX.getBoxes();
+											DBOX.loadBoxes(DBOX.totalPage)
+										} else if (_isRefresh == "curPage") {
+											DBOX.init()
+										} else if (_isRefresh == "remove") {
+											setTimeout(function () {
+												var updateOptions = createWebsite.isUpdate.split("_");
+												if (updateOptions.length > 1) {
+													$("." + updateOptions[0] + "Dialbox").find("#" + updateOptions[1] + "_" + updateOptions[2]).find('.boxClose').get(0).click()
+												}
+											}, 200)
 										}
+										_isRefresh = false
 									}
 								}
-							});
+							}
+						});
 						return cloudDialog
 					}
 				},
@@ -3795,18 +3893,18 @@ var _bookmarksDialogFun = "";
 					},
 					"run": function () {
 						var quickSearchDialog = $.dialog({
-								id: "quickSearchDialog",
-								isLock: true,
-								animate: "center center",
-								content: quickSearch.init(),
-								callback: {
-									dialogClose: function () {
-										if ($('.appBox[appid="quickSearch"]').length > 0) {
-											quickSearch.initQuickSearchApp($('.appBox[appid="quickSearch"]'))
-										}
+							id: "quickSearchDialog",
+							isLock: true,
+							animate: "center center",
+							content: quickSearch.init(),
+							callback: {
+								dialogClose: function () {
+									if ($('.appBox[appid="quickSearch"]').length > 0) {
+										quickSearch.initQuickSearchApp($('.appBox[appid="quickSearch"]'))
 									}
 								}
-							});
+							}
+						});
 						return quickSearchDialog
 					}
 				},
@@ -3815,11 +3913,11 @@ var _bookmarksDialogFun = "";
 					"css": "app/siteNav/css/skin_0.css",
 					"run": function () {
 						var siteNavDialog = $.dialog({
-								id: "siteNavDialog",
-								isLock: true,
-								animate: "center center",
-								content: siteNav.init()
-							});
+							id: "siteNavDialog",
+							isLock: true,
+							animate: "center center",
+							content: siteNav.init()
+						});
 						return siteNavDialog
 					}
 				},
@@ -3828,11 +3926,11 @@ var _bookmarksDialogFun = "";
 					"css": "app/tools/css/skin_0.css",
 					"run": function () {
 						var toolsDialog = $.dialog({
-								id: "toolsDialog",
-								isLock: true,
-								animate: "center center",
-								content: tools.init()
-							});
+							id: "toolsDialog",
+							isLock: true,
+							animate: "center center",
+							content: tools.init()
+						});
 						return toolsDialog
 					}
 				},
@@ -3841,11 +3939,11 @@ var _bookmarksDialogFun = "";
 					"css": "app/share/css/skin_0.css",
 					"run": function () {
 						var shareDialog = $.dialog({
-								id: "shareDialog",
-								isLock: true,
-								animate: "center center",
-								content: share.init()
-							});
+							id: "shareDialog",
+							isLock: true,
+							animate: "center center",
+							content: share.init()
+						});
 						return shareDialog
 					}
 				}
@@ -4011,7 +4109,41 @@ var _bookmarksDialogFun = "";
 	})()
 })(jq);
 var app = $.app();
-var _move = false, _down = false, _realMove = false, _edit = false, _flip = true, _wheelEvent = true, _wheelFun = "", _resize = false, _destory = false, _downfun = "", _editfun = "", _flipfun = "", _noticeFun = "", _quickDialBox = false, _moveQuickDialBox = false, _removeLastDialBox = false, _isRefresh = false, _classificationOpen = false, _x = 0, _y = 0, _dx = 0, _dy = 0, eventObj = '', eclone = '', ecloneCss = '', onDragID = '', onTargetID = '', onSelectedID = '', trends = [], onSeizeID = '', dialboxType = '', _cx = 0, _cy = 0, _cw = 0, _ch = 0;
+var _move = false,
+_down = false,
+_realMove = false,
+_edit = false,
+_flip = true,
+_wheelEvent = true,
+_wheelFun = "",
+_resize = false,
+_destory = false,
+_downfun = "",
+_editfun = "",
+_flipfun = "",
+_noticeFun = "",
+_quickDialBox = false,
+_moveQuickDialBox = false,
+_removeLastDialBox = false,
+_isRefresh = false,
+_classificationOpen = false,
+_x = 0,
+_y = 0,
+_dx = 0,
+_dy = 0,
+eventObj = '',
+eclone = '',
+ecloneCss = '',
+onDragID = '',
+onTargetID = '',
+onSelectedID = '',
+trends = [],
+onSeizeID = '',
+dialboxType = '',
+_cx = 0,
+_cy = 0,
+_cw = 0,
+_ch = 0;
 var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem'];
 (function ($) {
 	$.box = function (id, dbox, type) {
@@ -4208,8 +4340,8 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						event.returnValue = true
 					}
 					_wheelFun = setTimeout(function () {
-							_wheelEvent = true
-						}, self.page3DSwitcherOpen == true ? 400: 460)
+						_wheelEvent = true
+					}, self.page3DSwitcherOpen == true ? 400: 460)
 				}
 			};
 			window.onmousewheel = wheel;
@@ -4760,58 +4892,58 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							_cw = parseInt(eventObj.css('width'));
 							_ch = parseInt(eventObj.css('height'));
 							_downfun = setTimeout(function () {
-									box.boxObject.find(".iframeDialboxMask").show();
-									if (_down == true) {
-										if (classification && classification.minClassificationSwitch == true) {
-											classification.hideMinClassification(true)
-										}
-										onDragID = eventObj.attr("id");
-										onTargetID = "";
-										_removeLastDialBox = false;
-										if (e.pageY >= (self.QContainer.offset().top - self.QHeight)) {
-											_quickDialBox = _moveQuickDialBox = true;
-											_y = e.pageY - self.QContainer.offset().top - parseInt(eventObj.css("top"));
-											_x = e.pageX - parseInt(eventObj.css("left"))
-										} else {
-											_quickDialBox = _moveQuickDialBox = false;
-											_y = e.pageY - self.container.offset().top - parseInt(eventObj.css("top"));
-											_x = e.pageX - self.container.offset().left - parseInt(eventObj.css("left"))
-										}
-										eclone = eventObj.clone();
-										eclone.empty();
-										eclone.addClass("boxClone");
-										eclone.css("visibility", "hidden");
-										eclone.insertAfter(eventObj);
-										eventObj.css({
-											"opacity": 0.5,
-											"zIndex": getMaxZindex(eventObj) + 1,
-											"WebkitTransition": ""
-										});
-										eventObj.parent().parent().append(eventObj);
-										eventObj.css({
-											top: (e.pageY + self.container.parent().get(0).scrollTop - _y) + 'px',
-											left: (e.pageX - _x) + 'px'
-										});
-										eventObj.children().css("cursor", "move");
-										eventObj.addClass('boxDrag');
-										if (e.button != 2) {
-											_move = true
-										}
-										_editfun = setTimeout(function () {
-												_edit = true;
-												_move = true;
-												_down = false;
-												_realMove = true;
-												setTimeout(function () {
-													self.container.parent().removeClass('edit').addClass('edit');
-													if (self.container.attr('class').indexOf('normalDialbox op_') > -1) {
-														self.container.removeClass(self.container.attr('class').replace('normalDialbox ', ''))
-													}
-													app.loadAppContent(eventObj, 'cloud')
-												}, 0)
-											}, 500)
+								box.boxObject.find(".iframeDialboxMask").show();
+								if (_down == true) {
+									if (classification && classification.minClassificationSwitch == true) {
+										classification.hideMinClassification(true)
 									}
-								}, 120)
+									onDragID = eventObj.attr("id");
+									onTargetID = "";
+									_removeLastDialBox = false;
+									if (e.pageY >= (self.QContainer.offset().top - self.QHeight)) {
+										_quickDialBox = _moveQuickDialBox = true;
+										_y = e.pageY - self.QContainer.offset().top - parseInt(eventObj.css("top"));
+										_x = e.pageX - parseInt(eventObj.css("left"))
+									} else {
+										_quickDialBox = _moveQuickDialBox = false;
+										_y = e.pageY - self.container.offset().top - parseInt(eventObj.css("top"));
+										_x = e.pageX - self.container.offset().left - parseInt(eventObj.css("left"))
+									}
+									eclone = eventObj.clone();
+									eclone.empty();
+									eclone.addClass("boxClone");
+									eclone.css("visibility", "hidden");
+									eclone.insertAfter(eventObj);
+									eventObj.css({
+										"opacity": 0.5,
+										"zIndex": getMaxZindex(eventObj) + 1,
+										"WebkitTransition": ""
+									});
+									eventObj.parent().parent().append(eventObj);
+									eventObj.css({
+										top: (e.pageY + self.container.parent().get(0).scrollTop - _y) + 'px',
+										left: (e.pageX - _x) + 'px'
+									});
+									eventObj.children().css("cursor", "move");
+									eventObj.addClass('boxDrag');
+									if (e.button != 2) {
+										_move = true
+									}
+									_editfun = setTimeout(function () {
+										_edit = true;
+										_move = true;
+										_down = false;
+										_realMove = true;
+										setTimeout(function () {
+											self.container.parent().removeClass('edit').addClass('edit');
+											if (self.container.attr('class').indexOf('normalDialbox op_') > -1) {
+												self.container.removeClass(self.container.attr('class').replace('normalDialbox ', ''))
+											}
+											app.loadAppContent(eventObj, 'cloud')
+										}, 0)
+									}, 500)
+								}
+							}, 120)
 						}
 					}
 				});
@@ -5042,8 +5174,8 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 								_cw = parseInt(eclone.css('width'));
 								_ch = parseInt(eclone.css('height'));
 								var _flipfun = setTimeout(function () {
-										_flip = true
-									}, 1500)
+									_flip = true
+								}, 1500)
 							}
 						} else {
 							if (_flipfun != '') {
@@ -5370,8 +5502,8 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						}
 						self.container.parent().find('.pageNotice').addClass("show");
 						_noticeFun = setTimeout(function () {
-								self.pageNotice()
-							}, 3000)
+							self.pageNotice()
+						}, 3000)
 					}, 0)
 				}
 			},
@@ -5715,7 +5847,17 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 		return dialbox
 	})()
 })(jq);
-var storage = new $.storage(), PDI = $.pdi(), DBOX, ver = _config.version, cId = "", tabID = '', targetSwitch = true, serverValue = [], ctrlKey = false, ctrlKeyTimer = '', updateNotification = false;
+var storage = new $.storage(),
+PDI = $.pdi(),
+DBOX,
+ver = _config.version,
+cId = "",
+tabID = '',
+targetSwitch = true,
+serverValue = [],
+ctrlKey = false,
+ctrlKeyTimer = '',
+updateNotification = false;
 if (cId = PDI.get("setup", "cId")) {
 	storage = new $.storage(cId)
 }
@@ -5726,8 +5868,8 @@ $(document).bind('keydown', function (e) {
 		}
 		ctrlKey = true;
 		ctrlKeyTimer = setTimeout(function () {
-				ctrlKey = false
-			}, 1000)
+			ctrlKey = false
+		}, 1000)
 	}
 });
 if (window.location.hash == "#synchronize") {
@@ -5781,24 +5923,24 @@ if (window.location.hash == "#synchronize") {
 		$('#baseTarget').attr('target', targetSwitch ? "_self": "_blank");
 		$('#searchForm').attr('target', targetSwitch ? "_self": "_blank");
 		DBOX = $.dialbox({
-				container: $('.normalDialbox'),
-				QContainer: $('.quickDialbox'),
-				QBContainer: $('.QBannerContainer'),
-				num: PDI.get('privateSetup', 'dialBoxNum'),
-				page: PDI.get('privateSetup', 'dialBoxPage'),
-				opacity: PDI.get('privateSetup', 'dialBoxOpacity'),
-				spacing: PDI.get('privateSetup', 'dialBoxSpacing'),
-				titleShow: PDI.get('privateSetup', 'dialBoxTitleSwitch'),
-				cloudBoxShow: PDI.get('privateSetup', 'dialBoxCloudBoxSwitch'),
-				pageSwitcherShow: PDI.get('privateSetup', 'dialBoxPageSwitcher'),
-				page3DSwitcherOpen: support3D() ? PDI.get('privateSetup', 'dialBoxPage3DSwitcher'): false,
-				dialBoxQuickHide: PDI.get('privateSetup', 'dialBoxQuickSwitcher'),
-				width: PDI.get('privateSetup', 'dialBoxWidth'),
-				height: PDI.get('privateSetup', 'dialBoxHeight'),
-				radius: PDI.get('privateSetup', 'dialBoxRadius'),
-				maxTop: PDI.get('privateSetup', 'dialBoxMaxTop'),
-				QBContainerWidth: PDI.get('privateSetup', 'dialBoxQBCWidth')
-			});
+			container: $('.normalDialbox'),
+			QContainer: $('.quickDialbox'),
+			QBContainer: $('.QBannerContainer'),
+			num: PDI.get('privateSetup', 'dialBoxNum'),
+			page: PDI.get('privateSetup', 'dialBoxPage'),
+			opacity: PDI.get('privateSetup', 'dialBoxOpacity'),
+			spacing: PDI.get('privateSetup', 'dialBoxSpacing'),
+			titleShow: PDI.get('privateSetup', 'dialBoxTitleSwitch'),
+			cloudBoxShow: PDI.get('privateSetup', 'dialBoxCloudBoxSwitch'),
+			pageSwitcherShow: PDI.get('privateSetup', 'dialBoxPageSwitcher'),
+			page3DSwitcherOpen: support3D() ? PDI.get('privateSetup', 'dialBoxPage3DSwitcher'): false,
+			dialBoxQuickHide: PDI.get('privateSetup', 'dialBoxQuickSwitcher'),
+			width: PDI.get('privateSetup', 'dialBoxWidth'),
+			height: PDI.get('privateSetup', 'dialBoxHeight'),
+			radius: PDI.get('privateSetup', 'dialBoxRadius'),
+			maxTop: PDI.get('privateSetup', 'dialBoxMaxTop'),
+			QBContainerWidth: PDI.get('privateSetup', 'dialBoxQBCWidth')
+		});
 		var skin = PDI.get('privateSetup', 'skin');
 		if (skin != "" && PDI.getSkin(skin, 'style') != '') {
 			$('.wallpaper').css(PDI.getSkin(skin, 'style').background);
@@ -6104,4 +6246,4 @@ $(function () {
 	} else {
 		chrome.extension.onRequest.addListener(actHandle)
 	}
-})
+});

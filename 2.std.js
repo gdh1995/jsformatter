@@ -1,33 +1,51 @@
-(function ($)ÂÆ´Â§ßÊ±â {
-	$.browser = function () {
+(function ($) //
+{
+	a = 1 //
+	,
+	b = 2 //
+	;
+	$.browser = function () /*sdf*/ {
 		return new browser()
 	};
-	var browser = (function () {
-		var browser = function () {
-			var self = this;
+	/*sd*/
+	var browser = (function () //
+	{
+		var browser = function ()
+		/*s1
+		df*/
+		{
+			var self =
+				/*s1
+				df*/
+				1 =
+
+				/*s1
+				df*/
+				this;
 			self.init()
 		};
 		browser.prototype = {
-			ua : null,
-			version : null,
-			safari : null,
-			webkit : null,
-			opera : null,
-			msie : null,
-			chrome : null,
-			mozilla : null,
-			sogou : null,
-			maxthon : null,
-			dragon : null,
-			taobao : null,
-			liebao : null,
-			ee360 : null,
-			se360 : null,
-			cssType : null,
-			protocol : null,
-			init : function () {
+			ua: null,
+			version: null,
+			safari: null,
+			webkit: null,
+			opera: null,
+			msie: null,
+			chrome: null,
+			mozilla: null,
+			sogou: null,
+			maxthon: null,
+			dragon: null,
+			taobao: null,
+			liebao: null,
+			ee360: null,
+			se360: null,
+			cssType: null,
+			protocol: null,
+			init: function () {
 				var self = this;
 				self.ua = window.navigator.userAgent;
+				/*adfsd*/
 				self.version = (self.ua.match(/.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/) || []);
 				self.safari = (/Safari/gi).test(window.navigator.appVersion);
 				self.webkit = /webkit/i.test(self.ua);
@@ -44,10 +62,10 @@
 				self.liebao = !self.msie && !!window.external && !!window.external.LiebaoAutoFill_CopyToClipboard;
 				self.ee360 = !self.msie && !self.chrome && !self.liebao && self._plugin("filename", "pepflashplayer.dll");
 				self.se360 = !self._plugin("filename", "pepflashplayer.dll") && !self.ee360 && self._mime("suffixes", "dll", "description", /fancy/);
-				self.cssType = self.webkit ? "webkit" : (self.mozilla ? "moz" : self.opera ? "o" : "ms");
-				self.protocol = self.opera ? "opera" : (self.chrome ? "chrome" : (self.dragon ? "dragon" : (self.taobao ? "taobrowser" : (self.liebao ? "liebao" : "http"))))
+				self.cssType = self.webkit ? "webkit": (self.mozilla ? "moz": self.opera ? "o": "ms");
+				self.protocol = self.opera ? "opera": (self.chrome ? "chrome": (self.dragon ? "dragon": (self.taobao ? "taobrowser": (self.liebao ? "liebao": "http"))))
 			},
-			_ie : function () {
+			_ie: function () {
 				var ieAX = window.ActiveXObject;
 				var ieMode = document.documentMode;
 				if (ieAX) {
@@ -55,8 +73,8 @@
 						var v = 3,
 						p = document.createElement('p'),
 						all = p.getElementsByTagName('i');
-						while (p.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->', all[0]);
-						return v > 4 ? v : 0
+						while (p.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->', all[0]) ;
+						return v > 4 ? v: 0
 					}
 						());
 					for (var i = 6; i < 11; i++) {
@@ -71,7 +89,7 @@
 				}
 				return 0
 			},
-			_plugin : function (where, value) {
+			_plugin: function (where, value) {
 				var plugins = window.navigator.plugins,
 				i;
 				if (plugins.length > 0) {
@@ -82,7 +100,7 @@
 				}
 				return false
 			},
-			_mime : function (where, value, name, nameReg) {
+			_mime: function (where, value, name, nameReg) {
 				var mimeTypes = window.navigator.mimeTypes,
 				i;
 				if (mimeTypes.length > 0) {
@@ -143,8 +161,19 @@ function initChromeI18n(obj) {
 				var message = getI18nMsg(_data[n].getAttribute(key));
 				if (message) {
 					switch (_mKey) {
-					case 'content':
-						$(_data[n]).html(message);
+					case 'cont\
+e\
+n\
+tsdf':
+
+					case 'con\
+t\ent2\\\
+': case 2: {
+							$(_data[n]).html(message);
+						}
+						break;
+					case /asdf/:
+						a = 1;
 						break;
 					case 'value':
 						$(_data[n]).val(message);
@@ -158,7 +187,7 @@ function initChromeI18n(obj) {
 	}
 }
 function isMouseMoveContains(e, parent) {
-	var child = e.relatedTarget ? e.relatedTarget : e.type == 'mouseout' ? e.toElement : e.fromElement;
+	var child = e.relatedTarget ? e.relatedTarget: e.type == 'mouseout' ? e.toElement: e.fromElement;
 	while (child && child != parent) {
 		child = child.parentNode
 	}
@@ -261,19 +290,19 @@ function openTab(targetSwitch, url, tabID, ctrlKey) {
 	try {
 		if (typeof ctrlKey != 'undefined' && ctrlKey === true) {
 			chrome.tabs.create({
-				url : url,
-				index : tabID + 1,
-				selected : false
+				url: url,
+				index: tabID + 1,
+				selected: false
 			})
 		} else {
 			if (targetSwitch == true) {
 				chrome.tabs.update(tabID, {
-					url : url
+					url: url
 				})
 			} else {
 				chrome.tabs.create({
-					url : url,
-					index : tabID + 1,
+					url: url,
+					index: tabID + 1,
 				})
 			}
 		}
@@ -356,8 +385,8 @@ function getBookmarksData(tree, bookMarks) {
 		}
 		if (flag) {
 			bookMarks.push({
-				"title" : tree.title,
-				"url" : tree.url
+				"title": tree.title,
+				"url": tree.url
 			})
 		}
 	}
@@ -482,7 +511,6 @@ function replaceMSiteDialboxs(_dialboxs, MSite) {
 							}
 						}
 					} catch (e) {}
-
 					if (isReplace == true) {
 						if (typeof svalue['url'] != "undefined") {
 							_dialboxs[i]['url'] = svalue['url']
@@ -576,7 +604,7 @@ function replaceLocationDB() {
 					if (typeof _normalDialboxes != "undefined" && _normalDialboxes && _normalDialboxes.length > 0) {
 						$.each(_normalDialboxes, function (i, n) {
 							if (_normalDialboxes[i]['isApp'] == "taobaoPlus") {
-								_normalDialboxes[i]['title'] = "Ê∑òÂÆùÁâπÂçñ";
+								_normalDialboxes[i]['title'] = "Ã‘±¶Ãÿ¬Ù";
 								delete _normalDialboxes[i]['isApp'];
 								_save = true
 							}
@@ -597,7 +625,7 @@ function replaceLocationDB() {
 					if (typeof _quickDialboxes != "undefined" && _quickDialboxes && _quickDialboxes.length > 0) {
 						$.each(_quickDialboxes, function (i, n) {
 							if (_quickDialboxes[i]['isApp'] == "taobaoPlus") {
-								_quickDialboxes[i]['title'] = "Ê∑òÂÆùÁâπÂçñ";
+								_quickDialboxes[i]['title'] = "Ã‘±¶Ãÿ¬Ù";
 								delete _quickDialboxes[i]['isApp'];
 								_save = true
 							}
@@ -666,7 +694,7 @@ function rstr2hex(input) {
 	} catch (e) {
 		hexcase = 0
 	}
-	var hex_tab = hexcase ? "0123456789ABCDEF" : "0123456789abcdef";
+	var hex_tab = hexcase ? "0123456789ABCDEF": "0123456789abcdef";
 	var output = "";
 	var x;
 	for (var i = 0; i < input.length; i++) {
@@ -685,7 +713,7 @@ function rstr2b64(input) {
 	var output = "";
 	var len = input.length;
 	for (var i = 0; i < len; i += 3) {
-		var triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8 : 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
+		var triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8: 0) | (i + 2 < len ? input.charCodeAt(i + 2): 0);
 		for (var j = 0; j < 4; j++) {
 			if (i * 8 + j * 6 > input.length * 8)
 				output += b64pad;
@@ -733,7 +761,7 @@ function str2rstr_utf8(input) {
 	y;
 	while (++i < input.length) {
 		x = input.charCodeAt(i);
-		y = i + 1 < input.length ? input.charCodeAt(i + 1) : 0;
+		y = i + 1 < input.length ? input.charCodeAt(i + 1): 0;
 		if (0xD800 <= x && x <= 0xDBFF && 0xDC00 <= y && y <= 0xDFFF) {
 			x = 0x10000 + ((x & 0x03FF) << 10) + (y & 0x03FF);
 			i++
@@ -892,20 +920,20 @@ function bit_rol(num, cnt) {
 			}
 		};
 		storage.prototype = {
-			id : '',
-			db : localStorage,
-			privateKeys : ['privateSetup', 'dialBoxes', 'weather', 'skins'],
-			relative : true,
-			get : function (key, isJson) {
-				key = (this.relative && this.privateKeys.indexOf(key) > -1) ? key + this.id : key;
+			id: '',
+			db: localStorage,
+			privateKeys: ['privateSetup', 'dialBoxes', 'weather', 'skins'],
+			relative: true,
+			get: function (key, isJson) {
+				key = (this.relative && this.privateKeys.indexOf(key) > -1) ? key + this.id: key;
 				try {
-					return isJson === true ? JSON.parse(this.db.getItem(key)) : this.db.getItem(key)
+					return isJson === true ? JSON.parse(this.db.getItem(key)): this.db.getItem(key)
 				} catch (err) {
 					return null
 				}
 			},
-			set : function (key, value, isJson) {
-				key = (this.relative && this.privateKeys.indexOf(key) > -1) ? key + this.id : key;
+			set: function (key, value, isJson) {
+				key = (this.relative && this.privateKeys.indexOf(key) > -1) ? key + this.id: key;
 				try {
 					if (isJson === true) {
 						this.db.setItem(key, JSON.stringify(value))
@@ -916,15 +944,15 @@ function bit_rol(num, cnt) {
 					console.log(err)
 				}
 			},
-			remove : function (key) {
-				key = (this.relative && this.privateKeys.indexOf(key) > -1) ? key + this.id : key;
+			remove: function (key) {
+				key = (this.relative && this.privateKeys.indexOf(key) > -1) ? key + this.id: key;
 				try {
 					this.db.removeItem(key)
 				} catch (err) {
 					console.log(err)
 				}
 			},
-			clear : function (keylist) {
+			clear: function (keylist) {
 				var self = this;
 				try {
 					if (keylist instanceof Array) {
@@ -955,1588 +983,1587 @@ if (_languages.indexOf(ui_locale) > -1) {
 }
 var isApp = false;
 var _config = {
-	version : '4.6.2',
-	dataVersion : "4.0",
-	lang : "en",
-	oauthType : ['google', 'facebook', 'twitter'],
-	cacheKeys : ['dialBoxes', 'privateSetup', 'skins', 'setup', 'classifications', 'usedWallpaper', 'iframeDialbox', 'version', 'dataVersion'],
-	dialBoxes : {
-		normal : [{
-				"title" : getI18nMsg('weatherAppTitle'),
-				"img" : urlImg + "myapp/weather/img/m/logo.png",
-				"isApp" : "weather"
+	version: '4.6.2',
+	dataVersion: "4.0",
+	lang: "en",
+	oauthType: ['google', 'facebook', 'twitter'],
+	cacheKeys: ['dialBoxes', 'privateSetup', 'skins', 'setup', 'classifications', 'usedWallpaper', 'iframeDialbox', 'version', 'dataVersion'],
+	dialBoxes: {
+		normal: [{
+				"title": getI18nMsg('weatherAppTitle'),
+				"img": urlImg + "myapp/weather/img/m/logo.png",
+				"isApp": "weather"
 			}, {
-				"title" : getI18nMsg('quickSearchAppTitle'),
-				"img" : "app/quickSearch/img/logo.png",
-				"isApp" : "quickSearch"
+				"title": getI18nMsg('quickSearchAppTitle'),
+				"img": "app/quickSearch/img/logo.png",
+				"isApp": "quickSearch"
 			}, {
-				"title" : "Google",
-				"url" : "www.google.com"
+				"title": "Google",
+				"url": "www.google.com"
 			}, {
-				"title" : "YouTube",
-				"url" : "www.youtube.com"
+				"title": "YouTube",
+				"url": "www.youtube.com"
 			}, {
-				"title" : "Facebook",
-				"url" : "www.facebook.com"
+				"title": "Facebook",
+				"url": "www.facebook.com"
 			}, {
-				"title" : "eBay",
-				"url" : "rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.com",
-				"html" : "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/711-53200-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
+				"title": "eBay",
+				"url": "rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.com",
+				"html": "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/711-53200-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
 			}, {
-				"title" : "Amazon",
-				"url" : "www.amazon.com"
+				"title": "Amazon",
+				"url": "www.amazon.com"
 			}, {
-				"title" : "Yahoo",
-				"url" : "www.yahoo.com"
+				"title": "Yahoo",
+				"url": "www.yahoo.com"
 			}, {
-				"title" : "Walmart",
-				"url" : "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
-				"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
+				"title": "Walmart",
+				"url": "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
+				"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
 			}, {
-				"title" : "Twitter",
-				"url" : "twitter.com"
+				"title": "Twitter",
+				"url": "twitter.com"
 			}, {
-				"title" : "CNN",
-				"url" : "www.cnn.com"
+				"title": "CNN",
+				"url": "www.cnn.com"
 			}, {
-				"title" : "BestBuy",
-				"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
-				"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
+				"title": "BestBuy",
+				"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
+				"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
 			}, {
-				"title" : "JCPenney",
-				"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=172753.10004138&type=3&subid=0&t=http://www.jcpenney.com",
-				"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=172753.10004138&type=3&subid=0' width='1' height='1' border='0'>"
+				"title": "JCPenney",
+				"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=172753.10004138&type=3&subid=0&t=http://www.jcpenney.com",
+				"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=172753.10004138&type=3&subid=0' width='1' height='1' border='0'>"
 			}, {
-				"title" : "Pinterest",
-				"url" : "www.pinterest.com"
+				"title": "Pinterest",
+				"url": "www.pinterest.com"
 			}, {
-				"title" : "Bet365",
-				"url" : "www.bet365.com"
+				"title": "Bet365",
+				"url": "www.bet365.com"
 			}, {
-				"title" : "Macys",
-				"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=206959.100229842&type=3&subid=0&t=http://www.macys.com",
-				"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=206959.100229842&type=3&subid=0' width='1' height='1' border='0'>"
+				"title": "Macys",
+				"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=206959.100229842&type=3&subid=0&t=http://www.macys.com",
+				"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=206959.100229842&type=3&subid=0' width='1' height='1' border='0'>"
 			}, {
-				"title" : "Wikipedia",
-				"url" : "www.wikipedia.org"
+				"title": "Wikipedia",
+				"url": "www.wikipedia.org"
 			}, {
-				"title" : "LivingSocial",
-				"url" : "www.livingsocial.com"
+				"title": "LivingSocial",
+				"url": "www.livingsocial.com"
 			}, {
-				"title" : "LinkedIn",
-				"url" : "www.linkedin.com"
+				"title": "LinkedIn",
+				"url": "www.linkedin.com"
 			}, {
-				"title" : "Netflix",
-				"url" : "www.netflix.com"
+				"title": "Netflix",
+				"url": "www.netflix.com"
 			}, {
-				"title" : "Msn",
-				"url" : "www.msn.com"
+				"title": "Msn",
+				"url": "www.msn.com"
 			}, {
-				"title" : "Webstore",
-				"url" : "chrome.google.com/webstore/?t=http://webstore.google.com"
+				"title": "Webstore",
+				"url": "chrome.google.com/webstore/?t=http://webstore.google.com"
 			}, {
-				"title" : getI18nMsg('siteNavAppTitle'),
-				"img" : "app/siteNav/img/logo.png",
-				"isApp" : "siteNav"
+				"title": getI18nMsg('siteNavAppTitle'),
+				"img": "app/siteNav/img/logo.png",
+				"isApp": "siteNav"
 			}, {
-				"title" : getI18nMsg('cloudAppTitle'),
-				"img" : "js/plugin/cloud/img/logo.png",
-				"isApp" : "cloud",
-				"isFixed" : true
+				"title": getI18nMsg('cloudAppTitle'),
+				"img": "js/plugin/cloud/img/logo.png",
+				"isApp": "cloud",
+				"isFixed": true
 			}
 		],
-		quick : [{
-				"title" : getI18nMsg('classificationAppTitle'),
-				"img" : "js/plugin/classification/img/logo.png",
-				"isApp" : "classification"
+		quick: [{
+				"title": getI18nMsg('classificationAppTitle'),
+				"img": "js/plugin/classification/img/logo.png",
+				"isApp": "classification"
 			}, {
-				"title" : getI18nMsg('skinsAppTitle'),
-				"img" : "js/plugin/skins/img/logo.png",
-				"isApp" : "skins"
+				"title": getI18nMsg('skinsAppTitle'),
+				"img": "js/plugin/skins/img/logo.png",
+				"isApp": "skins"
 			}, {
-				"title" : getI18nMsg('bookmarksAppTitle'),
-				"img" : "js/plugin/bookmarks/img/logo.png",
-				"isApp" : "bookmarks"
+				"title": getI18nMsg('bookmarksAppTitle'),
+				"img": "js/plugin/bookmarks/img/logo.png",
+				"isApp": "bookmarks"
 			}, {
-				"title" : getI18nMsg('oNewtabTitle'),
-				"img" : "js/plugin/app/img/skin_0/oNewtab.png",
-				"isApp" : "oNewtab"
+				"title": getI18nMsg('oNewtabTitle'),
+				"img": "js/plugin/app/img/skin_0/oNewtab.png",
+				"isApp": "oNewtab"
 			}, {
-				"title" : getI18nMsg('lastVisitedAppTitle'),
-				"img" : "js/plugin/lastVisited/img/logo.png",
-				"isApp" : "lastVisited"
+				"title": getI18nMsg('lastVisitedAppTitle'),
+				"img": "js/plugin/lastVisited/img/logo.png",
+				"isApp": "lastVisited"
 			}, {
-				"title" : getI18nMsg('extensionsAppTitle'),
-				"img" : "js/plugin/extensions/img/logo.png",
-				"isApp" : "extensions"
+				"title": getI18nMsg('extensionsAppTitle'),
+				"img": "js/plugin/extensions/img/logo.png",
+				"isApp": "extensions"
 			}, {
-				"title" : getI18nMsg('setupAppTitle'),
-				"img" : "js/plugin/setup/img/logo.png",
-				"isApp" : "setup",
-				"isFixed" : true
+				"title": getI18nMsg('setupAppTitle'),
+				"img": "js/plugin/setup/img/logo.png",
+				"isApp": "setup",
+				"isFixed": true
 			}
 		]
 	},
-	apps : [{
-			"id" : "weather",
-			"title" : getI18nMsg('weatherAppTitle'),
-			"img" : urlImg + "myapp/weather/img/m/logo.png"
+	apps: [{
+			"id": "weather",
+			"title": getI18nMsg('weatherAppTitle'),
+			"img": urlImg + "myapp/weather/img/m/logo.png"
 		}, {
-			"id" : "quickSearch",
-			"title" : getI18nMsg('quickSearchAppTitle'),
-			"img" : "app/quickSearch/img/logo.png"
+			"id": "quickSearch",
+			"title": getI18nMsg('quickSearchAppTitle'),
+			"img": "app/quickSearch/img/logo.png"
 		}, {
-			"id" : "skins",
-			"title" : getI18nMsg('skinsAppTitle'),
-			"img" : "js/plugin/skins/img/logo.png"
+			"id": "skins",
+			"title": getI18nMsg('skinsAppTitle'),
+			"img": "js/plugin/skins/img/logo.png"
 		}, {
-			"id" : "classification",
-			"title" : getI18nMsg('classificationAppTitle'),
-			"img" : "js/plugin/classification/img/logo.png"
+			"id": "classification",
+			"title": getI18nMsg('classificationAppTitle'),
+			"img": "js/plugin/classification/img/logo.png"
 		}, {
-			"id" : "cloud",
-			"title" : getI18nMsg('cloudAppTitle'),
-			"img" : "js/plugin/cloud/img/logo.png",
-			"isFixed" : true
+			"id": "cloud",
+			"title": getI18nMsg('cloudAppTitle'),
+			"img": "js/plugin/cloud/img/logo.png",
+			"isFixed": true
 		}, {
-			"id" : "setup",
-			"title" : getI18nMsg('setupAppTitle'),
-			"img" : "js/plugin/setup/img/logo.png",
-			"isFixed" : true
+			"id": "setup",
+			"title": getI18nMsg('setupAppTitle'),
+			"img": "js/plugin/setup/img/logo.png",
+			"isFixed": true
 		}, {
-			"id" : "bookmarks",
-			"title" : getI18nMsg('bookmarksAppTitle'),
-			"img" : "js/plugin/bookmarks/img/logo.png"
+			"id": "bookmarks",
+			"title": getI18nMsg('bookmarksAppTitle'),
+			"img": "js/plugin/bookmarks/img/logo.png"
 		}, {
-			"id" : "lastVisited",
-			"title" : getI18nMsg('lastVisitedAppTitle'),
-			"img" : "js/plugin/lastVisited/img/logo.png"
+			"id": "lastVisited",
+			"title": getI18nMsg('lastVisitedAppTitle'),
+			"img": "js/plugin/lastVisited/img/logo.png"
 		}, {
-			"id" : "extensions",
-			"title" : getI18nMsg('extensionsAppTitle'),
-			"img" : "js/plugin/extensions/img/logo.png"
+			"id": "extensions",
+			"title": getI18nMsg('extensionsAppTitle'),
+			"img": "js/plugin/extensions/img/logo.png"
 		}, {
-			"id" : "siteNav",
-			"title" : getI18nMsg('siteNavAppTitle'),
-			"img" : "app/siteNav/img/logo.png"
+			"id": "siteNav",
+			"title": getI18nMsg('siteNavAppTitle'),
+			"img": "app/siteNav/img/logo.png"
 		}, {
-			"id" : "oDownloads",
-			"title" : getI18nMsg('oDownloadsTitle'),
-			"img" : "js/plugin/app/img/skin_0/oDownloads.png"
+			"id": "oDownloads",
+			"title": getI18nMsg('oDownloadsTitle'),
+			"img": "js/plugin/app/img/skin_0/oDownloads.png"
 		}, {
-			"id" : "oBookmarks",
-			"title" : getI18nMsg('oBookmarksTitle'),
-			"img" : "js/plugin/app/img/skin_0/oBookmarks.png"
+			"id": "oBookmarks",
+			"title": getI18nMsg('oBookmarksTitle'),
+			"img": "js/plugin/app/img/skin_0/oBookmarks.png"
 		}, {
-			"id" : "oExtensions",
-			"title" : getI18nMsg('oExtensionsTitle'),
-			"img" : "js/plugin/app/img/skin_0/oExtensions.png"
+			"id": "oExtensions",
+			"title": getI18nMsg('oExtensionsTitle'),
+			"img": "js/plugin/app/img/skin_0/oExtensions.png"
 		}, {
-			"id" : "oHistory",
-			"title" : getI18nMsg('oHistoryTitle'),
-			"img" : "js/plugin/app/img/skin_0/oHistory.png"
+			"id": "oHistory",
+			"title": getI18nMsg('oHistoryTitle'),
+			"img": "js/plugin/app/img/skin_0/oHistory.png"
 		}, {
-			"id" : "oNewtab",
-			"title" : getI18nMsg('oNewtabTitle'),
-			"img" : "js/plugin/app/img/skin_0/oNewtab.png"
+			"id": "oNewtab",
+			"title": getI18nMsg('oNewtabTitle'),
+			"img": "js/plugin/app/img/skin_0/oNewtab.png"
 		}
 	],
-	skins : {
-		skin_cloud : {
-			style : {}
-
+	skins: {
+		skin_cloud: {
+			style: {}
 		},
-		skin_local : {
-			style : {
-				"background" : {
-					"backgroundColor" : "#0866A4",
-					"backgroundImage" : "url(img/skin_0/defaultBg.svg)"
+		skin_local: {
+			style: {
+				"background": {
+					"backgroundColor": "#0866A4",
+					"backgroundImage": "url(img/skin_0/defaultBg.svg)"
 				}
 			}
 		}
 	},
-	weather : {
-		city : '',
-		cityID : '',
-		isAuto : false,
-		weather : '',
-		calendar : '',
-		tempUnit : ui_locale == 'zh_CN' ? 'C' : 'F',
-		dateline : ''
+	weather: {
+		city: '',
+		cityID: '',
+		isAuto: false,
+		weather: '',
+		calendar: '',
+		tempUnit: ui_locale == 'zh_CN' ? 'C': 'F',
+		dateline: ''
 	},
-	oauthData : {},
-	oauthId : "",
-	oauthKey : "",
-	oauthCode : "",
-	oauthSource : "",
-	msgid : 0,
-	openSwitch : true,
-	helpSwitch : true,
-	contextMenusSwitch : true,
-	noticeID : 0,
-	notificationID : 0,
-	isShared : (_browser.msie && ui_locale != 'zh_CN') ? false : true,
-	OTime : 0,
-	STime : 0,
-	MTime : 0,
-	code : '',
-	ip : '',
-	lunarCalendar : '',
-	bookMarksOpenQueue : [],
-	usedWallpaper : [],
-	iframeDialbox : [],
-	cId : '',
-	classifications : [{
-			"id" : "shopping",
-			"title" : getI18nMsg("classificationShopping"),
-			"logo" : urlImg + "classification/images/4.png",
-			"dataUrl" : urlImg + "rssData/index.php?ui_locale=" + ui_locale + "&name=shopping",
-			"LTime" : 0
+	oauthData: {},
+	oauthId: "",
+	oauthKey: "",
+	oauthCode: "",
+	oauthSource: "",
+	msgid: 0,
+	openSwitch: true,
+	helpSwitch: true,
+	contextMenusSwitch: true,
+	noticeID: 0,
+	notificationID: 0,
+	isShared: (_browser.msie && ui_locale != 'zh_CN') ? false: true,
+	OTime: 0,
+	STime: 0,
+	MTime: 0,
+	code: '',
+	ip: '',
+	lunarCalendar: '',
+	bookMarksOpenQueue: [],
+	usedWallpaper: [],
+	iframeDialbox: [],
+	cId: '',
+	classifications: [{
+			"id": "shopping",
+			"title": getI18nMsg("classificationShopping"),
+			"logo": urlImg + "classification/images/4.png",
+			"dataUrl": urlImg + "rssData/index.php?ui_locale=" + ui_locale + "&name=shopping",
+			"LTime": 0
 		}
 	],
-	privateSetup : {
-		dialBoxNum : 12,
-		dialBoxOpacity : 1,
-		dialBoxSpacing : 30,
-		dialBoxWidth : 240,
-		dialBoxHeight : 135,
-		dialBoxRadius : 4,
-		dialBoxMaxTop : 'auto',
-		dialBoxPage : 1,
-		dialBoxQBCWidth : 1000,
-		dialBoxTitleSwitch : false,
-		dialBoxCloudBoxSwitch : true,
-		dialBoxPageSwitcher : false,
-		dialBoxPage3DSwitcher : false,
-		dialBoxQuickSwitcher : false,
-		targetSwitch : true,
-		style : {
-			background : {
-				"backgroundRepeat" : "no-repeat",
-				"backgroundPosition" : "center",
-				"backgroundSize" : "100% 100%"
+	privateSetup: {
+		dialBoxNum: 12,
+		dialBoxOpacity: 1,
+		dialBoxSpacing: 30,
+		dialBoxWidth: 240,
+		dialBoxHeight: 135,
+		dialBoxRadius: 4,
+		dialBoxMaxTop: 'auto',
+		dialBoxPage: 1,
+		dialBoxQBCWidth: 1000,
+		dialBoxTitleSwitch: false,
+		dialBoxCloudBoxSwitch: true,
+		dialBoxPageSwitcher: false,
+		dialBoxPage3DSwitcher: false,
+		dialBoxQuickSwitcher: false,
+		targetSwitch: true,
+		style: {
+			background: {
+				"backgroundRepeat": "no-repeat",
+				"backgroundPosition": "center",
+				"backgroundSize": "100% 100%"
 			}
 		},
-		skin : "skin_local",
-		searchSite : ui_locale == "zh_CN" ? 'baidu' : 'google'
+		skin: "skin_local",
+		searchSite: ui_locale == "zh_CN" ? 'baidu': 'google'
 	}
 };
 var _configList = {
-	de : {
-		lang : "de",
-		dialBoxes : {
-			normal : [{
-					"title" : getI18nMsg('weatherAppTitle'),
-					"img" : urlImg + "myapp/weather/img/m/logo.png",
-					"isApp" : "weather"
+	de: {
+		lang: "de",
+		dialBoxes: {
+			normal: [{
+					"title": getI18nMsg('weatherAppTitle'),
+					"img": urlImg + "myapp/weather/img/m/logo.png",
+					"isApp": "weather"
 				}, {
-					"title" : getI18nMsg('quickSearchAppTitle'),
-					"img" : "app/quickSearch/img/logo.png",
-					"isApp" : "quickSearch"
+					"title": getI18nMsg('quickSearchAppTitle'),
+					"img": "app/quickSearch/img/logo.png",
+					"isApp": "quickSearch"
 				}, {
-					"title" : "Google",
-					"url" : "www.google.de"
+					"title": "Google",
+					"url": "www.google.de"
 				}, {
-					"title" : "Facebook",
-					"url" : "www.facebook.com"
+					"title": "Facebook",
+					"url": "www.facebook.com"
 				}, {
-					"title" : "YouTube",
-					"url" : "www.youtube.com"
+					"title": "YouTube",
+					"url": "www.youtube.com"
 				}, {
-					"title" : "Amazon",
-					"url" : "www.amazon.de/?_encoding=UTF8&camp=1638&creative=19454&linkCode=ur2&site-redirect=de&tag=xnetapa-21",
-					"html" : "<img src='https://www.assoc-amazon.de/e/ir?t=xnetapa-21&l=ur2&o=3' width='1' height='1' border='0'>"
+					"title": "Amazon",
+					"url": "www.amazon.de/?_encoding=UTF8&camp=1638&creative=19454&linkCode=ur2&site-redirect=de&tag=xnetapa-21",
+					"html": "<img src='https://www.assoc-amazon.de/e/ir?t=xnetapa-21&l=ur2&o=3' width='1' height='1' border='0'>"
 				}, {
-					"title" : "eBay",
-					"url" : "rover.ebay.com/rover/1/707-53477-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229487&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.de",
-					"html" : "<img width='1' height='1' border='0' src='http://rover.ebay.com/roverimp/1/707-53477-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
+					"title": "eBay",
+					"url": "rover.ebay.com/rover/1/707-53477-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229487&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.de",
+					"html": "<img width='1' height='1' border='0' src='http://rover.ebay.com/roverimp/1/707-53477-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
 				}, {
-					"title" : "T-online",
-					"url" : "www.t-online.de"
+					"title": "T-online",
+					"url": "www.t-online.de"
 				}, {
-					"title" : "Walmart",
-					"url" : "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "Walmart",
+					"url": "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Wikipedia",
-					"url" : "www.wikipedia.org"
+					"title": "Wikipedia",
+					"url": "www.wikipedia.org"
 				}, {
-					"title" : "Yahoo",
-					"url" : "de.yahoo.com"
+					"title": "Yahoo",
+					"url": "de.yahoo.com"
 				}, {
-					"title" : "BestBuy",
-					"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "BestBuy",
+					"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Twitter",
-					"url" : "twitter.com"
+					"title": "Twitter",
+					"url": "twitter.com"
 				}, {
-					"title" : "Bet365",
-					"url" : "www.bet365.com"
+					"title": "Bet365",
+					"url": "www.bet365.com"
 				}, {
-					"title" : "Web",
-					"url" : "www.web.de"
+					"title": "Web",
+					"url": "www.web.de"
 				}, {
-					"title" : "SPIEGEL ONLINE",
-					"url" : "www.spiegel.de"
+					"title": "SPIEGEL ONLINE",
+					"url": "www.spiegel.de"
 				}, {
-					"title" : "GMX",
-					"url" : "www.gmx.net"
+					"title": "GMX",
+					"url": "www.gmx.net"
 				}, {
-					"title" : "JCPenney",
-					"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=172753.10004138&type=3&subid=0&t=http://www.jcpenney.com/",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=172753.10004138&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "JCPenney",
+					"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=172753.10004138&type=3&subid=0&t=http://www.jcpenney.com/",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=172753.10004138&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Bild",
-					"url" : "www.Bild.de"
+					"title": "Bild",
+					"url": "www.Bild.de"
 				}, {
-					"title" : "LinkedIn",
-					"url" : "www.linkedin.com"
+					"title": "LinkedIn",
+					"url": "www.linkedin.com"
 				}, {
-					"title" : "Webstore",
-					"url" : "chrome.google.com/webstore/?t=http://webstore.google.com"
+					"title": "Webstore",
+					"url": "chrome.google.com/webstore/?t=http://webstore.google.com"
 				}, {
-					"title" : getI18nMsg('siteNavAppTitle'),
-					"img" : "app/siteNav/img/logo.png",
-					"isApp" : "siteNav"
+					"title": getI18nMsg('siteNavAppTitle'),
+					"img": "app/siteNav/img/logo.png",
+					"isApp": "siteNav"
 				}, {
-					"title" : getI18nMsg('cloudAppTitle'),
-					"img" : "js/plugin/cloud/img/logo.png",
-					"isApp" : "cloud",
-					"isFixed" : true
+					"title": getI18nMsg('cloudAppTitle'),
+					"img": "js/plugin/cloud/img/logo.png",
+					"isApp": "cloud",
+					"isFixed": true
 				}
 			],
-			quick : [{
-					"title" : getI18nMsg('classificationAppTitle'),
-					"img" : "js/plugin/classification/img/logo.png",
-					"isApp" : "classification"
+			quick: [{
+					"title": getI18nMsg('classificationAppTitle'),
+					"img": "js/plugin/classification/img/logo.png",
+					"isApp": "classification"
 				}, {
-					"title" : getI18nMsg('skinsAppTitle'),
-					"img" : "js/plugin/skins/img/logo.png",
-					"isApp" : "skins"
+					"title": getI18nMsg('skinsAppTitle'),
+					"img": "js/plugin/skins/img/logo.png",
+					"isApp": "skins"
 				}, {
-					"title" : getI18nMsg('bookmarksAppTitle'),
-					"img" : "js/plugin/bookmarks/img/logo.png",
-					"isApp" : "bookmarks"
+					"title": getI18nMsg('bookmarksAppTitle'),
+					"img": "js/plugin/bookmarks/img/logo.png",
+					"isApp": "bookmarks"
 				}, {
-					"title" : getI18nMsg('oNewtabTitle'),
-					"img" : "js/plugin/app/img/skin_0/oNewtab.png",
-					"isApp" : "oNewtab"
+					"title": getI18nMsg('oNewtabTitle'),
+					"img": "js/plugin/app/img/skin_0/oNewtab.png",
+					"isApp": "oNewtab"
 				}, {
-					"title" : getI18nMsg('lastVisitedAppTitle'),
-					"img" : "js/plugin/lastVisited/img/logo.png",
-					"isApp" : "lastVisited"
+					"title": getI18nMsg('lastVisitedAppTitle'),
+					"img": "js/plugin/lastVisited/img/logo.png",
+					"isApp": "lastVisited"
 				}, {
-					"title" : getI18nMsg('extensionsAppTitle'),
-					"img" : "js/plugin/extensions/img/logo.png",
-					"isApp" : "extensions"
+					"title": getI18nMsg('extensionsAppTitle'),
+					"img": "js/plugin/extensions/img/logo.png",
+					"isApp": "extensions"
 				}, {
-					"title" : getI18nMsg('setupAppTitle'),
-					"img" : "js/plugin/setup/img/logo.png",
-					"isApp" : "setup",
-					"isFixed" : true
+					"title": getI18nMsg('setupAppTitle'),
+					"img": "js/plugin/setup/img/logo.png",
+					"isApp": "setup",
+					"isFixed": true
 				}
 			]
 		}
 	},
-	ru : {
-		lang : "ru",
-		dialBoxes : {
-			normal : [{
-					"title" : getI18nMsg('weatherAppTitle'),
-					"img" : urlImg + "myapp/weather/img/m/logo.png",
-					"isApp" : "weather"
+	ru: {
+		lang: "ru",
+		dialBoxes: {
+			normal: [{
+					"title": getI18nMsg('weatherAppTitle'),
+					"img": urlImg + "myapp/weather/img/m/logo.png",
+					"isApp": "weather"
 				}, {
-					"title" : getI18nMsg('quickSearchAppTitle'),
-					"img" : "app/quickSearch/img/logo.png",
-					"isApp" : "quickSearch"
+					"title": getI18nMsg('quickSearchAppTitle'),
+					"img": "app/quickSearch/img/logo.png",
+					"isApp": "quickSearch"
 				}, {
-					"title" : "–Ø–Ω–¥–µ–∫—Å",
-					"url" : "www.yandex.ru"
+					"title": "ß¡ßﬂß’ß÷ß‹ß„",
+					"url": "www.yandex.ru"
 				}, {
-					"title" : "–í–ö–æ–Ω—Ç–∞–∫—Ç–µ",
-					"url" : "www.vk.com"
+					"title": "ß£ß¨ß‡ßﬂß‰ß—ß‹ß‰ß÷",
+					"url": "www.vk.com"
 				}, {
-					"title" : "Google",
-					"url" : "www.google.ru"
+					"title": "Google",
+					"url": "www.google.ru"
 				}, {
-					"title" : "Amazon",
-					"url" : "www.amazon.com"
+					"title": "Amazon",
+					"url": "www.amazon.com"
 				}, {
-					"title" : "eBay",
-					"url" : "rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.com",
-					"html" : "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/711-53200-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
+					"title": "eBay",
+					"url": "rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.com",
+					"html": "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/711-53200-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
 				}, {
-					"title" : "–ü–æ—Ä—Ç–∞–ª Mail.Ru",
-					"url" : "www.mail.ru"
+					"title": "ß±ß‡ß‚ß‰ß—ß› Mail.Ru",
+					"url": "www.mail.ru"
 				}, {
-					"title" : "Walmart",
-					"url" : "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "Walmart",
+					"url": "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "YouTube",
-					"url" : "www.youtube.com"
+					"title": "YouTube",
+					"url": "www.youtube.com"
 				}, {
-					"title" : "Facebook",
-					"url" : "www.facebook.com"
+					"title": "Facebook",
+					"url": "www.facebook.com"
 				}, {
-					"title" : "BestBuy",
-					"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "BestBuy",
+					"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Twitter",
-					"url" : "twitter.com"
+					"title": "Twitter",
+					"url": "twitter.com"
 				}, {
-					"title" : "Bet365",
-					"url" : "www.bet365.com"
+					"title": "Bet365",
+					"url": "www.bet365.com"
 				}, {
-					"title" : "–û–¥–Ω–æ–∫–ª–∞—Å—Å–Ω–∏–∫–∏.ru",
-					"url" : "www.odnoklassniki.ru"
+					"title": "ß∞ß’ßﬂß‡ß‹ß›ß—ß„ß„ßﬂß⁄ß‹ß⁄.ru",
+					"url": "www.odnoklassniki.ru"
 				}, {
-					"title" : "Wikipedia",
-					"url" : "www.wikipedia.org"
+					"title": "Wikipedia",
+					"url": "www.wikipedia.org"
 				}, {
-					"title" : "LiveInternet.ru",
-					"url" : "www.liveinternet.ru"
+					"title": "LiveInternet.ru",
+					"url": "www.liveinternet.ru"
 				}, {
-					"title" : "LiveJournal.com",
-					"url" : "www.livejournal.com"
+					"title": "LiveJournal.com",
+					"url": "www.livejournal.com"
 				}, {
-					"title" : "avito.ru",
-					"url" : "www.avito.ru"
+					"title": "avito.ru",
+					"url": "www.avito.ru"
 				}, {
-					"title" : "–í–µ–±-—Å–µ—Ä–≤–∏—Å uCoz",
-					"url" : "www.ucoz.ru"
+					"title": "ß£ß÷ß“-ß„ß÷ß‚ß”ß⁄ß„ uCoz",
+					"url": "www.ucoz.ru"
 				}, {
-					"title" : "Webstore",
-					"url" : "chrome.google.com/webstore/?t=http://webstore.google.com"
+					"title": "Webstore",
+					"url": "chrome.google.com/webstore/?t=http://webstore.google.com"
 				}, {
-					"title" : getI18nMsg('siteNavAppTitle'),
-					"img" : "app/siteNav/img/logo.png",
-					"isApp" : "siteNav"
+					"title": getI18nMsg('siteNavAppTitle'),
+					"img": "app/siteNav/img/logo.png",
+					"isApp": "siteNav"
 				}, {
-					"title" : getI18nMsg('cloudAppTitle'),
-					"img" : "js/plugin/cloud/img/logo.png",
-					"isApp" : "cloud",
-					"isFixed" : true
+					"title": getI18nMsg('cloudAppTitle'),
+					"img": "js/plugin/cloud/img/logo.png",
+					"isApp": "cloud",
+					"isFixed": true
 				}
 			],
-			quick : [{
-					"title" : getI18nMsg('classificationAppTitle'),
-					"img" : "js/plugin/classification/img/logo.png",
-					"isApp" : "classification"
+			quick: [{
+					"title": getI18nMsg('classificationAppTitle'),
+					"img": "js/plugin/classification/img/logo.png",
+					"isApp": "classification"
 				}, {
-					"title" : getI18nMsg('skinsAppTitle'),
-					"img" : "js/plugin/skins/img/logo.png",
-					"isApp" : "skins"
+					"title": getI18nMsg('skinsAppTitle'),
+					"img": "js/plugin/skins/img/logo.png",
+					"isApp": "skins"
 				}, {
-					"title" : getI18nMsg('bookmarksAppTitle'),
-					"img" : "js/plugin/bookmarks/img/logo.png",
-					"isApp" : "bookmarks"
+					"title": getI18nMsg('bookmarksAppTitle'),
+					"img": "js/plugin/bookmarks/img/logo.png",
+					"isApp": "bookmarks"
 				}, {
-					"title" : getI18nMsg('oNewtabTitle'),
-					"img" : "js/plugin/app/img/skin_0/oNewtab.png",
-					"isApp" : "oNewtab"
+					"title": getI18nMsg('oNewtabTitle'),
+					"img": "js/plugin/app/img/skin_0/oNewtab.png",
+					"isApp": "oNewtab"
 				}, {
-					"title" : getI18nMsg('lastVisitedAppTitle'),
-					"img" : "js/plugin/lastVisited/img/logo.png",
-					"isApp" : "lastVisited"
+					"title": getI18nMsg('lastVisitedAppTitle'),
+					"img": "js/plugin/lastVisited/img/logo.png",
+					"isApp": "lastVisited"
 				}, {
-					"title" : getI18nMsg('extensionsAppTitle'),
-					"img" : "js/plugin/extensions/img/logo.png",
-					"isApp" : "extensions"
+					"title": getI18nMsg('extensionsAppTitle'),
+					"img": "js/plugin/extensions/img/logo.png",
+					"isApp": "extensions"
 				}, {
-					"title" : getI18nMsg('setupAppTitle'),
-					"img" : "js/plugin/setup/img/logo.png",
-					"isApp" : "setup",
-					"isFixed" : true
+					"title": getI18nMsg('setupAppTitle'),
+					"img": "js/plugin/setup/img/logo.png",
+					"isApp": "setup",
+					"isFixed": true
 				}
 			]
 		}
 	},
-	pt_BR : {
-		lang : "pt_BR",
-		dialBoxes : {
-			normal : [{
-					"title" : getI18nMsg('weatherAppTitle'),
-					"img" : urlImg + "myapp/weather/img/m/logo.png",
-					"isApp" : "weather"
+	pt_BR: {
+		lang: "pt_BR",
+		dialBoxes: {
+			normal: [{
+					"title": getI18nMsg('weatherAppTitle'),
+					"img": urlImg + "myapp/weather/img/m/logo.png",
+					"isApp": "weather"
 				}, {
-					"title" : getI18nMsg('quickSearchAppTitle'),
-					"img" : "app/quickSearch/img/logo.png",
-					"isApp" : "quickSearch"
+					"title": getI18nMsg('quickSearchAppTitle'),
+					"img": "app/quickSearch/img/logo.png",
+					"isApp": "quickSearch"
 				}, {
-					"title" : "Google",
-					"url" : "www.google.com.br"
+					"title": "Google",
+					"url": "www.google.com.br"
 				}, {
-					"title" : "Facebook",
-					"url" : "www.facebook.com"
+					"title": "Facebook",
+					"url": "www.facebook.com"
 				}, {
-					"title" : "YouTube",
-					"url" : "www.youtube.com"
+					"title": "YouTube",
+					"url": "www.youtube.com"
 				}, {
-					"title" : "Amazon",
-					"url" : "www.amazon.com"
+					"title": "Amazon",
+					"url": "www.amazon.com"
 				}, {
-					"title" : "eBay",
-					"url" : "rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.com",
-					"html" : "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/711-53200-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
+					"title": "eBay",
+					"url": "rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.com",
+					"html": "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/711-53200-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
 				}, {
-					"title" : "Universo Online",
-					"url" : "www.uol.com.br"
+					"title": "Universo Online",
+					"url": "www.uol.com.br"
 				}, {
-					"title" : "Walmart",
-					"url" : "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "Walmart",
+					"url": "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Windows Live",
-					"url" : "www.live.com"
+					"title": "Windows Live",
+					"url": "www.live.com"
 				}, {
-					"title" : "Yahoo",
-					"url" : "www.yahoo.com"
+					"title": "Yahoo",
+					"url": "www.yahoo.com"
 				}, {
-					"title" : "BestBuy",
-					"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "BestBuy",
+					"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Bet365",
-					"url" : "www.bet365.com"
+					"title": "Bet365",
+					"url": "www.bet365.com"
 				}, {
-					"title" : "Globo",
-					"url" : "www.globo.com"
+					"title": "Globo",
+					"url": "www.globo.com"
 				}, {
-					"title" : "MercadoLivre Brasil",
-					"url" : "www.mercadolivre.com.br"
+					"title": "MercadoLivre Brasil",
+					"url": "www.mercadolivre.com.br"
 				}, {
-					"title" : "Wikipedia",
-					"url" : "www.wikipedia.org"
+					"title": "Wikipedia",
+					"url": "www.wikipedia.org"
 				}, {
-					"title" : "IG",
-					"url" : "www.ig.com.br"
+					"title": "IG",
+					"url": "www.ig.com.br"
 				}, {
-					"title" : "JCPenney",
-					"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=172753.10004138&type=3&subid=0&t=http://www.jcpenney.com/",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=172753.10004138&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "JCPenney",
+					"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=172753.10004138&type=3&subid=0&t=http://www.jcpenney.com/",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=172753.10004138&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Abril",
-					"url" : "www.abril.com.br"
+					"title": "Abril",
+					"url": "www.abril.com.br"
 				}, {
-					"title" : "Twitter",
-					"url" : "www.twitter.com"
+					"title": "Twitter",
+					"url": "www.twitter.com"
 				}, {
-					"title" : "LinkedIn",
-					"url" : "www.linkedin.com"
+					"title": "LinkedIn",
+					"url": "www.linkedin.com"
 				}, {
-					"title" : "Webstore",
-					"url" : "chrome.google.com/webstore/?t=http://webstore.google.com"
+					"title": "Webstore",
+					"url": "chrome.google.com/webstore/?t=http://webstore.google.com"
 				}, {
-					"title" : getI18nMsg('siteNavAppTitle'),
-					"img" : "app/siteNav/img/logo.png",
-					"isApp" : "siteNav"
+					"title": getI18nMsg('siteNavAppTitle'),
+					"img": "app/siteNav/img/logo.png",
+					"isApp": "siteNav"
 				}, {
-					"title" : getI18nMsg('cloudAppTitle'),
-					"img" : "js/plugin/cloud/img/logo.png",
-					"isApp" : "cloud",
-					"isFixed" : true
+					"title": getI18nMsg('cloudAppTitle'),
+					"img": "js/plugin/cloud/img/logo.png",
+					"isApp": "cloud",
+					"isFixed": true
 				}
 			],
-			quick : [{
-					"title" : getI18nMsg('classificationAppTitle'),
-					"img" : "js/plugin/classification/img/logo.png",
-					"isApp" : "classification"
+			quick: [{
+					"title": getI18nMsg('classificationAppTitle'),
+					"img": "js/plugin/classification/img/logo.png",
+					"isApp": "classification"
 				}, {
-					"title" : getI18nMsg('skinsAppTitle'),
-					"img" : "js/plugin/skins/img/logo.png",
-					"isApp" : "skins"
+					"title": getI18nMsg('skinsAppTitle'),
+					"img": "js/plugin/skins/img/logo.png",
+					"isApp": "skins"
 				}, {
-					"title" : getI18nMsg('bookmarksAppTitle'),
-					"img" : "js/plugin/bookmarks/img/logo.png",
-					"isApp" : "bookmarks"
+					"title": getI18nMsg('bookmarksAppTitle'),
+					"img": "js/plugin/bookmarks/img/logo.png",
+					"isApp": "bookmarks"
 				}, {
-					"title" : getI18nMsg('oNewtabTitle'),
-					"img" : "js/plugin/app/img/skin_0/oNewtab.png",
-					"isApp" : "oNewtab"
+					"title": getI18nMsg('oNewtabTitle'),
+					"img": "js/plugin/app/img/skin_0/oNewtab.png",
+					"isApp": "oNewtab"
 				}, {
-					"title" : getI18nMsg('lastVisitedAppTitle'),
-					"img" : "js/plugin/lastVisited/img/logo.png",
-					"isApp" : "lastVisited"
+					"title": getI18nMsg('lastVisitedAppTitle'),
+					"img": "js/plugin/lastVisited/img/logo.png",
+					"isApp": "lastVisited"
 				}, {
-					"title" : getI18nMsg('extensionsAppTitle'),
-					"img" : "js/plugin/extensions/img/logo.png",
-					"isApp" : "extensions"
+					"title": getI18nMsg('extensionsAppTitle'),
+					"img": "js/plugin/extensions/img/logo.png",
+					"isApp": "extensions"
 				}, {
-					"title" : getI18nMsg('setupAppTitle'),
-					"img" : "js/plugin/setup/img/logo.png",
-					"isApp" : "setup",
-					"isFixed" : true
+					"title": getI18nMsg('setupAppTitle'),
+					"img": "js/plugin/setup/img/logo.png",
+					"isApp": "setup",
+					"isFixed": true
 				}
 			]
 		}
 	},
-	pt_PT : {
-		lang : "pt_PT",
-		dialBoxes : {
-			normal : [{
-					"title" : getI18nMsg('weatherAppTitle'),
-					"img" : urlImg + "myapp/weather/img/m/logo.png",
-					"isApp" : "weather"
+	pt_PT: {
+		lang: "pt_PT",
+		dialBoxes: {
+			normal: [{
+					"title": getI18nMsg('weatherAppTitle'),
+					"img": urlImg + "myapp/weather/img/m/logo.png",
+					"isApp": "weather"
 				}, {
-					"title" : getI18nMsg('quickSearchAppTitle'),
-					"img" : "app/quickSearch/img/logo.png",
-					"isApp" : "quickSearch"
+					"title": getI18nMsg('quickSearchAppTitle'),
+					"img": "app/quickSearch/img/logo.png",
+					"isApp": "quickSearch"
 				}, {
-					"title" : "Google",
-					"url" : "www.google.pt"
+					"title": "Google",
+					"url": "www.google.pt"
 				}, {
-					"title" : "Facebook",
-					"url" : "www.facebook.com"
+					"title": "Facebook",
+					"url": "www.facebook.com"
 				}, {
-					"title" : "YouTube",
-					"url" : "www.youtube.com"
+					"title": "YouTube",
+					"url": "www.youtube.com"
 				}, {
-					"title" : "Amazon",
-					"url" : "www.amazon.com"
+					"title": "Amazon",
+					"url": "www.amazon.com"
 				}, {
-					"title" : "eBay",
-					"url" : "rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.com",
-					"html" : "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/711-53200-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
+					"title": "eBay",
+					"url": "rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.com",
+					"html": "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/711-53200-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
 				}, {
-					"title" : "Sapo - Portugal Online",
-					"url" : "www.sapo.pt"
+					"title": "Sapo - Portugal Online",
+					"url": "www.sapo.pt"
 				}, {
-					"title" : "Walmart",
-					"url" : "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "Walmart",
+					"url": "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Wikipedia",
-					"url" : "www.wikipedia.org"
+					"title": "Wikipedia",
+					"url": "www.wikipedia.org"
 				}, {
-					"title" : "NeoBux",
-					"url" : "www.neobux.com"
+					"title": "NeoBux",
+					"url": "www.neobux.com"
 				}, {
-					"title" : "BestBuy",
-					"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "BestBuy",
+					"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Bet365",
-					"url" : "www.bet365.com"
+					"title": "Bet365",
+					"url": "www.bet365.com"
 				}, {
-					"title" : "XL.pt",
-					"url" : "www.xl.pt"
+					"title": "XL.pt",
+					"url": "www.xl.pt"
 				}, {
-					"title" : "Clix Desporto",
-					"url" : "www.abola.pt"
+					"title": "Clix Desporto",
+					"url": "www.abola.pt"
 				}, {
-					"title" : "Tumblr",
-					"url" : "www.tumblr.com"
+					"title": "Tumblr",
+					"url": "www.tumblr.com"
 				}, {
-					"title" : "olx.pt",
-					"url" : "www.olx.pt"
+					"title": "olx.pt",
+					"url": "www.olx.pt"
 				}, {
-					"title" : "Yahoo",
-					"url" : "www.yahoo.com"
+					"title": "Yahoo",
+					"url": "www.yahoo.com"
 				}, {
-					"title" : "Twitter",
-					"url" : "www.twitter.com"
+					"title": "Twitter",
+					"url": "www.twitter.com"
 				}, {
-					"title" : "LinkedIn",
-					"url" : "www.linkedin.com"
+					"title": "LinkedIn",
+					"url": "www.linkedin.com"
 				}, {
-					"title" : "Webstore",
-					"url" : "chrome.google.com/webstore/?t=http://webstore.google.com"
+					"title": "Webstore",
+					"url": "chrome.google.com/webstore/?t=http://webstore.google.com"
 				}, {
-					"title" : getI18nMsg('siteNavAppTitle'),
-					"img" : "app/siteNav/img/logo.png",
-					"isApp" : "siteNav"
+					"title": getI18nMsg('siteNavAppTitle'),
+					"img": "app/siteNav/img/logo.png",
+					"isApp": "siteNav"
 				}, {
-					"title" : getI18nMsg('cloudAppTitle'),
-					"img" : "js/plugin/cloud/img/logo.png",
-					"isApp" : "cloud",
-					"isFixed" : true
+					"title": getI18nMsg('cloudAppTitle'),
+					"img": "js/plugin/cloud/img/logo.png",
+					"isApp": "cloud",
+					"isFixed": true
 				}
 			],
-			quick : [{
-					"title" : getI18nMsg('classificationAppTitle'),
-					"img" : "js/plugin/classification/img/logo.png",
-					"isApp" : "classification"
+			quick: [{
+					"title": getI18nMsg('classificationAppTitle'),
+					"img": "js/plugin/classification/img/logo.png",
+					"isApp": "classification"
 				}, {
-					"title" : getI18nMsg('skinsAppTitle'),
-					"img" : "js/plugin/skins/img/logo.png",
-					"isApp" : "skins"
+					"title": getI18nMsg('skinsAppTitle'),
+					"img": "js/plugin/skins/img/logo.png",
+					"isApp": "skins"
 				}, {
-					"title" : getI18nMsg('bookmarksAppTitle'),
-					"img" : "js/plugin/bookmarks/img/logo.png",
-					"isApp" : "bookmarks"
+					"title": getI18nMsg('bookmarksAppTitle'),
+					"img": "js/plugin/bookmarks/img/logo.png",
+					"isApp": "bookmarks"
 				}, {
-					"title" : getI18nMsg('oNewtabTitle'),
-					"img" : "js/plugin/app/img/skin_0/oNewtab.png",
-					"isApp" : "oNewtab"
+					"title": getI18nMsg('oNewtabTitle'),
+					"img": "js/plugin/app/img/skin_0/oNewtab.png",
+					"isApp": "oNewtab"
 				}, {
-					"title" : getI18nMsg('lastVisitedAppTitle'),
-					"img" : "js/plugin/lastVisited/img/logo.png",
-					"isApp" : "lastVisited"
+					"title": getI18nMsg('lastVisitedAppTitle'),
+					"img": "js/plugin/lastVisited/img/logo.png",
+					"isApp": "lastVisited"
 				}, {
-					"title" : getI18nMsg('extensionsAppTitle'),
-					"img" : "js/plugin/extensions/img/logo.png",
-					"isApp" : "extensions"
+					"title": getI18nMsg('extensionsAppTitle'),
+					"img": "js/plugin/extensions/img/logo.png",
+					"isApp": "extensions"
 				}, {
-					"title" : getI18nMsg('setupAppTitle'),
-					"img" : "js/plugin/setup/img/logo.png",
-					"isApp" : "setup",
-					"isFixed" : true
+					"title": getI18nMsg('setupAppTitle'),
+					"img": "js/plugin/setup/img/logo.png",
+					"isApp": "setup",
+					"isFixed": true
 				}
 			]
 		}
 	},
-	es : {
-		lang : "es",
-		dialBoxes : {
-			normal : [{
-					"title" : getI18nMsg('weatherAppTitle'),
-					"img" : urlImg + "myapp/weather/img/m/logo.png",
-					"isApp" : "weather"
+	es: {
+		lang: "es",
+		dialBoxes: {
+			normal: [{
+					"title": getI18nMsg('weatherAppTitle'),
+					"img": urlImg + "myapp/weather/img/m/logo.png",
+					"isApp": "weather"
 				}, {
-					"title" : getI18nMsg('quickSearchAppTitle'),
-					"img" : "app/quickSearch/img/logo.png",
-					"isApp" : "quickSearch"
+					"title": getI18nMsg('quickSearchAppTitle'),
+					"img": "app/quickSearch/img/logo.png",
+					"isApp": "quickSearch"
 				}, {
-					"title" : "Google",
-					"url" : "www.google.es"
+					"title": "Google",
+					"url": "www.google.es"
 				}, {
-					"title" : "YouTube",
-					"url" : "www.youtube.com"
+					"title": "YouTube",
+					"url": "www.youtube.com"
 				}, {
-					"title" : "Wikipedia",
-					"url" : "www.wikipedia.org"
+					"title": "Wikipedia",
+					"url": "www.wikipedia.org"
 				}, {
-					"title" : "Amazon",
-					"url" : "www.amazon.es/?_encoding=UTF8&camp=3626&creative=24790&linkCode=ur2&tag=netapl08-21",
-					"html" : "<img src='http://www.assoc-amazon.es/e/ir?t=netapl08-21&l=ur2&o=30' width='1' height='1' border='0'>"
+					"title": "Amazon",
+					"url": "www.amazon.es/?_encoding=UTF8&camp=3626&creative=24790&linkCode=ur2&tag=netapl08-21",
+					"html": "<img src='http://www.assoc-amazon.es/e/ir?t=netapl08-21&l=ur2&o=30' width='1' height='1' border='0'>"
 				}, {
-					"title" : "eBay",
-					"url" : "rover.ebay.com/rover/1/1185-53479-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229501&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.es",
-					"html" : "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/1185-53479-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
+					"title": "eBay",
+					"url": "rover.ebay.com/rover/1/1185-53479-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229501&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.es",
+					"html": "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/1185-53479-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
 				}, {
-					"title" : "Facebook",
-					"url" : "www.facebook.com"
+					"title": "Facebook",
+					"url": "www.facebook.com"
 				}, {
-					"title" : "Walmart",
-					"url" : "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "Walmart",
+					"url": "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Ask",
-					"url" : "www.ask.com"
+					"title": "Ask",
+					"url": "www.ask.com"
 				}, {
-					"title" : "Milanuncios",
-					"url" : "www.milanuncios.com"
+					"title": "Milanuncios",
+					"url": "www.milanuncios.com"
 				}, {
-					"title" : "BestBuy",
-					"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "BestBuy",
+					"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Bet365",
-					"url" : "www.bet365.com"
+					"title": "Bet365",
+					"url": "www.bet365.com"
 				}, {
-					"title" : "antena3.com",
-					"url" : "www.antena3.com"
+					"title": "antena3.com",
+					"url": "www.antena3.com"
 				}, {
-					"title" : "TELECINCO",
-					"url" : "www.telecinco.es"
+					"title": "TELECINCO",
+					"url": "www.telecinco.es"
 				}, {
-					"title" : "Yahoo",
-					"url" : "es.yahoo.com"
+					"title": "Yahoo",
+					"url": "es.yahoo.com"
 				}, {
-					"title" : "rtve.es",
-					"url" : "www.rtve.es"
+					"title": "rtve.es",
+					"url": "www.rtve.es"
 				}, {
-					"title" : "Msn",
-					"url" : "es.msn.com"
+					"title": "Msn",
+					"url": "es.msn.com"
 				}, {
-					"title" : "AS.com",
-					"url" : "www.as.com"
+					"title": "AS.com",
+					"url": "www.as.com"
 				}, {
-					"title" : "Badoo",
-					"url" : "www.badoo.com"
+					"title": "Badoo",
+					"url": "www.badoo.com"
 				}, {
-					"title" : "Ciao",
-					"url" : "www.ciao.es"
+					"title": "Ciao",
+					"url": "www.ciao.es"
 				}, {
-					"title" : "Webstore",
-					"url" : "chrome.google.com/webstore/?t=http://webstore.google.com"
+					"title": "Webstore",
+					"url": "chrome.google.com/webstore/?t=http://webstore.google.com"
 				}, {
-					"title" : getI18nMsg('siteNavAppTitle'),
-					"img" : "app/siteNav/img/logo.png",
-					"isApp" : "siteNav"
+					"title": getI18nMsg('siteNavAppTitle'),
+					"img": "app/siteNav/img/logo.png",
+					"isApp": "siteNav"
 				}, {
-					"title" : getI18nMsg('cloudAppTitle'),
-					"img" : "js/plugin/cloud/img/logo.png",
-					"isApp" : "cloud",
-					"isFixed" : true
+					"title": getI18nMsg('cloudAppTitle'),
+					"img": "js/plugin/cloud/img/logo.png",
+					"isApp": "cloud",
+					"isFixed": true
 				}
 			],
-			quick : [{
-					"title" : getI18nMsg('classificationAppTitle'),
-					"img" : "js/plugin/classification/img/logo.png",
-					"isApp" : "classification"
+			quick: [{
+					"title": getI18nMsg('classificationAppTitle'),
+					"img": "js/plugin/classification/img/logo.png",
+					"isApp": "classification"
 				}, {
-					"title" : getI18nMsg('skinsAppTitle'),
-					"img" : "js/plugin/skins/img/logo.png",
-					"isApp" : "skins"
+					"title": getI18nMsg('skinsAppTitle'),
+					"img": "js/plugin/skins/img/logo.png",
+					"isApp": "skins"
 				}, {
-					"title" : getI18nMsg('bookmarksAppTitle'),
-					"img" : "js/plugin/bookmarks/img/logo.png",
-					"isApp" : "bookmarks"
+					"title": getI18nMsg('bookmarksAppTitle'),
+					"img": "js/plugin/bookmarks/img/logo.png",
+					"isApp": "bookmarks"
 				}, {
-					"title" : getI18nMsg('oNewtabTitle'),
-					"img" : "js/plugin/app/img/skin_0/oNewtab.png",
-					"isApp" : "oNewtab"
+					"title": getI18nMsg('oNewtabTitle'),
+					"img": "js/plugin/app/img/skin_0/oNewtab.png",
+					"isApp": "oNewtab"
 				}, {
-					"title" : getI18nMsg('lastVisitedAppTitle'),
-					"img" : "js/plugin/lastVisited/img/logo.png",
-					"isApp" : "lastVisited"
+					"title": getI18nMsg('lastVisitedAppTitle'),
+					"img": "js/plugin/lastVisited/img/logo.png",
+					"isApp": "lastVisited"
 				}, {
-					"title" : getI18nMsg('extensionsAppTitle'),
-					"img" : "js/plugin/extensions/img/logo.png",
-					"isApp" : "extensions"
+					"title": getI18nMsg('extensionsAppTitle'),
+					"img": "js/plugin/extensions/img/logo.png",
+					"isApp": "extensions"
 				}, {
-					"title" : getI18nMsg('setupAppTitle'),
-					"img" : "js/plugin/setup/img/logo.png",
-					"isApp" : "setup",
-					"isFixed" : true
+					"title": getI18nMsg('setupAppTitle'),
+					"img": "js/plugin/setup/img/logo.png",
+					"isApp": "setup",
+					"isFixed": true
 				}
 			]
 		}
 	},
-	es_419 : {
-		lang : "es_419",
-		dialBoxes : {
-			normal : [{
-					"title" : getI18nMsg('weatherAppTitle'),
-					"img" : urlImg + "myapp/weather/img/m/logo.png",
-					"isApp" : "weather"
+	es_419: {
+		lang: "es_419",
+		dialBoxes: {
+			normal: [{
+					"title": getI18nMsg('weatherAppTitle'),
+					"img": urlImg + "myapp/weather/img/m/logo.png",
+					"isApp": "weather"
 				}, {
-					"title" : getI18nMsg('quickSearchAppTitle'),
-					"img" : "app/quickSearch/img/logo.png",
-					"isApp" : "quickSearch"
+					"title": getI18nMsg('quickSearchAppTitle'),
+					"img": "app/quickSearch/img/logo.png",
+					"isApp": "quickSearch"
 				}, {
-					"title" : "Google",
-					"url" : "www.google.com"
+					"title": "Google",
+					"url": "www.google.com"
 				}, {
-					"title" : "YouTube",
-					"url" : "www.youtube.com"
+					"title": "YouTube",
+					"url": "www.youtube.com"
 				}, {
-					"title" : "Wikipedia",
-					"url" : "www.wikipedia.org"
+					"title": "Wikipedia",
+					"url": "www.wikipedia.org"
 				}, {
-					"title" : "Amazon",
-					"url" : "www.amazon.es/?_encoding=UTF8&camp=3626&creative=24790&linkCode=ur2&tag=netapl08-21",
-					"html" : "<img src='http://www.assoc-amazon.es/e/ir?t=netapl08-21&l=ur2&o=30' width='1' height='1' border='0'>"
+					"title": "Amazon",
+					"url": "www.amazon.es/?_encoding=UTF8&camp=3626&creative=24790&linkCode=ur2&tag=netapl08-21",
+					"html": "<img src='http://www.assoc-amazon.es/e/ir?t=netapl08-21&l=ur2&o=30' width='1' height='1' border='0'>"
 				}, {
-					"title" : "eBay",
-					"url" : "rover.ebay.com/rover/1/1185-53479-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229501&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.es",
-					"html" : "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/1185-53479-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
+					"title": "eBay",
+					"url": "rover.ebay.com/rover/1/1185-53479-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229501&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.es",
+					"html": "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/1185-53479-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
 				}, {
-					"title" : "Facebook",
-					"url" : "www.facebook.com"
+					"title": "Facebook",
+					"url": "www.facebook.com"
 				}, {
-					"title" : "Walmart",
-					"url" : "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "Walmart",
+					"url": "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Ask",
-					"url" : "www.ask.com"
+					"title": "Ask",
+					"url": "www.ask.com"
 				}, {
-					"title" : "MercadoLibre M√©xico",
-					"url" : "www.mercadolibre.com"
+					"title": "MercadoLibre M®¶xico",
+					"url": "www.mercadolibre.com"
 				}, {
-					"title" : "BestBuy",
-					"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "BestBuy",
+					"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Windows Live",
-					"url" : "www.live.com"
+					"title": "Windows Live",
+					"url": "www.live.com"
 				}, {
-					"title" : "Bet365",
-					"url" : "www.bet365.com"
+					"title": "Bet365",
+					"url": "www.bet365.com"
 				}, {
-					"title" : "Musica",
-					"url" : "www.musica.com"
+					"title": "Musica",
+					"url": "www.musica.com"
 				}, {
-					"title" : "Monografias",
-					"url" : "www.monografias.com"
+					"title": "Monografias",
+					"url": "www.monografias.com"
 				}, {
-					"title" : "Twitter",
-					"url" : "www.twitter.com"
+					"title": "Twitter",
+					"url": "www.twitter.com"
 				}, {
-					"title" : "Hotmail",
-					"url" : "www.hotmail.com"
+					"title": "Hotmail",
+					"url": "www.hotmail.com"
 				}, {
-					"title" : "JCPenney",
-					"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=172753.10004138&type=3&subid=0&t=http://www.jcpenney.com/",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=172753.10004138&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "JCPenney",
+					"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=172753.10004138&type=3&subid=0&t=http://www.jcpenney.com/",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=172753.10004138&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "Webstore",
-					"url" : "chrome.google.com/webstore/?t=http://webstore.google.com"
+					"title": "Webstore",
+					"url": "chrome.google.com/webstore/?t=http://webstore.google.com"
 				}, {
-					"title" : getI18nMsg('siteNavAppTitle'),
-					"img" : "app/siteNav/img/logo.png",
-					"isApp" : "siteNav"
+					"title": getI18nMsg('siteNavAppTitle'),
+					"img": "app/siteNav/img/logo.png",
+					"isApp": "siteNav"
 				}, {
-					"title" : getI18nMsg('cloudAppTitle'),
-					"img" : "js/plugin/cloud/img/logo.png",
-					"isApp" : "cloud",
-					"isFixed" : true
+					"title": getI18nMsg('cloudAppTitle'),
+					"img": "js/plugin/cloud/img/logo.png",
+					"isApp": "cloud",
+					"isFixed": true
 				}
 			],
-			quick : [{
-					"title" : getI18nMsg('classificationAppTitle'),
-					"img" : "js/plugin/classification/img/logo.png",
-					"isApp" : "classification"
+			quick: [{
+					"title": getI18nMsg('classificationAppTitle'),
+					"img": "js/plugin/classification/img/logo.png",
+					"isApp": "classification"
 				}, {
-					"title" : getI18nMsg('skinsAppTitle'),
-					"img" : "js/plugin/skins/img/logo.png",
-					"isApp" : "skins"
+					"title": getI18nMsg('skinsAppTitle'),
+					"img": "js/plugin/skins/img/logo.png",
+					"isApp": "skins"
 				}, {
-					"title" : getI18nMsg('bookmarksAppTitle'),
-					"img" : "js/plugin/bookmarks/img/logo.png",
-					"isApp" : "bookmarks"
+					"title": getI18nMsg('bookmarksAppTitle'),
+					"img": "js/plugin/bookmarks/img/logo.png",
+					"isApp": "bookmarks"
 				}, {
-					"title" : getI18nMsg('oNewtabTitle'),
-					"img" : "js/plugin/app/img/skin_0/oNewtab.png",
-					"isApp" : "oNewtab"
+					"title": getI18nMsg('oNewtabTitle'),
+					"img": "js/plugin/app/img/skin_0/oNewtab.png",
+					"isApp": "oNewtab"
 				}, {
-					"title" : getI18nMsg('lastVisitedAppTitle'),
-					"img" : "js/plugin/lastVisited/img/logo.png",
-					"isApp" : "lastVisited"
+					"title": getI18nMsg('lastVisitedAppTitle'),
+					"img": "js/plugin/lastVisited/img/logo.png",
+					"isApp": "lastVisited"
 				}, {
-					"title" : getI18nMsg('extensionsAppTitle'),
-					"img" : "js/plugin/extensions/img/logo.png",
-					"isApp" : "extensions"
+					"title": getI18nMsg('extensionsAppTitle'),
+					"img": "js/plugin/extensions/img/logo.png",
+					"isApp": "extensions"
 				}, {
-					"title" : getI18nMsg('setupAppTitle'),
-					"img" : "js/plugin/setup/img/logo.png",
-					"isApp" : "setup",
-					"isFixed" : true
+					"title": getI18nMsg('setupAppTitle'),
+					"img": "js/plugin/setup/img/logo.png",
+					"isApp": "setup",
+					"isFixed": true
 				}
 			]
 		}
 	},
-	ja : {
-		lang : "ja",
-		dialBoxes : {
-			normal : [{
-					"title" : getI18nMsg('weatherAppTitle'),
-					"img" : urlImg + "myapp/weather/img/m/logo.png",
-					"isApp" : "weather"
+	ja: {
+		lang: "ja",
+		dialBoxes: {
+			normal: [{
+					"title": getI18nMsg('weatherAppTitle'),
+					"img": urlImg + "myapp/weather/img/m/logo.png",
+					"isApp": "weather"
 				}, {
-					"title" : getI18nMsg('quickSearchAppTitle'),
-					"img" : "app/quickSearch/img/logo.png",
-					"isApp" : "quickSearch"
+					"title": getI18nMsg('quickSearchAppTitle'),
+					"img": "app/quickSearch/img/logo.png",
+					"isApp": "quickSearch"
 				}, {
-					"title" : "Yahoo",
-					"url" : "www.yahoo.co.jp"
+					"title": "Yahoo",
+					"url": "www.yahoo.co.jp"
 				}, {
-					"title" : "Google",
-					"url" : "www.google.co.jp"
+					"title": "Google",
+					"url": "www.google.co.jp"
 				}, {
-					"title" : "Mixi",
-					"url" : "mixi.jp"
+					"title": "Mixi",
+					"url": "mixi.jp"
 				}, {
-					"title" : "Amazon",
-					"url" : "www.amazon.co.jp"
+					"title": "Amazon",
+					"url": "www.amazon.co.jp"
 				}, {
-					"title" : "Ê•ΩÂ§©Â∏ÇÂ†¥",
-					"url" : "www.rakuten.co.jp"
+					"title": "òSÃÏ –àˆ",
+					"url": "www.rakuten.co.jp"
 				}, {
-					"title" : "FC2 BLOG",
-					"url" : "fc2blog.us"
+					"title": "FC2 BLOG",
+					"url": "fc2blog.us"
 				}, {
-					"title" : "‰æ°Ê†º.com",
-					"url" : "kakaku.com"
+					"title": "Å˝∏Ò.com",
+					"url": "kakaku.com"
 				}, {
-					"title" : "Facebook",
-					"url" : "www.facebook.com"
+					"title": "Facebook",
+					"url": "www.facebook.com"
 				}, {
-					"title" : "ÈùíÁ©∫ÊñáÂ∫´",
-					"url" : "www.aozora.gr.jp"
+					"title": "«‡ø’ŒƒéÏ",
+					"url": "www.aozora.gr.jp"
 				}, {
-					"title" : "Net price",
-					"url" : "www.netprice.co.jp"
+					"title": "Net price",
+					"url": "www.netprice.co.jp"
 				}, {
-					"title" : "Twitter",
-					"url" : "www.twitter.com"
+					"title": "Twitter",
+					"url": "www.twitter.com"
 				}, {
-					"title" : "Ôºí„Å°„ÇÉ„Çì„Å≠„Çã",
-					"url" : "www.2ch.net"
+					"title": "£≤§¡§„§Û§Õ§Î",
+					"url": "www.2ch.net"
 				}, {
-					"title" : "Copon",
-					"url" : "www.c-pon.com"
+					"title": "Copon",
+					"url": "www.c-pon.com"
 				}, {
-					"title" : "eBay",
-					"url" : "www.ebay.com"
+					"title": "eBay",
+					"url": "www.ebay.com"
 				}, {
-					"title" : "Hot Pepper",
-					"url" : "www.hotpepper.jp"
+					"title": "Hot Pepper",
+					"url": "www.hotpepper.jp"
 				}, {
-					"title" : "Livedoor",
-					"url" : "www.livedoor.com"
+					"title": "Livedoor",
+					"url": "www.livedoor.com"
 				}, {
-					"title" : "„Åê„Çã„Å™„Å≥",
-					"url" : "www.gnavi.co.jp"
+					"title": "§∞§Î§ §”",
+					"url": "www.gnavi.co.jp"
 				}, {
-					"title" : "Vector",
-					"url" : "www.vector.co.jp"
+					"title": "Vector",
+					"url": "www.vector.co.jp"
 				}, {
-					"title" : "Webstore",
-					"url" : "chrome.google.com/webstore/?t=http://webstore.google.com"
+					"title": "Webstore",
+					"url": "chrome.google.com/webstore/?t=http://webstore.google.com"
 				}, {
-					"title" : getI18nMsg('siteNavAppTitle'),
-					"img" : "app/siteNav/img/logo.png",
-					"isApp" : "siteNav"
+					"title": getI18nMsg('siteNavAppTitle'),
+					"img": "app/siteNav/img/logo.png",
+					"isApp": "siteNav"
 				}, {
-					"title" : getI18nMsg('cloudAppTitle'),
-					"img" : "js/plugin/cloud/img/logo.png",
-					"isApp" : "cloud",
-					"isFixed" : true
+					"title": getI18nMsg('cloudAppTitle'),
+					"img": "js/plugin/cloud/img/logo.png",
+					"isApp": "cloud",
+					"isFixed": true
 				}
 			],
-			quick : [{
-					"title" : getI18nMsg('classificationAppTitle'),
-					"img" : "js/plugin/classification/img/logo.png",
-					"isApp" : "classification"
+			quick: [{
+					"title": getI18nMsg('classificationAppTitle'),
+					"img": "js/plugin/classification/img/logo.png",
+					"isApp": "classification"
 				}, {
-					"title" : getI18nMsg('skinsAppTitle'),
-					"img" : "js/plugin/skins/img/logo.png",
-					"isApp" : "skins"
+					"title": getI18nMsg('skinsAppTitle'),
+					"img": "js/plugin/skins/img/logo.png",
+					"isApp": "skins"
 				}, {
-					"title" : getI18nMsg('bookmarksAppTitle'),
-					"img" : "js/plugin/bookmarks/img/logo.png",
-					"isApp" : "bookmarks"
+					"title": getI18nMsg('bookmarksAppTitle'),
+					"img": "js/plugin/bookmarks/img/logo.png",
+					"isApp": "bookmarks"
 				}, {
-					"title" : getI18nMsg('oNewtabTitle'),
-					"img" : "js/plugin/app/img/skin_0/oNewtab.png",
-					"isApp" : "oNewtab"
+					"title": getI18nMsg('oNewtabTitle'),
+					"img": "js/plugin/app/img/skin_0/oNewtab.png",
+					"isApp": "oNewtab"
 				}, {
-					"title" : getI18nMsg('lastVisitedAppTitle'),
-					"img" : "js/plugin/lastVisited/img/logo.png",
-					"isApp" : "lastVisited"
+					"title": getI18nMsg('lastVisitedAppTitle'),
+					"img": "js/plugin/lastVisited/img/logo.png",
+					"isApp": "lastVisited"
 				}, {
-					"title" : getI18nMsg('extensionsAppTitle'),
-					"img" : "js/plugin/extensions/img/logo.png",
-					"isApp" : "extensions"
+					"title": getI18nMsg('extensionsAppTitle'),
+					"img": "js/plugin/extensions/img/logo.png",
+					"isApp": "extensions"
 				}, {
-					"title" : getI18nMsg('setupAppTitle'),
-					"img" : "js/plugin/setup/img/logo.png",
-					"isApp" : "setup",
-					"isFixed" : true
+					"title": getI18nMsg('setupAppTitle'),
+					"img": "js/plugin/setup/img/logo.png",
+					"isApp": "setup",
+					"isFixed": true
 				}
 			]
 		}
 	},
-	zh_TW : {
-		lang : "zh_TW",
-		dialBoxes : {
-			normal : [{
-					"title" : getI18nMsg('weatherAppTitle'),
-					"img" : urlImg + "myapp/weather/img/m/logo.png",
-					"isApp" : "weather"
+	zh_TW: {
+		lang: "zh_TW",
+		dialBoxes: {
+			normal: [{
+					"title": getI18nMsg('weatherAppTitle'),
+					"img": urlImg + "myapp/weather/img/m/logo.png",
+					"isApp": "weather"
 				}, {
-					"title" : getI18nMsg('quickSearchAppTitle'),
-					"img" : "app/quickSearch/img/logo.png",
-					"isApp" : "quickSearch"
+					"title": getI18nMsg('quickSearchAppTitle'),
+					"img": "app/quickSearch/img/logo.png",
+					"isApp": "quickSearch"
 				}, {
-					"title" : "Â•áÊë©",
-					"url" : "tw.yahoo.com"
+					"title": "∆Êƒ¶",
+					"url": "tw.yahoo.com"
 				}, {
-					"title" : "Ë∞∑Âì•",
-					"url" : "www.google.com.hk"
+					"title": "π»∏Á",
+					"url": "www.google.com.hk"
 				}, {
-					"title" : "YouTube",
-					"url" : "www.youtube.com"
+					"title": "YouTube",
+					"url": "www.youtube.com"
 				}, {
-					"title" : "eBay",
-					"url" : "rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.com",
-					"html" : "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/711-53200-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
+					"title": "eBay",
+					"url": "rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.com",
+					"html": "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/711-53200-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
 				}, {
-					"title" : "Amazon",
-					"url" : "www.amazon.com"
+					"title": "Amazon",
+					"url": "www.amazon.com"
 				}, {
-					"title" : "Mobile01",
-					"url" : "www.mobile01.com"
+					"title": "Mobile01",
+					"url": "www.mobile01.com"
 				}, {
-					"title" : "Walmart",
-					"url" : "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "Walmart",
+					"url": "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "ËáâË≠ú",
-					"url" : "www.facebook.com"
+					"title": "ƒò◊V",
+					"url": "www.facebook.com"
 				}, {
-					"title" : "Â∑¥ÂìàÂßÜÁâπÈõªÁé©Ë≥áË®äÁ´ô",
-					"url" : "www.gamer.com.tw"
+					"title": "∞Õπ˛ƒ∑ÃÿÎäÕÊŸY”ç’æ",
+					"url": "www.gamer.com.tw"
 				}, {
-					"title" : "Wikipedia",
-					"url" : "www.wikipedia.org"
+					"title": "Wikipedia",
+					"url": "www.wikipedia.org"
 				}, {
-					"title" : "ÁôæÂ∫¶",
-					"url" : "www.baidu.com/index.php?tn=16046049_dg"
+					"title": "∞Ÿ∂»",
+					"url": "www.baidu.com/index.php?tn=16046049_dg"
 				}, {
-					"title" : "Wikipedia",
-					"url" : "www.wikipedia.org"
+					"title": "Wikipedia",
+					"url": "www.wikipedia.org"
 				}, {
-					"title" : "Bet365",
-					"url" : "www.bet365.com"
+					"title": "Bet365",
+					"url": "www.bet365.com"
 				}, {
-					"title" : "Êé®Áâπ",
-					"url" : "www.twitter.com"
+					"title": "Õ∆Ãÿ",
+					"url": "www.twitter.com"
 				}, {
-					"title" : "Êñ∞Êµ™ÂæÆÂçö",
-					"url" : "weibo.com"
+					"title": "–¬¿ÀŒ¢≤©",
+					"url": "weibo.com"
 				}, {
-					"title" : "BestBuy",
-					"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
-					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
+					"title": "BestBuy",
+					"url": "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
+					"html": "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "ÊÑõÂ•áËóù",
-					"url" : "www.iqiyi.com"
+					"title": "ê€∆ÊÀá",
+					"url": "www.iqiyi.com"
 				}, {
-					"title" : "‰∫∫‰∫∫Á∂≤",
-					"url" : "www.renren.com"
+					"title": "»À»ÀæW",
+					"url": "www.renren.com"
 				}, {
-					"title" : "Webstore",
-					"url" : "chrome.google.com/webstore/?t=http://webstore.google.com"
+					"title": "Webstore",
+					"url": "chrome.google.com/webstore/?t=http://webstore.google.com"
 				}, {
-					"title" : getI18nMsg('siteNavAppTitle'),
-					"img" : "app/siteNav/img/logo.png",
-					"isApp" : "siteNav"
+					"title": getI18nMsg('siteNavAppTitle'),
+					"img": "app/siteNav/img/logo.png",
+					"isApp": "siteNav"
 				}, {
-					"title" : getI18nMsg('toolsAppTitle'),
-					"img" : "app/tools/img/logo.png",
-					"isApp" : "tools"
+					"title": getI18nMsg('toolsAppTitle'),
+					"img": "app/tools/img/logo.png",
+					"isApp": "tools"
 				}, {
-					"title" : getI18nMsg('cloudAppTitle'),
-					"img" : "js/plugin/cloud/img/logo.png",
-					"isApp" : "cloud",
-					"isFixed" : true
+					"title": getI18nMsg('cloudAppTitle'),
+					"img": "js/plugin/cloud/img/logo.png",
+					"isApp": "cloud",
+					"isFixed": true
 				}
 			],
-			quick : [{
-					"title" : getI18nMsg('classificationAppTitle'),
-					"img" : "js/plugin/classification/img/logo.png",
-					"isApp" : "classification"
+			quick: [{
+					"title": getI18nMsg('classificationAppTitle'),
+					"img": "js/plugin/classification/img/logo.png",
+					"isApp": "classification"
 				}, {
-					"title" : getI18nMsg('skinsAppTitle'),
-					"img" : "js/plugin/skins/img/logo.png",
-					"isApp" : "skins"
+					"title": getI18nMsg('skinsAppTitle'),
+					"img": "js/plugin/skins/img/logo.png",
+					"isApp": "skins"
 				}, {
-					"title" : getI18nMsg('bookmarksAppTitle'),
-					"img" : "js/plugin/bookmarks/img/logo.png",
-					"isApp" : "bookmarks"
+					"title": getI18nMsg('bookmarksAppTitle'),
+					"img": "js/plugin/bookmarks/img/logo.png",
+					"isApp": "bookmarks"
 				}, {
-					"title" : getI18nMsg('oNewtabTitle'),
-					"img" : "js/plugin/app/img/skin_0/oNewtab.png",
-					"isApp" : "oNewtab"
+					"title": getI18nMsg('oNewtabTitle'),
+					"img": "js/plugin/app/img/skin_0/oNewtab.png",
+					"isApp": "oNewtab"
 				}, {
-					"title" : getI18nMsg('lastVisitedAppTitle'),
-					"img" : "js/plugin/lastVisited/img/logo.png",
-					"isApp" : "lastVisited"
+					"title": getI18nMsg('lastVisitedAppTitle'),
+					"img": "js/plugin/lastVisited/img/logo.png",
+					"isApp": "lastVisited"
 				}, {
-					"title" : getI18nMsg('extensionsAppTitle'),
-					"img" : "js/plugin/extensions/img/logo.png",
-					"isApp" : "extensions"
+					"title": getI18nMsg('extensionsAppTitle'),
+					"img": "js/plugin/extensions/img/logo.png",
+					"isApp": "extensions"
 				}, {
-					"title" : getI18nMsg('setupAppTitle'),
-					"img" : "js/plugin/setup/img/logo.png",
-					"isApp" : "setup",
-					"isFixed" : true
+					"title": getI18nMsg('setupAppTitle'),
+					"img": "js/plugin/setup/img/logo.png",
+					"isApp": "setup",
+					"isFixed": true
 				}
 			]
 		},
-		apps : [{
-				"id" : "weather",
-				"title" : getI18nMsg('weatherAppTitle'),
-				"img" : urlImg + "myapp/weather/img/m/logo.png"
+		apps: [{
+				"id": "weather",
+				"title": getI18nMsg('weatherAppTitle'),
+				"img": urlImg + "myapp/weather/img/m/logo.png"
 			}, {
-				"id" : "quickSearch",
-				"title" : getI18nMsg('quickSearchAppTitle'),
-				"img" : "app/quickSearch/img/logo.png"
+				"id": "quickSearch",
+				"title": getI18nMsg('quickSearchAppTitle'),
+				"img": "app/quickSearch/img/logo.png"
 			}, {
-				"id" : "skins",
-				"title" : getI18nMsg('skinsAppTitle'),
-				"img" : "js/plugin/skins/img/logo.png"
+				"id": "skins",
+				"title": getI18nMsg('skinsAppTitle'),
+				"img": "js/plugin/skins/img/logo.png"
 			}, {
-				"id" : "classification",
-				"title" : getI18nMsg('classificationAppTitle'),
-				"img" : "js/plugin/classification/img/logo.png"
+				"id": "classification",
+				"title": getI18nMsg('classificationAppTitle'),
+				"img": "js/plugin/classification/img/logo.png"
 			}, {
-				"id" : "cloud",
-				"title" : getI18nMsg('cloudAppTitle'),
-				"img" : "js/plugin/cloud/img/logo.png",
-				"isFixed" : true
+				"id": "cloud",
+				"title": getI18nMsg('cloudAppTitle'),
+				"img": "js/plugin/cloud/img/logo.png",
+				"isFixed": true
 			}, {
-				"id" : "setup",
-				"title" : getI18nMsg('setupAppTitle'),
-				"img" : "js/plugin/setup/img/logo.png",
-				"isFixed" : true
+				"id": "setup",
+				"title": getI18nMsg('setupAppTitle'),
+				"img": "js/plugin/setup/img/logo.png",
+				"isFixed": true
 			}, {
-				"id" : "bookmarks",
-				"title" : getI18nMsg('bookmarksAppTitle'),
-				"img" : "js/plugin/bookmarks/img/logo.png"
+				"id": "bookmarks",
+				"title": getI18nMsg('bookmarksAppTitle'),
+				"img": "js/plugin/bookmarks/img/logo.png"
 			}, {
-				"id" : "lastVisited",
-				"title" : getI18nMsg('lastVisitedAppTitle'),
-				"img" : "js/plugin/lastVisited/img/logo.png"
+				"id": "lastVisited",
+				"title": getI18nMsg('lastVisitedAppTitle'),
+				"img": "js/plugin/lastVisited/img/logo.png"
 			}, {
-				"id" : "extensions",
-				"title" : getI18nMsg('extensionsAppTitle'),
-				"img" : "js/plugin/extensions/img/logo.png"
+				"id": "extensions",
+				"title": getI18nMsg('extensionsAppTitle'),
+				"img": "js/plugin/extensions/img/logo.png"
 			}, {
-				"id" : "siteNav",
-				"title" : getI18nMsg('siteNavAppTitle'),
-				"img" : "app/siteNav/img/logo.png"
+				"id": "siteNav",
+				"title": getI18nMsg('siteNavAppTitle'),
+				"img": "app/siteNav/img/logo.png"
 			}, {
-				"id" : "tools",
-				"title" : getI18nMsg('toolsAppTitle'),
-				"img" : "app/tools/img/logo.png"
+				"id": "tools",
+				"title": getI18nMsg('toolsAppTitle'),
+				"img": "app/tools/img/logo.png"
 			}, {
-				"id" : "oDownloads",
-				"title" : getI18nMsg('oDownloadsTitle'),
-				"img" : "js/plugin/app/img/skin_0/oDownloads.png"
+				"id": "oDownloads",
+				"title": getI18nMsg('oDownloadsTitle'),
+				"img": "js/plugin/app/img/skin_0/oDownloads.png"
 			}, {
-				"id" : "oBookmarks",
-				"title" : getI18nMsg('oBookmarksTitle'),
-				"img" : "js/plugin/app/img/skin_0/oBookmarks.png"
+				"id": "oBookmarks",
+				"title": getI18nMsg('oBookmarksTitle'),
+				"img": "js/plugin/app/img/skin_0/oBookmarks.png"
 			}, {
-				"id" : "oExtensions",
-				"title" : getI18nMsg('oExtensionsTitle'),
-				"img" : "js/plugin/app/img/skin_0/oExtensions.png"
+				"id": "oExtensions",
+				"title": getI18nMsg('oExtensionsTitle'),
+				"img": "js/plugin/app/img/skin_0/oExtensions.png"
 			}, {
-				"id" : "oHistory",
-				"title" : getI18nMsg('oHistoryTitle'),
-				"img" : "js/plugin/app/img/skin_0/oHistory.png"
+				"id": "oHistory",
+				"title": getI18nMsg('oHistoryTitle'),
+				"img": "js/plugin/app/img/skin_0/oHistory.png"
 			}, {
-				"id" : "oNewtab",
-				"title" : getI18nMsg('oNewtabTitle'),
-				"img" : "js/plugin/app/img/skin_0/oNewtab.png"
+				"id": "oNewtab",
+				"title": getI18nMsg('oNewtabTitle'),
+				"img": "js/plugin/app/img/skin_0/oNewtab.png"
 			}
 		]
 	},
-	zh_CN : {
-		lang : "zh_CN",
-		oauthType : ['sina', 'qq', 'qqwb', 'taobao', 'google'],
-		dialBoxes : {
-			normal : [{
-					"title" : getI18nMsg('weatherAppTitle'),
-					"img" : urlImg + "myapp/weather/img/m/logo.png",
-					"isApp" : "weather"
+	zh_CN: {
+		lang: "zh_CN",
+		oauthType: ['sina', 'qq', 'qqwb', 'taobao', 'google'],
+		dialBoxes: {
+			normal: [{
+					"title": getI18nMsg('weatherAppTitle'),
+					"img": urlImg + "myapp/weather/img/m/logo.png",
+					"isApp": "weather"
 				}, {
-					"title" : getI18nMsg('quickSearchAppTitle'),
-					"img" : "app/quickSearch/img/logo.png",
-					"isApp" : "quickSearch"
+					"title": getI18nMsg('quickSearchAppTitle'),
+					"img": "app/quickSearch/img/logo.png",
+					"isApp": "quickSearch"
 				}, {
-					"title" : "ÁôæÂ∫¶",
-					"url" : "www.baidu.com/index.php?tn=16046049_dg"
+					"title": "∞Ÿ∂»",
+					"url": "www.baidu.com/index.php?tn=16046049_dg"
 				}, {
-					"title" : "Ê∑òÂÆù",
-					"url" : "www.taobao.com/?tn=newtab"
+					"title": "Ã‘±¶",
+					"url": "www.taobao.com/?tn=newtab"
 				}, {
-					"title" : "QQÁ©∫Èó¥",
-					"url" : "qzone.qq.com"
+					"title": "QQø’º‰",
+					"url": "qzone.qq.com"
 				}, {
-					"title" : "‰∫¨‰∏ú",
-					"url" : "p.yiqifa.com/c?s=b9e10055&w=433447&c=254&i=160&l=0&e=&t=http://www.jd.com"
+					"title": "æ©∂´",
+					"url": "p.yiqifa.com/c?s=b9e10055&w=433447&c=254&i=160&l=0&e=&t=http://www.jd.com"
 				}, {
-					"title" : "Áà±Ê∑òÂÆù",
-					"url" : "www.taobao.com/go/chn/tbk_channel/onsale.php?pid=mm_13164080_2437641_9653920&eventid=101329&t=http://ai.taobao.com"
+					"title": "∞ÆÃ‘±¶",
+					"url": "www.taobao.com/go/chn/tbk_channel/onsale.php?pid=mm_13164080_2437641_9653920&eventid=101329&t=http://ai.taobao.com"
 				}, {
-					"title" : "‰∫öÈ©¨ÈÄä",
-					"url" : "www.amazon.cn/?_encoding=UTF8&camp=536&creative=3200&linkCode=ur2&tag=weidunewtab-23"
+					"title": "—«¬Ì—∑",
+					"url": "www.amazon.cn/?_encoding=UTF8&camp=536&creative=3200&linkCode=ur2&tag=weidunewtab-23"
 				}, {
-					"title" : "ÂΩìÂΩì",
-					"url" : "union.dangdang.com/transfer.php?from=P-308058&ad_type=10&sys_id=1&backurl=http://www.dangdang.com"
+					"title": "µ±µ±",
+					"url": "union.dangdang.com/transfer.php?from=P-308058&ad_type=10&sys_id=1&backurl=http://www.dangdang.com"
 				}, {
-					"title" : "Êê∫Á®ã",
-					"url" : "p.yiqifa.com/c?s=301697aa&w=433447&c=297&i=19323&l=0&e=&t=http://u.ctrip.com/union/redirect.aspx"
+					"title": "–Ø≥Ã",
+					"url": "p.yiqifa.com/c?s=301697aa&w=433447&c=297&i=19323&l=0&e=&t=http://u.ctrip.com/union/redirect.aspx"
 				}, {
-					"title" : "1Âè∑Â∫ó",
-					"url" : "p.yiqifa.com/c?s=ceb1fc1e&w=433447&c=139&i=802&l=0&e=&t=http://www.yhd.com"
+					"title": "1∫≈µÍ",
+					"url": "p.yiqifa.com/c?s=ceb1fc1e&w=433447&c=139&i=802&l=0&e=&t=http://www.yhd.com"
 				}, {
-					"title" : "5336.com",
-					"url" : "www.5336.com"
+					"title": "5336.com",
+					"url": "www.5336.com"
 				}, {
-					"title" : "Â§©Áå´",
-					"url" : "s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGGjlY60oHcc7bkKOQiRddrNEyGLx31dnc6%2Fz%2BaQS2UNDUWpebTcEEjBuk1W5odmLS8%3D&pid=mm_13164080_0_0&t=http://www.tmall.com"
+					"title": "ÃÏ√®",
+					"url": "s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGGjlY60oHcc7bkKOQiRddrNEyGLx31dnc6%2Fz%2BaQS2UNDUWpebTcEEjBuk1W5odmLS8%3D&pid=mm_13164080_0_0&t=http://www.tmall.com"
 				}, {
-					"title" : "Êñ∞Êµ™ÂæÆÂçö",
-					"url" : "weibo.com"
+					"title": "–¬¿ÀŒ¢≤©",
+					"url": "weibo.com"
 				}, {
-					"title" : "ÊòìËøÖ",
-					"url" : "p.yiqifa.com/c?s=e3694872&w=433447&c=6828&i=24002&l=0&e=&t=http://www.yixun.com"
+					"title": "“◊—∏",
+					"url": "p.yiqifa.com/c?s=e3694872&w=433447&c=6828&i=24002&l=0&e=&t=http://www.yixun.com"
 				}, {
-					"title" : "‰ºòÈÖ∑",
-					"url" : "www.youku.com"
+					"title": "”≈ø·",
+					"url": "www.youku.com"
 				}, {
-					"title" : "ËãèÂÆÅÊòìË¥≠",
-					"url" : "p.yiqifa.com/c?s=afa04194&w=433447&c=4459&i=5662&l=0&e=&t=http://www.suning.com"
+					"title": "À’ƒ˛“◊π∫",
+					"url": "p.yiqifa.com/c?s=afa04194&w=433447&c=4459&i=5662&l=0&e=&t=http://www.suning.com"
 				}, {
-					"title" : "ÁΩëÊòì",
-					"url" : "www.163.com"
+					"title": "Õ¯“◊",
+					"url": "www.163.com"
 				}, {
-					"title" : "ÂîØÂìÅ‰ºö",
-					"url" : "p.yiqifa.com/c?s=e24e6362&w=433447&c=4018&i=2882&l=0&e=&t=http://www.vip.com"
+					"title": "Œ®∆∑ª·",
+					"url": "p.yiqifa.com/c?s=e24e6362&w=433447&c=4018&i=2882&l=0&e=&t=http://www.vip.com"
 				}, {
-					"title" : "Âá§Âá∞ÁΩë",
-					"url" : "www.ifeng.com"
+					"title": "∑ÔªÀÕ¯",
+					"url": "www.ifeng.com"
 				}, {
-					"title" : "‰∫∫‰∫∫ÁΩë",
-					"url" : "www.renren.com"
+					"title": "»À»ÀÕ¯",
+					"url": "www.renren.com"
 				}, {
-					"title" : "ËÅöÁæé‰ºòÂìÅ",
-					"url" : "p.yiqifa.com/c?s=75cfd8b8&w=433447&c=5227&i=10462&l=0&e=&t=http://www.jumei.com"
+					"title": "æ€√¿”≈∆∑",
+					"url": "p.yiqifa.com/c?s=75cfd8b8&w=433447&c=5227&i=10462&l=0&e=&t=http://www.jumei.com"
 				}, {
-					"title" : "Webstore",
-					"url" : "chrome.google.com/webstore/?t=http://webstore.google.com"
+					"title": "Webstore",
+					"url": "chrome.google.com/webstore/?t=http://webstore.google.com"
 				}, {
-					"title" : getI18nMsg('cloudAppTitle'),
-					"img" : "js/plugin/cloud/img/logo.png",
-					"isApp" : "cloud",
-					"isFixed" : true
+					"title": getI18nMsg('cloudAppTitle'),
+					"img": "js/plugin/cloud/img/logo.png",
+					"isApp": "cloud",
+					"isFixed": true
 				}
 			],
-			quick : [{
-					"title" : getI18nMsg('classificationAppTitle'),
-					"img" : "js/plugin/classification/img/logo.png",
-					"isApp" : "classification"
+			quick: [{
+					"title": getI18nMsg('classificationAppTitle'),
+					"img": "js/plugin/classification/img/logo.png",
+					"isApp": "classification"
 				}, {
-					"title" : getI18nMsg('siteNavAppTitle'),
-					"img" : "app/siteNav/img/logo.png",
-					"isApp" : "siteNav"
+					"title": getI18nMsg('siteNavAppTitle'),
+					"img": "app/siteNav/img/logo.png",
+					"isApp": "siteNav"
 				}, {
-					"title" : getI18nMsg('skinsAppTitle'),
-					"img" : "js/plugin/skins/img/logo.png",
-					"isApp" : "skins"
+					"title": getI18nMsg('skinsAppTitle'),
+					"img": "js/plugin/skins/img/logo.png",
+					"isApp": "skins"
 				}, {
-					"title" : getI18nMsg('oNewtabTitle'),
-					"img" : "js/plugin/app/img/skin_0/oNewtab.png",
-					"isApp" : "oNewtab"
+					"title": getI18nMsg('oNewtabTitle'),
+					"img": "js/plugin/app/img/skin_0/oNewtab.png",
+					"isApp": "oNewtab"
 				}, {
-					"title" : getI18nMsg('extensionsAppTitle'),
-					"img" : "js/plugin/extensions/img/logo.png",
-					"isApp" : "extensions"
+					"title": getI18nMsg('extensionsAppTitle'),
+					"img": "js/plugin/extensions/img/logo.png",
+					"isApp": "extensions"
 				}, {
-					"title" : getI18nMsg('bookmarksAppTitle'),
-					"img" : "js/plugin/bookmarks/img/logo.png",
-					"isApp" : "bookmarks"
+					"title": getI18nMsg('bookmarksAppTitle'),
+					"img": "js/plugin/bookmarks/img/logo.png",
+					"isApp": "bookmarks"
 				}, {
-					"title" : getI18nMsg('setupAppTitle'),
-					"img" : "js/plugin/setup/img/logo.png",
-					"isApp" : "setup",
-					"isFixed" : true
+					"title": getI18nMsg('setupAppTitle'),
+					"img": "js/plugin/setup/img/logo.png",
+					"isApp": "setup",
+					"isFixed": true
 				}
 			]
 		},
-		apps : [{
-				"id" : "weather",
-				"title" : getI18nMsg('weatherAppTitle'),
-				"img" : urlImg + "myapp/weather/img/m/logo.png"
+		apps: [{
+				"id": "weather",
+				"title": getI18nMsg('weatherAppTitle'),
+				"img": urlImg + "myapp/weather/img/m/logo.png"
 			}, {
-				"id" : "quickSearch",
-				"title" : getI18nMsg('quickSearchAppTitle'),
-				"img" : "app/quickSearch/img/logo.png"
+				"id": "quickSearch",
+				"title": getI18nMsg('quickSearchAppTitle'),
+				"img": "app/quickSearch/img/logo.png"
 			}, {
-				"id" : "skins",
-				"title" : getI18nMsg('skinsAppTitle'),
-				"img" : "js/plugin/skins/img/logo.png"
+				"id": "skins",
+				"title": getI18nMsg('skinsAppTitle'),
+				"img": "js/plugin/skins/img/logo.png"
 			}, {
-				"id" : "classification",
-				"title" : getI18nMsg('classificationAppTitle'),
-				"img" : "js/plugin/classification/img/logo.png"
+				"id": "classification",
+				"title": getI18nMsg('classificationAppTitle'),
+				"img": "js/plugin/classification/img/logo.png"
 			}, {
-				"id" : "cloud",
-				"title" : getI18nMsg('cloudAppTitle'),
-				"img" : "js/plugin/cloud/img/logo.png",
-				"isFixed" : true
+				"id": "cloud",
+				"title": getI18nMsg('cloudAppTitle'),
+				"img": "js/plugin/cloud/img/logo.png",
+				"isFixed": true
 			}, {
-				"id" : "setup",
-				"title" : getI18nMsg('setupAppTitle'),
-				"img" : "js/plugin/setup/img/logo.png",
-				"isFixed" : true
+				"id": "setup",
+				"title": getI18nMsg('setupAppTitle'),
+				"img": "js/plugin/setup/img/logo.png",
+				"isFixed": true
 			}, {
-				"id" : "bookmarks",
-				"title" : getI18nMsg('bookmarksAppTitle'),
-				"img" : "js/plugin/bookmarks/img/logo.png"
+				"id": "bookmarks",
+				"title": getI18nMsg('bookmarksAppTitle'),
+				"img": "js/plugin/bookmarks/img/logo.png"
 			}, {
-				"id" : "lastVisited",
-				"title" : getI18nMsg('lastVisitedAppTitle'),
-				"img" : "js/plugin/lastVisited/img/logo.png"
+				"id": "lastVisited",
+				"title": getI18nMsg('lastVisitedAppTitle'),
+				"img": "js/plugin/lastVisited/img/logo.png"
 			}, {
-				"id" : "extensions",
-				"title" : getI18nMsg('extensionsAppTitle'),
-				"img" : "js/plugin/extensions/img/logo.png"
+				"id": "extensions",
+				"title": getI18nMsg('extensionsAppTitle'),
+				"img": "js/plugin/extensions/img/logo.png"
 			}, {
-				"id" : "siteNav",
-				"title" : getI18nMsg('siteNavAppTitle'),
-				"img" : "app/siteNav/img/logo.png"
+				"id": "siteNav",
+				"title": getI18nMsg('siteNavAppTitle'),
+				"img": "app/siteNav/img/logo.png"
 			}, {
-				"id" : "tools",
-				"title" : getI18nMsg('toolsAppTitle'),
-				"img" : "app/tools/img/logo.png"
+				"id": "tools",
+				"title": getI18nMsg('toolsAppTitle'),
+				"img": "app/tools/img/logo.png"
 			}, {
-				"id" : "oDownloads",
-				"title" : getI18nMsg('oDownloadsTitle'),
-				"img" : "js/plugin/app/img/skin_0/oDownloads.png"
+				"id": "oDownloads",
+				"title": getI18nMsg('oDownloadsTitle'),
+				"img": "js/plugin/app/img/skin_0/oDownloads.png"
 			}, {
-				"id" : "oBookmarks",
-				"title" : getI18nMsg('oBookmarksTitle'),
-				"img" : "js/plugin/app/img/skin_0/oBookmarks.png"
+				"id": "oBookmarks",
+				"title": getI18nMsg('oBookmarksTitle'),
+				"img": "js/plugin/app/img/skin_0/oBookmarks.png"
 			}, {
-				"id" : "oExtensions",
-				"title" : getI18nMsg('oExtensionsTitle'),
-				"img" : "js/plugin/app/img/skin_0/oExtensions.png"
+				"id": "oExtensions",
+				"title": getI18nMsg('oExtensionsTitle'),
+				"img": "js/plugin/app/img/skin_0/oExtensions.png"
 			}, {
-				"id" : "oHistory",
-				"title" : getI18nMsg('oHistoryTitle'),
-				"img" : "js/plugin/app/img/skin_0/oHistory.png"
+				"id": "oHistory",
+				"title": getI18nMsg('oHistoryTitle'),
+				"img": "js/plugin/app/img/skin_0/oHistory.png"
 			}, {
-				"id" : "oNewtab",
-				"title" : getI18nMsg('oNewtabTitle'),
-				"img" : "js/plugin/app/img/skin_0/oNewtab.png"
+				"id": "oNewtab",
+				"title": getI18nMsg('oNewtabTitle'),
+				"img": "js/plugin/app/img/skin_0/oNewtab.png"
 			}
 		],
-		classifications : [{
-				"id" : "shopping",
-				"title" : getI18nMsg("classificationShopping"),
-				"logo" : urlImg + "classification/images/4.png",
-				"dataUrl" : urlImg + "rssData/index.php?ui_locale=zh_CN&name=shopping",
-				"LTime" : 0
+		classifications: [{
+				"id": "shopping",
+				"title": getI18nMsg("classificationShopping"),
+				"logo": urlImg + "classification/images/4.png",
+				"dataUrl": urlImg + "rssData/index.php?ui_locale=zh_CN&name=shopping",
+				"LTime": 0
 			}, {
-				"id" : "game",
-				"title" : getI18nMsg("classificationGame"),
-				"logo" : urlImg + "classification/images/1.png",
-				"dataUrl" : urlImg + "rssData/index.php?ui_locale=zh_CN&name=game",
-				"LTime" : 0
+				"id": "game",
+				"title": getI18nMsg("classificationGame"),
+				"logo": urlImg + "classification/images/1.png",
+				"dataUrl": urlImg + "rssData/index.php?ui_locale=zh_CN&name=game",
+				"LTime": 0
 			}
 		]
 	}
 };
 var screenDialboxOptions = {
-	"default" : {
-		"spacing" : 30,
-		"width" : 240,
-		"height" : 135,
-		"maxTop" : 'auto',
-		"QBContainerWidth" : 1000
+	"default": {
+		"spacing": 30,
+		"width": 240,
+		"height": 135,
+		"maxTop": 'auto',
+		"QBContainerWidth": 1000
 	},
-	"800*600" : {
-		"spacing" : 20,
-		"width" : 130,
-		"height" : 70,
-		"maxTop" : 30,
-		"QBContainerWidth" : 800
+	"800*600": {
+		"spacing": 20,
+		"width": 130,
+		"height": 70,
+		"maxTop": 30,
+		"QBContainerWidth": 800
 	},
-	"1024*768" : {
-		"spacing" : 20,
-		"width" : 195,
-		"height" : 110,
-		"maxTop" : 80,
-		"QBContainerWidth" : 940
+	"1024*768": {
+		"spacing": 20,
+		"width": 195,
+		"height": 110,
+		"maxTop": 80,
+		"QBContainerWidth": 940
 	},
-	"1152*864" : {
-		"spacing" : 30,
-		"width" : 195,
-		"height" : 110,
-		"maxTop" : 90,
-		"QBContainerWidth" : 1040
+	"1152*864": {
+		"spacing": 30,
+		"width": 195,
+		"height": 110,
+		"maxTop": 90,
+		"QBContainerWidth": 1040
 	},
-	"1280*600" : {
-		"spacing" : 20,
-		"width" : 200,
-		"height" : 90,
-		"maxTop" : 40,
-		"QBContainerWidth" : 1040
+	"1280*600": {
+		"spacing": 20,
+		"width": 200,
+		"height": 90,
+		"maxTop": 40,
+		"QBContainerWidth": 1040
 	},
-	"1280*720" : {
-		"spacing" : 30,
-		"width" : 215,
-		"height" : 120,
-		"maxTop" : 60,
-		"QBContainerWidth" : 1040
+	"1280*720": {
+		"spacing": 30,
+		"width": 215,
+		"height": 120,
+		"maxTop": 60,
+		"QBContainerWidth": 1040
 	},
-	"1280*768" : {
-		"spacing" : 30,
-		"width" : 215,
-		"height" : 120,
-		"maxTop" : 70,
-		"QBContainerWidth" : 1040
+	"1280*768": {
+		"spacing": 30,
+		"width": 215,
+		"height": 120,
+		"maxTop": 70,
+		"QBContainerWidth": 1040
 	},
-	"1280*800" : {
-		"spacing" : 30,
-		"width" : 215,
-		"height" : 120,
-		"maxTop" : 70,
-		"QBContainerWidth" : 1040
+	"1280*800": {
+		"spacing": 30,
+		"width": 215,
+		"height": 120,
+		"maxTop": 70,
+		"QBContainerWidth": 1040
 	},
-	"1280*960" : {
-		"spacing" : 30,
-		"width" : 215,
-		"height" : 140,
-		"maxTop" : 80,
-		"QBContainerWidth" : 1040
+	"1280*960": {
+		"spacing": 30,
+		"width": 215,
+		"height": 140,
+		"maxTop": 80,
+		"QBContainerWidth": 1040
 	},
-	"1280*1024" : {
-		"spacing" : 34,
-		"width" : 215,
-		"height" : 140,
-		"maxTop" : 110,
-		"QBContainerWidth" : 1040
+	"1280*1024": {
+		"spacing": 34,
+		"width": 215,
+		"height": 140,
+		"maxTop": 110,
+		"QBContainerWidth": 1040
 	},
-	"1360*768" : {
-		"spacing" : 30,
-		"width" : 215,
-		"height" : 120,
-		"maxTop" : 60,
-		"QBContainerWidth" : 1040
+	"1360*768": {
+		"spacing": 30,
+		"width": 215,
+		"height": 120,
+		"maxTop": 60,
+		"QBContainerWidth": 1040
 	},
-	"1366*768" : {
-		"spacing" : 30,
-		"width" : 215,
-		"height" : 120,
-		"maxTop" : 60,
-		"QBContainerWidth" : 1040
+	"1366*768": {
+		"spacing": 30,
+		"width": 215,
+		"height": 120,
+		"maxTop": 60,
+		"QBContainerWidth": 1040
 	},
-	"1440*900" : {
-		"spacing" : 30,
-		"width" : 240,
-		"height" : 135,
-		"maxTop" : 110,
-		"QBContainerWidth" : 1000
+	"1440*900": {
+		"spacing": 30,
+		"width": 240,
+		"height": 135,
+		"maxTop": 110,
+		"QBContainerWidth": 1000
 	},
-	"1400*1050" : {
-		"spacing" : 40,
-		"width" : 240,
-		"height" : 140,
-		"maxTop" : 110,
-		"QBContainerWidth" : 1040
+	"1400*1050": {
+		"spacing": 40,
+		"width": 240,
+		"height": 140,
+		"maxTop": 110,
+		"QBContainerWidth": 1040
 	},
-	"1600*900" : {
-		"spacing" : 30,
-		"width" : 240,
-		"height" : 135,
-		"maxTop" : 160,
-		"QBContainerWidth" : 1040
+	"1600*900": {
+		"spacing": 30,
+		"width": 240,
+		"height": 135,
+		"maxTop": 160,
+		"QBContainerWidth": 1040
 	},
-	"1680*1050" : {
-		"spacing" : 30,
-		"width" : 260,
-		"height" : 145,
-		"maxTop" : 130,
-		"QBContainerWidth" : 1040
+	"1680*1050": {
+		"spacing": 30,
+		"width": 260,
+		"height": 145,
+		"maxTop": 130,
+		"QBContainerWidth": 1040
 	},
-	"1920*1080" : {
-		"spacing" : 40,
-		"width" : 285,
-		"height" : 160,
-		"maxTop" : 160,
-		"QBContainerWidth" : 1240
+	"1920*1080": {
+		"spacing": 40,
+		"width": 285,
+		"height": 160,
+		"maxTop": 160,
+		"QBContainerWidth": 1240
 	}
 };
 var _tmp_config = _configList[ui_locale];
@@ -2545,7 +2572,8 @@ if (typeof _tmp_config != 'undefined') {
 		_config[i] = n
 	})
 }
-var screenWidth = window.screen.width, screenHeight = window.screen.height;
+var screenWidth = window.screen.width,
+screenHeight = window.screen.height;
 if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined') {
 	if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight]['num'] != "undefined") {
 		_config['privateSetup']['dialBoxNum'] = screenDialboxOptions[screenWidth + "*" + screenHeight]['num']
@@ -2563,7 +2591,7 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 	var pdi = (function () {
 		var pdi = function () {};
 		pdi.prototype = {
-			get : function (part, key) {
+			get: function (part, key) {
 				var config = storage.get(part, true);
 				if (config == null || config.lenght == 0 || (typeof key != 'undefined' && typeof config[key] == 'undefined')) {
 					if (typeof _config[part] == 'undefined') {
@@ -2577,10 +2605,9 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 				}
 				return config[key]
 			},
-			set : function (part, key, value, data) {
+			set: function (part, key, value, data) {
 				if (typeof data == 'undefined') {
-					data = storage.get(part, true) ? storage.get(part, true) : {}
-
+					data = storage.get(part, true) ? storage.get(part, true): {}
 				}
 				if (key != "" && key != null) {
 					data[key] = value
@@ -2589,13 +2616,13 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 				}
 				storage.set(part, data, true)
 			},
-			length : function (data) {
+			length: function (data) {
 				if (typeof data == 'undefined' || data == null || !(data instanceof Array)) {
 					return 0
 				}
 				return data.length
 			},
-			getSkins : function () {
+			getSkins: function () {
 				var _skins = objClone(_config.skins);
 				var skins = PDI.get('skins');
 				$.each(skins, function (i, n) {
@@ -2603,7 +2630,7 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 				});
 				return _skins
 			},
-			getSkin : function (part, key) {
+			getSkin: function (part, key) {
 				var data = this.getSkins();
 				if (!data[part] || typeof data[part] == 'undefined') {
 					return ''
@@ -2617,21 +2644,19 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 				}
 				return data[part][key]
 			},
-			setSkin : function (part, key, value, data) {
+			setSkin: function (part, key, value, data) {
 				if (part == 'skin_cloud' || part == 'skin_local') {
 					if (typeof data == 'undefined') {
-						data = storage.get('skins', true) ? storage.get('skins', true) : {}
-
+						data = storage.get('skins', true) ? storage.get('skins', true): {}
 					}
 					if (typeof data[part] == 'undefined') {
 						data[part] = {}
-
 					}
 					data[part][key] = value;
 					storage.set("skins", data, true)
 				}
 			},
-			getStyle : function (part, key) {
+			getStyle: function (part, key) {
 				var data = PDI.get('privateSetup', 'style');
 				if (typeof key == 'undefined') {
 					if (typeof data[part] == 'undefined') {
@@ -2644,23 +2669,20 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 				}
 				return data[part][key]
 			},
-			setStyle : function (part, key, value, data) {
+			setStyle: function (part, key, value, data) {
 				if (typeof data == 'undefined') {
-					data = storage.get('privateSetup', true) ? storage.get('privateSetup', true) : {}
-
+					data = storage.get('privateSetup', true) ? storage.get('privateSetup', true): {}
 				}
 				if (typeof data['style'] == 'undefined') {
 					data['style'] = {};
 					data['style'][part] = {}
-
 				} else if (typeof data["style"][part] == 'undefined') {
 					data['style'][part] = {}
-
 				}
 				data['style'][part][key] = value;
 				storage.set('privateSetup', data, true)
 			},
-			insertDialbox : function (type, value, data) {
+			insertDialbox: function (type, value, data) {
 				if (typeof data == 'undefined') {
 					data = PDI.get('dialBoxes', type)
 				}
@@ -2669,14 +2691,14 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 				oauth.updateMsgId();
 				oauth.synchronize()
 			},
-			updateDialbox : function (type, index, value, data) {
+			updateDialbox: function (type, index, value, data) {
 				if (typeof data == 'undefined') {
 					data = PDI.get('dialBoxes', type)
 				}
 				data[index] = value;
 				PDI.set('dialBoxes', type, data)
 			},
-			removeDialbox : function (type, index, data) {
+			removeDialbox: function (type, index, data) {
 				if (typeof data == 'undefined') {
 					data = PDI.get('dialBoxes', type)
 				}
@@ -2687,7 +2709,7 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 					oauth.synchronize()
 				}
 			},
-			destoryDialbox : function (type, index, data) {
+			destoryDialbox: function (type, index, data) {
 				if (typeof data == 'undefined') {
 					data = PDI.get('dialBoxes', type)
 				}
@@ -2696,7 +2718,7 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 				}
 				PDI.set('dialBoxes', type, data)
 			},
-			changeDialbox : function (type, fromIndex, toIndex, data) {
+			changeDialbox: function (type, fromIndex, toIndex, data) {
 				if (typeof data == 'undefined') {
 					data = PDI.get('dialBoxes', type)
 				}
@@ -2708,7 +2730,7 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 				data[fromIndex] = tmp;
 				PDI.set('dialBoxes', type, data)
 			},
-			moveDialbox : function (fromType, toType, fromIndex, toIndex, data) {
+			moveDialbox: function (fromType, toType, fromIndex, toIndex, data) {
 				if (fromType == toType) {
 					type = fromType;
 					if (typeof data == 'undefined') {
@@ -2737,7 +2759,7 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 				oauth.updateMsgId();
 				oauth.synchronize()
 			},
-			appendDialbox : function (type, toIndex, value, data) {
+			appendDialbox: function (type, toIndex, value, data) {
 				if (typeof data == 'undefined') {
 					data = PDI.get('dialBoxes', type)
 				}
@@ -2760,20 +2782,20 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 			self.init(syn)
 		};
 		oauth.prototype = {
-			oauthId : false,
-			oauthKey : '',
-			oauthCode : false,
-			oauthSource : false,
-			oauthApiUrl : urlImg + 'oauth/ajax.php?rnd=' + new Date().getTime(),
-			synDataApiUrl : urlImg + 'weidu/wc.json.php',
-			synDataKey : 'oauthData',
-			init : function (syn) {
+			oauthId: false,
+			oauthKey: '',
+			oauthCode: false,
+			oauthSource: false,
+			oauthApiUrl: urlImg + 'oauth/ajax.php?rnd=' + new Date().getTime(),
+			synDataApiUrl: urlImg + 'weidu/wc.json.php',
+			synDataKey: 'oauthData',
+			init: function (syn) {
 				var self = this;
 				self.oauthKey = PDI.get('setup', 'oauthKey');
 				if (self.oauthKey) {
 					self.oauthApiUrl = self.oauthApiUrl + "&oauthKey=" + self.oauthKey
 				}
-				syn = typeof syn == 'undefined' ? false : syn;
+				syn = typeof syn == 'undefined' ? false: syn;
 				$.get(self.oauthApiUrl, function (data) {
 					self.oauthId = '';
 					self.oauthCode = '';
@@ -2782,7 +2804,7 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 						data = JSON.parse(data);
 						self.oauthId = data.sign + data.uid;
 						self.oauthCode = data.name;
-						self.oauthSource = data.sign == '' ? 'google' : data.sign
+						self.oauthSource = data.sign == '' ? 'google': data.sign
 					} else if (PDI.get('setup', 'oauthId') != "") {
 						showNotice(getI18nMsg('loggedOut'))
 					}
@@ -2804,7 +2826,7 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 					}
 				})
 			},
-			download : function () {
+			download: function () {
 				var self = this;
 				var url = self.synDataApiUrl + '?e=' + self.oauthId + '&ver=' + ver + '&dataVersion=' + _config.dataVersion;
 				$.post(url, function (result) {
@@ -2835,7 +2857,7 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 					}, 200)
 				})
 			},
-			save : function (value) {
+			save: function (value) {
 				var self = this;
 				var returnStatus = true;
 				var result = JSON.parse(value);
@@ -2877,8 +2899,8 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 						}
 						returnStatus = true
 					}
-					result['msgid'] = result['msgid'] != null ? parseInt(result['msgid']) : curMsgId;
-					result['msgid'] = result['msgid'] >= curMsgId ? result['msgid'] : curMsgId;
+					result['msgid'] = result['msgid'] != null ? parseInt(result['msgid']): curMsgId;
+					result['msgid'] = result['msgid'] >= curMsgId ? result['msgid']: curMsgId;
 					PDI.set('setup', 'msgid', result['msgid']);
 					PDI.set('setup', 'oauthKey', curOauthKey)
 				} else {
@@ -2887,7 +2909,7 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 				}
 				return returnStatus
 			},
-			compareMsgId : function (gt, lt) {
+			compareMsgId: function (gt, lt) {
 				var self = this;
 				var url = self.synDataApiUrl + '?e=' + self.oauthId;
 				gt = gt || function () {};
@@ -2908,9 +2930,9 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 					lt()
 				}
 			},
-			upload : function (fn) {
+			upload: function (fn) {
 				var self = this;
-				fn = typeof fn == 'function' ? fn : false;
+				fn = typeof fn == 'function' ? fn: false;
 				fn = fn || function () {};
 				if (self.backup()) {
 					var oauthData = PDI.get(self.synDataKey);
@@ -2933,7 +2955,7 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 					})
 				}
 			},
-			backup : function () {
+			backup: function () {
 				var self = this;
 				if (oauth.oauthId != false && oauth.oauthCode != false) {
 					var oauthData = PDI.get(self.synDataKey);
@@ -2964,10 +2986,10 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 								}
 								if (skinLocal && skinLocal['style'] && skinLocal['style']['background'] && skinLocal['style']['background']['backgroundColor']) {
 									skinsJson["skin_local"] = {
-										"style" : {
-											"background" : {
-												"backgroundColor" : skinLocal['style']['background']['backgroundColor'],
-												"backgroundImage" : ""
+										"style": {
+											"background": {
+												"backgroundColor": skinLocal['style']['background']['backgroundColor'],
+												"backgroundImage": ""
 											}
 										}
 									}
@@ -2986,19 +3008,19 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 				}
 				return true
 			},
-			updateMsgId : function (msgid) {
+			updateMsgId: function (msgid) {
 				if (typeof msgid == 'undefined') {
 					msgid = parseInt(PDI.get('setup', 'msgid')) + 1
 				}
 				PDI.set('setup', 'msgid', msgid)
 			},
-			synchronize : function (fn) {
+			synchronize: function (fn) {
 				var self = this;
 				if (self.oauthId && self.oauthCode) {
 					self.upload(fn)
 				}
 			},
-			clear : function () {
+			clear: function () {
 				var self = this;
 				var msgid = PDI.get("setup", "msgid") + 1;
 				var oauthKey = PDI.get("setup", "oauthKey");
@@ -3027,7 +3049,6 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 							storage.relative = true;
 							window.location.reload(true)
 						} else {}
-
 					})
 				} else {
 					storage.relative = false;
@@ -3049,7 +3070,11 @@ if (typeof screenDialboxOptions[screenWidth + "*" + screenHeight] != 'undefined'
 		return oauth
 	})()
 })(jq);
-var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 0;
+var _dialogDown = false,
+_dialogX = 0,
+_dialogY = 0,
+_dialogCx = 0,
+_dialogCy = 0;
 (function ($) {
 	$(document).unbind("keyup.dialogEsc").bind('keyup.dialogEsc', function (e) {
 		if (e.keyCode == 27) {
@@ -3094,37 +3119,37 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 			}
 		};
 		dialog.prototype = {
-			id : "",
-			caption : "",
-			content : "",
-			eventObj : "",
-			eventName : "click",
-			callback : {},
-			isLock : false,
-			isDestory : false,
-			isFollow : false,
-			followObj : "",
-			animate : "",
-			style : "",
-			bottom : 45,
-			hideClose : false,
-			zIndex : 100,
-			lock : function () {
+			id: "",
+			caption: "",
+			content: "",
+			eventObj: "",
+			eventName: "click",
+			callback: {},
+			isLock: false,
+			isDestory: false,
+			isFollow: false,
+			followObj: "",
+			animate: "",
+			style: "",
+			bottom: 45,
+			hideClose: false,
+			zIndex: 100,
+			lock: function () {
 				var self = this;
 				if (!self.isLock) {
 					return
 				}
 				var maskdiv = $('<div class="dialogMask"></div>').css({
-						"zIndex" : self.zIndex
-					});
+					"zIndex": self.zIndex
+				});
 				$("body").append(maskdiv);
 				DBOX.container.css("opacity", "0.2")
 			},
-			unlock : function () {
+			unlock: function () {
 				$("body").find(".dialogMask").remove();
 				DBOX.container.css("opacity", "")
 			},
-			position : function () {
+			position: function () {
 				var self = this;
 				var dbox = $("#" + self.id);
 				if (!self.isFollow) {
@@ -3132,16 +3157,16 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 						dbox.css(this.style)
 					} else {
 						dbox.css({
-							"left" : parseInt((document.body.offsetWidth - dbox[0].offsetWidth) / 2) + "px",
-							"top" : parseInt((document.body.offsetHeight - self.bottom - dbox[0].offsetHeight) / 2) + "px"
+							"left": parseInt((document.body.offsetWidth - dbox[0].offsetWidth) / 2) + "px",
+							"top": parseInt((document.body.offsetHeight - self.bottom - dbox[0].offsetHeight) / 2) + "px"
 						})
 					}
 				}
 				dbox.css({
-					"zIndex" : this.zIndex + 1
+					"zIndex": this.zIndex + 1
 				})
 			},
-			follow : function () {
+			follow: function () {
 				var self = this;
 				if (!self.isFollow || (self.eventObj == '' && self.followObj == '')) {
 					return
@@ -3163,7 +3188,7 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 					$("#" + self.id).css(n, dialogCoffset[n] + 'px')
 				})
 			},
-			drag : function (dbox) {
+			drag: function (dbox) {
 				var self = this;
 				if (dbox.find(".dragArea").length > 0) {
 					dbox.find(".dragArea").unbind('mousedown.dialog').bind('mousedown.dialog', function (e) {
@@ -3183,10 +3208,10 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 						if (_dialogDown) {
 							var cLeft = _dialogCx - (_dialogX - e.pageX);
 							var cTop = _dialogCy - (_dialogY - e.pageY);
-							cTop = cTop < 0 ? 0 : cTop;
+							cTop = cTop < 0 ? 0: cTop;
 							dbox.css({
-								"left" : cLeft + "px",
-								"top" : cTop + "px"
+								"left": cLeft + "px",
+								"top": cTop + "px"
 							})
 						}
 					}).unbind("mouseup.dialog").bind("mouseup.dialog", function () {
@@ -3195,7 +3220,7 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 					})
 				}
 			},
-			undrag : function (dbox) {
+			undrag: function (dbox) {
 				var self = this;
 				if (dbox.find(".dragArea").length > 0) {
 					_dialogDown = false;
@@ -3207,7 +3232,7 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 					$(document).unbind("mousemove.dialog").unbind("mouseup.dialog")
 				}
 			},
-			show : function () {
+			show: function () {
 				var self = this;
 				if ($("#" + self.id).hasClass('dialog-visible')) {
 					self.remove();
@@ -3216,9 +3241,9 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 				var isCloseNum = self.closeAll();
 				if ($("#" + self.id).length == 0) {
 					if (this.caption == "") {
-						var dbox = $('<div><button class="close' + (self.hideClose == true ? ' hide' : '') + '"></button><div class="main"></div></div>')
+						var dbox = $('<div><button class="close' + (self.hideClose == true ? ' hide': '') + '"></button><div class="main"></div></div>')
 					} else {
-						var dbox = $('<div><div class="head"><div class="title">' + this.caption + '</div><button class="close' + (self.hideClose == true ? ' hide' : '') + '"></button></div><div class="main"></div></div>')
+						var dbox = $('<div><div class="head"><div class="title">' + this.caption + '</div><button class="close' + (self.hideClose == true ? ' hide': '') + '"></button></div><div class="main"></div></div>')
 					}
 					dbox.find(".main").append(this.content);
 					var iframe = dbox.find('iframe');
@@ -3246,12 +3271,12 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 				if (self.animate != "") {
 					if (self.animate == "opacity") {
 						dbox.css({
-							"WebkitTransition" : "opacity .2s ease-out"
+							"WebkitTransition": "opacity .2s ease-out"
 						})
 					} else {
 						dbox.css({
-							"WebkitTransition" : "-webkit-transform .2s ease-out,opacity .2s ease-out",
-							"WebkitTransformOrigin" : self.animate
+							"WebkitTransition": "-webkit-transform .2s ease-out,opacity .2s ease-out",
+							"WebkitTransformOrigin": self.animate
 						})
 					}
 				}
@@ -3262,7 +3287,7 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 				window.setTimeout(function () {
 					dbox.addClass('dialog-visible');
 					dbox.find('.close').get(0).focus()
-				}, isCloseNum > 0 ? 210 : 10);
+				}, isCloseNum > 0 ? 210: 10);
 				window.setTimeout(function () {
 					$(document).unbind('click').bind('click', function (e) {
 						var targetObj = $(e.target);
@@ -3273,7 +3298,7 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 					})
 				}, 0)
 			},
-			changeContent : function (content) {
+			changeContent: function (content) {
 				var self = this;
 				var dbox = $("#" + self.id);
 				if (dbox.length > 0) {
@@ -3284,7 +3309,7 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 					self.drag(dbox)
 				}
 			},
-			remove : function () {
+			remove: function () {
 				var self = this;
 				var dbox = $("#" + self.id);
 				if (typeof self.callback.dialogClose == 'function') {
@@ -3302,12 +3327,12 @@ var _dialogDown = false, _dialogX = 0, _dialogY = 0, _dialogCx = 0, _dialogCy = 
 					}, 200)
 				}
 			},
-			destory : function () {
+			destory: function () {
 				var self = this;
 				var dbox = $("#" + self.id);
 				dbox.remove()
 			},
-			closeAll : function () {
+			closeAll: function () {
 				var self = this;
 				var dialogs = $('.dialog');
 				var isCloseNum = 0;
@@ -3333,25 +3358,25 @@ var _bookmarksDialogFun = "";
 	var app = (function () {
 		var app = function () {};
 		app.prototype = {
-			apps : {
-				"weather" : {
-					"type" : "immediate",
-					"js" : "js/plugin/weather/weather.js",
-					"css" : "js/plugin/weather/css/skin_0.css",
-					"init" : function (targetObj, self, first) {
+			apps: {
+				"weather": {
+					"type": "immediate",
+					"js": "js/plugin/weather/weather.js",
+					"css": "js/plugin/weather/css/skin_0.css",
+					"init": function (targetObj, self, first) {
 						if (typeof weather != "undefined") {
 							weather.container = targetObj;
 							weather.init({
-								"city" : PDI.get('weather', 'city'),
-								"cityID" : PDI.get('weather', 'cityID'),
-								"isAuto" : PDI.get('weather', 'isAuto'),
-								"weather" : PDI.get('weather', 'weather'),
-								"calendar" : PDI.get('weather', 'calendar'),
-								"dateline" : PDI.get('weather', 'dateline')
+								"city": PDI.get('weather', 'city'),
+								"cityID": PDI.get('weather', 'cityID'),
+								"isAuto": PDI.get('weather', 'isAuto'),
+								"weather": PDI.get('weather', 'weather'),
+								"calendar": PDI.get('weather', 'calendar'),
+								"dateline": PDI.get('weather', 'dateline')
 							})
 						}
 					},
-					"loadData" : function (dialogObj, targetObj) {
+					"loadData": function (dialogObj, targetObj) {
 						if (weather.cityID != '') {
 							if (weather.weatherCache == '') {
 								weather.getWeatherData(function (xmlDoc) {
@@ -3368,20 +3393,20 @@ var _bookmarksDialogFun = "";
 							}
 						}
 					},
-					"run" : function () {
+					"run": function () {
 						var weatherDialog = $.dialog({
-								id : "weatherDialog",
-								isLock : true,
-								content : '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>',
-								animate : "center center"
-							});
+							id: "weatherDialog",
+							isLock: true,
+							content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>',
+							animate: "center center"
+						});
 						return weatherDialog
 					},
-					"langVers" : {
-						"zh_CN" : {
-							"js" : "js/plugin/weather/zh_CN/weather.js",
-							"css" : "js/plugin/weather/css/zh_CN/skin_0.css",
-							"loadData" : function (dialogObj, targetObj) {
+					"langVers": {
+						"zh_CN": {
+							"js": "js/plugin/weather/zh_CN/weather.js",
+							"css": "js/plugin/weather/css/zh_CN/skin_0.css",
+							"loadData": function (dialogObj, targetObj) {
 								if (weather.cityID != '') {
 									if (weather.weatherCache == '') {
 										weather.getWeatherData(function (data) {
@@ -3402,18 +3427,18 @@ var _bookmarksDialogFun = "";
 						}
 					}
 				},
-				"classification" : {
-					"type" : "immediate",
-					"separate" : true,
-					"js" : "js/plugin/classification/classification.js",
-					"css" : "js/plugin/classification/css/skin_0.css",
-					"loadData" : function (dialogObj, targetObj) {
+				"classification": {
+					"type": "immediate",
+					"separate": true,
+					"js": "js/plugin/classification/classification.js",
+					"css": "js/plugin/classification/css/skin_0.css",
+					"loadData": function (dialogObj, targetObj) {
 						if (classification && classification.minClassificationSwitch == true) {
 							classification.hideMinClassification(true)
 						}
 						dialogObj.changeContent(classification.init(true))
 					},
-					"init" : function (targetObj, self, first) {
+					"init": function (targetObj, self, first) {
 						if (typeof classification != "undefined") {
 							classification.initClassificationApp(targetObj)
 						}
@@ -3429,55 +3454,55 @@ var _bookmarksDialogFun = "";
 							})
 						}
 					},
-					"run" : function () {
+					"run": function () {
 						var classificationDialog = $.dialog({
-								id : "classificationDialog",
-								hideClose : true,
-								style : {
-									"position" : "relative",
-									"width" : "100%",
-									"height" : "100%",
-									"background" : "rgba(0,0,0,0.8)",
-									"boxShadow" : "none",
-									"borderRadius" : "0"
-								},
-								content : '',
-								animate : "opacity",
-								callback : {
-									dialogClose : function () {
-										classification.isClear(3, true)
-									}
+							id: "classificationDialog",
+							hideClose: true,
+							style: {
+								"position": "relative",
+								"width": "100%",
+								"height": "100%",
+								"background": "rgba(0,0,0,0.8)",
+								"boxShadow": "none",
+								"borderRadius": "0"
+							},
+							content: '',
+							animate: "opacity",
+							callback: {
+								dialogClose: function () {
+									classification.isClear(3, true)
 								}
-							});
+							}
+						});
 						return classificationDialog
 					}
 				},
-				"setup" : {
-					"js" : "js/plugin/setup/setup.js",
-					"css" : "js/plugin/setup/css/skin_0.css",
-					"run" : function () {
+				"setup": {
+					"js": "js/plugin/setup/setup.js",
+					"css": "js/plugin/setup/css/skin_0.css",
+					"run": function () {
 						var setupDialog = $.dialog({
-								id : "setupDialog",
-								isLock : true,
-								content : setup.init(),
-								animate : "center center"
-							});
+							id: "setupDialog",
+							isLock: true,
+							content: setup.init(),
+							animate: "center center"
+						});
 						return setupDialog
 					},
-					"loadData" : function (dialogObj, targetObj) {
+					"loadData": function (dialogObj, targetObj) {
 						dialogObj.changeContent(setup.init(true))
 					}
 				},
-				"lastVisited" : {
-					"js" : "js/plugin/lastVisited/lastVisited.js",
-					"css" : "js/plugin/lastVisited/css/skin_0.css",
-					"loadData" : function (dialogObj, targetObj) {
+				"lastVisited": {
+					"js": "js/plugin/lastVisited/lastVisited.js",
+					"css": "js/plugin/lastVisited/css/skin_0.css",
+					"loadData": function (dialogObj, targetObj) {
 						if (typeof chrome.history != "undefined") {
 							chrome.history.search({
-								text : '',
-								maxResults : 100,
-								startTime : (new Date()).getTime() - (28 * 24 * 3600 * 1000),
-								endTime : (new Date()).getTime()
+								text: '',
+								maxResults: 100,
+								startTime: (new Date()).getTime() - (28 * 24 * 3600 * 1000),
+								endTime: (new Date()).getTime()
 							}, function (data) {
 								var lastVisitedContent = lastVisited.visitedTemplate(data);
 								lastVisited.template(lastVisitedContent);
@@ -3487,20 +3512,20 @@ var _bookmarksDialogFun = "";
 							})
 						}
 					},
-					"run" : function () {
+					"run": function () {
 						var lastVisitedDialog = $.dialog({
-								id : "lastVisitedDialog",
-								isLock : true,
-								animate : "center center",
-								content : '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>'
-							});
+							id: "lastVisitedDialog",
+							isLock: true,
+							animate: "center center",
+							content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>'
+						});
 						return lastVisitedDialog
 					}
 				},
-				"bookmarks" : {
-					"js" : "js/plugin/bookmarks/bookmarks.js",
-					"css" : "js/plugin/bookmarks/css/skin_0.css",
-					"loadData" : function (dialogObj, targetObj) {
+				"bookmarks": {
+					"js": "js/plugin/bookmarks/bookmarks.js",
+					"css": "js/plugin/bookmarks/css/skin_0.css",
+					"loadData": function (dialogObj, targetObj) {
 						chrome.bookmarks.getTree(function (tree) {
 							chrome.bookmarks.getRecent(30, function (recentTree) {
 								bookmarks.template(tree, recentTree);
@@ -3523,30 +3548,29 @@ var _bookmarksDialogFun = "";
 												}
 											})
 										} catch (e) {}
-
 									}
 								}
 							})
 						});
 						_bookmarksDialogFun = setTimeout(function () {
-								showNotice(getI18nMsg('loadingTimeout').replace('%s', getI18nMsg('360Error')));
-								dialogObj.remove()
-							}, 5000)
+							showNotice(getI18nMsg('loadingTimeout').replace('%s', getI18nMsg('360Error')));
+							dialogObj.remove()
+						}, 5000)
 					},
-					"run" : function () {
+					"run": function () {
 						var bookmarksDialog = $.dialog({
-								id : "bookmarksDialog",
-								isLock : true,
-								animate : "center center",
-								content : '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>'
-							});
+							id: "bookmarksDialog",
+							isLock: true,
+							animate: "center center",
+							content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>'
+						});
 						return bookmarksDialog
 					}
 				},
-				"extensions" : {
-					"js" : "js/plugin/extensions/extensions.js",
-					"css" : "js/plugin/extensions/css/skin_0.css",
-					"loadData" : function (dialogObj, targetObj) {
+				"extensions": {
+					"js": "js/plugin/extensions/extensions.js",
+					"css": "js/plugin/extensions/css/skin_0.css",
+					"loadData": function (dialogObj, targetObj) {
 						chrome.management.getAll(function (_extensions) {
 							extensions.template(_extensions);
 							if (typeof dialogObj != 'undefined') {
@@ -3554,48 +3578,48 @@ var _bookmarksDialogFun = "";
 							}
 						})
 					},
-					"run" : function () {
+					"run": function () {
 						var extensionsDialog = $.dialog({
-								id : "extensionsDialog",
-								isLock : true,
-								animate : "center center",
-								content : '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>',
-								callback : {
-									dialogClose : function () {
-										if (_isRefresh != false) {
-											DBOX.getBoxes();
-											DBOX.loadBoxes(DBOX.totalPage);
-											_isRefresh = false
-										}
+							id: "extensionsDialog",
+							isLock: true,
+							animate: "center center",
+							content: '<div class="emptyLoading"><img src="/img/skin_0/loading.gif"></div>',
+							callback: {
+								dialogClose: function () {
+									if (_isRefresh != false) {
+										DBOX.getBoxes();
+										DBOX.loadBoxes(DBOX.totalPage);
+										_isRefresh = false
 									}
 								}
-							});
+							}
+						});
 						return extensionsDialog
 					}
 				},
-				"skins" : {
-					"js" : "js/plugin/skins/skins.js",
-					"css" : "js/plugin/skins/css/skin_0.css",
-					"loadData" : function (dialogObj, targetObj) {
+				"skins": {
+					"js": "js/plugin/skins/skins.js",
+					"css": "js/plugin/skins/css/skin_0.css",
+					"loadData": function (dialogObj, targetObj) {
 						if (typeof cloudWallpaper == 'undefined') {
 							loadScript('js/plugin/skins/cloudWallpaper.js')
 						}
 						$(".skinsContainer .moreSettingsContainer").hide()
 					},
-					"run" : function () {
+					"run": function () {
 						var skinsDialog = $.dialog({
-								id : "skinsDialog",
-								isLock : true,
-								animate : "center center",
-								content : skins.init()
-							});
+							id: "skinsDialog",
+							isLock: true,
+							animate: "center center",
+							content: skins.init()
+						});
 						return skinsDialog
 					}
 				},
-				"cloud" : {
-					"js" : "js/plugin/cloud/cloud.js",
-					"css" : "js/plugin/cloud/css/skin_0.css",
-					"loadData" : function (dialogObj, targetObj) {
+				"cloud": {
+					"js": "js/plugin/cloud/cloud.js",
+					"css": "js/plugin/cloud/css/skin_0.css",
+					"loadData": function (dialogObj, targetObj) {
 						if (typeof cloudApp == 'undefined') {
 							loadScript('js/plugin/cloud/cloudApp.js')
 						} else {
@@ -3616,7 +3640,7 @@ var _bookmarksDialogFun = "";
 									$('.cloudBody .aboutContainer').hide();
 									$('.cloudBody .classificationsContainer').show();
 									createWebsite.initClassificationsContainer();
-									createWebsite.initWebsite(targetObj.attr('url'), targetObj.find('.boxTitle').text(), targetObj.find('.boxLogo').css('backgroundImage').replace("url(", "").replace(")", "").replace(/\"/g, ""), targetObj.hasClass('quick') ? 'quick' : 'normal', targetObj.attr('id'))
+									createWebsite.initWebsite(targetObj.attr('url'), targetObj.find('.boxTitle').text(), targetObj.find('.boxLogo').css('backgroundImage').replace("url(", "").replace(")", "").replace(/\"/g, ""), targetObj.hasClass('quick') ? 'quick': 'normal', targetObj.attr('id'))
 								} else {
 									$('.cloudBody .menu').removeClass('hide');
 									$(".cloudHeader .cloudSwitch").text(getI18nMsg('websiteAdd'));
@@ -3641,7 +3665,7 @@ var _bookmarksDialogFun = "";
 								$('.cloudBody .aboutContainer').hide();
 								$('.cloudBody .classificationsContainer').show();
 								createWebsite.initClassificationsContainer();
-								createWebsite.initWebsite(targetObj.attr('url'), targetObj.find('.boxTitle').text(), targetObj.find('.boxLogo').css('backgroundImage').replace("url(", "").replace(")", "").replace(/\"/g, ""), targetObj.hasClass('quick') ? 'quick' : 'normal', targetObj.attr('id'))
+								createWebsite.initWebsite(targetObj.attr('url'), targetObj.find('.boxTitle').text(), targetObj.find('.boxLogo').css('backgroundImage').replace("url(", "").replace(")", "").replace(/\"/g, ""), targetObj.hasClass('quick') ? 'quick': 'normal', targetObj.attr('id'))
 							} else {
 								$('.cloudBody .menu').removeClass('hide');
 								$(".cloudHeader .cloudSwitch").text(getI18nMsg('websiteAdd'));
@@ -3658,107 +3682,107 @@ var _bookmarksDialogFun = "";
 							}
 						}
 					},
-					"run" : function () {
+					"run": function () {
 						var cloudDialog = $.dialog({
-								id : "cloudDialog",
-								isLock : true,
-								animate : "center center",
-								content : cloud.init(),
-								callback : {
-									dialogClose : function () {
-										if (_isRefresh != false) {
-											if (_isRefresh == "lastPage") {
-												DBOX.getBoxes();
-												DBOX.loadBoxes(DBOX.totalPage)
-											} else if (_isRefresh == "curPage") {
-												DBOX.init()
-											} else if (_isRefresh == "remove") {
-												setTimeout(function () {
-													var updateOptions = createWebsite.isUpdate.split("_");
-													if (updateOptions.length > 1) {
-														$("." + updateOptions[0] + "Dialbox").find("#" + updateOptions[1] + "_" + updateOptions[2]).find('.boxClose').get(0).click()
-													}
-												}, 200)
-											}
-											_isRefresh = false
+							id: "cloudDialog",
+							isLock: true,
+							animate: "center center",
+							content: cloud.init(),
+							callback: {
+								dialogClose: function () {
+									if (_isRefresh != false) {
+										if (_isRefresh == "lastPage") {
+											DBOX.getBoxes();
+											DBOX.loadBoxes(DBOX.totalPage)
+										} else if (_isRefresh == "curPage") {
+											DBOX.init()
+										} else if (_isRefresh == "remove") {
+											setTimeout(function () {
+												var updateOptions = createWebsite.isUpdate.split("_");
+												if (updateOptions.length > 1) {
+													$("." + updateOptions[0] + "Dialbox").find("#" + updateOptions[1] + "_" + updateOptions[2]).find('.boxClose').get(0).click()
+												}
+											}, 200)
 										}
+										_isRefresh = false
 									}
 								}
-							});
+							}
+						});
 						return cloudDialog
 					}
 				},
-				"quickSearch" : {
-					"type" : "immediate",
-					"js" : "app/quickSearch/quickSearch.js",
-					"css" : "app/quickSearch/css/skin_0.css",
-					"loadData" : function (dialogObj, targetObj) {
+				"quickSearch": {
+					"type": "immediate",
+					"js": "app/quickSearch/quickSearch.js",
+					"css": "app/quickSearch/css/skin_0.css",
+					"loadData": function (dialogObj, targetObj) {
 						dialogObj.changeContent(quickSearch.init(true))
 					},
-					"init" : function (targetObj, self, first) {
+					"init": function (targetObj, self, first) {
 						quickSearch.initQuickSearchApp(targetObj)
 					},
-					"run" : function () {
+					"run": function () {
 						var quickSearchDialog = $.dialog({
-								id : "quickSearchDialog",
-								isLock : true,
-								animate : "center center",
-								content : quickSearch.init(),
-								callback : {
-									dialogClose : function () {
-										if ($('.appBox[appid="quickSearch"]').length > 0) {
-											quickSearch.initQuickSearchApp($('.appBox[appid="quickSearch"]'))
-										}
+							id: "quickSearchDialog",
+							isLock: true,
+							animate: "center center",
+							content: quickSearch.init(),
+							callback: {
+								dialogClose: function () {
+									if ($('.appBox[appid="quickSearch"]').length > 0) {
+										quickSearch.initQuickSearchApp($('.appBox[appid="quickSearch"]'))
 									}
 								}
-							});
+							}
+						});
 						return quickSearchDialog
 					}
 				},
-				"siteNav" : {
-					"js" : "app/siteNav/siteNav.js",
-					"css" : "app/siteNav/css/skin_0.css",
-					"run" : function () {
+				"siteNav": {
+					"js": "app/siteNav/siteNav.js",
+					"css": "app/siteNav/css/skin_0.css",
+					"run": function () {
 						var siteNavDialog = $.dialog({
-								id : "siteNavDialog",
-								isLock : true,
-								animate : "center center",
-								content : siteNav.init()
-							});
+							id: "siteNavDialog",
+							isLock: true,
+							animate: "center center",
+							content: siteNav.init()
+						});
 						return siteNavDialog
 					}
 				},
-				"tools" : {
-					"js" : "app/tools/tools.js",
-					"css" : "app/tools/css/skin_0.css",
-					"run" : function () {
+				"tools": {
+					"js": "app/tools/tools.js",
+					"css": "app/tools/css/skin_0.css",
+					"run": function () {
 						var toolsDialog = $.dialog({
-								id : "toolsDialog",
-								isLock : true,
-								animate : "center center",
-								content : tools.init()
-							});
+							id: "toolsDialog",
+							isLock: true,
+							animate: "center center",
+							content: tools.init()
+						});
 						return toolsDialog
 					}
 				},
-				"share" : {
-					"js" : "app/share/share.js",
-					"css" : "app/share/css/skin_0.css",
-					"run" : function () {
+				"share": {
+					"js": "app/share/share.js",
+					"css": "app/share/css/skin_0.css",
+					"run": function () {
 						var shareDialog = $.dialog({
-								id : "shareDialog",
-								isLock : true,
-								animate : "center center",
-								content : share.init()
-							});
+							id: "shareDialog",
+							isLock: true,
+							animate: "center center",
+							content: share.init()
+						});
 						return shareDialog
 					}
 				}
 			},
-			loadedApps : [],
-			loadedAppsReady : [],
-			runedAppObjects : {},
-			getAppConfigValue : function (appId, key) {
+			loadedApps: [],
+			loadedAppsReady: [],
+			runedAppObjects: {},
+			getAppConfigValue: function (appId, key) {
 				var self = this;
 				if (typeof self.apps[appId]['langVers'] != "undefined" && typeof self.apps[appId]['langVers'][ui_locale] != "undefined" && typeof self.apps[appId]['langVers'][ui_locale][key] != "undefined") {
 					return self.apps[appId]['langVers'][ui_locale][key]
@@ -3767,7 +3791,7 @@ var _bookmarksDialogFun = "";
 				}
 				return false
 			},
-			loadJs : function (appId, fn) {
+			loadJs: function (appId, fn) {
 				var self = this;
 				fn = fn || function () {};
 				var jsUrl = self.getAppConfigValue(appId, 'js');
@@ -3777,14 +3801,14 @@ var _bookmarksDialogFun = "";
 					})
 				}
 			},
-			loadCss : function (appId) {
+			loadCss: function (appId) {
 				var self = this;
 				var cssUrl = self.getAppConfigValue(appId, 'css');
 				if (cssUrl) {
 					loadCss(cssUrl)
 				}
 			},
-			loadApp : function (targetObj, appId) {
+			loadApp: function (targetObj, appId) {
 				var self = this;
 				if (typeof self.apps[appId] != "undefined") {
 					if (self.apps[appId]['type'] == 'immediate') {
@@ -3796,7 +3820,7 @@ var _bookmarksDialogFun = "";
 					}
 				}
 			},
-			loadAppContent : function (targetObj, appId) {
+			loadAppContent: function (targetObj, appId) {
 				var self = this;
 				if (self.loadedApps.indexOf(appId) == -1) {
 					self.loadedApps.push(appId);
@@ -3822,7 +3846,7 @@ var _bookmarksDialogFun = "";
 					}
 				}
 			},
-			runApp : function (targetObj, appId, event) {
+			runApp: function (targetObj, appId, event) {
 				var self = this;
 				if (typeof self.apps[appId] != "undefined") {
 					if (self.loadedApps.indexOf(appId) == -1) {
@@ -3886,11 +3910,11 @@ var _bookmarksDialogFun = "";
 							var re = /^o[A-Z]\w+/;
 							if (re.test(appId)) {
 								var oUrls = {
-									"oDownloads" : _browser.protocol + "://downloads/",
-									"oBookmarks" : _browser.protocol + "://bookmarks/#1",
-									"oHistory" : _browser.protocol + "://history/",
-									"oExtensions" : getChromeUrl('extensions'),
-									"oNewtab" : _browser.opera ? "opera://startpage" : "chrome-internal://newtab/"
+									"oDownloads": _browser.protocol + "://downloads/",
+									"oBookmarks": _browser.protocol + "://bookmarks/#1",
+									"oHistory": _browser.protocol + "://history/",
+									"oExtensions": getChromeUrl('extensions'),
+									"oNewtab": _browser.opera ? "opera://startpage": "chrome-internal://newtab/"
 								};
 								if (_browser.ee360) {
 									if (appId == "oDownloads" || appId == "oBookmarks") {
@@ -3898,12 +3922,12 @@ var _bookmarksDialogFun = "";
 										return false
 									}
 								}
-								var oUrl = typeof oUrls[appId] == "undefined" ? "" : oUrls[appId];
+								var oUrl = typeof oUrls[appId] == "undefined" ? "": oUrls[appId];
 								if (oUrl != "") {
 									if (typeof event != "undefined" && event.button == 1) {
-										openTab(_browser.liebao ? false : targetSwitch, oUrl, tabID, true)
+										openTab(_browser.liebao ? false: targetSwitch, oUrl, tabID, true)
 									} else {
-										openTab(_browser.liebao ? false : targetSwitch, oUrl, tabID, ctrlKey)
+										openTab(_browser.liebao ? false: targetSwitch, oUrl, tabID, ctrlKey)
 									}
 								}
 							}
@@ -3916,7 +3940,41 @@ var _bookmarksDialogFun = "";
 	})()
 })(jq);
 var app = $.app();
-var _move = false, _down = false, _realMove = false, _edit = false, _flip = true, _wheelEvent = true, _wheelFun = "", _resize = false, _destory = false, _downfun = "", _editfun = "", _flipfun = "", _noticeFun = "", _quickDialBox = false, _moveQuickDialBox = false, _removeLastDialBox = false, _isRefresh = false, _classificationOpen = false, _x = 0, _y = 0, _dx = 0, _dy = 0, eventObj = '', eclone = '', ecloneCss = '', onDragID = '', onTargetID = '', onSelectedID = '', trends = [], onSeizeID = '', dialboxType = '', _cx = 0, _cy = 0, _cw = 0, _ch = 0;
+var _move = false,
+_down = false,
+_realMove = false,
+_edit = false,
+_flip = true,
+_wheelEvent = true,
+_wheelFun = "",
+_resize = false,
+_destory = false,
+_downfun = "",
+_editfun = "",
+_flipfun = "",
+_noticeFun = "",
+_quickDialBox = false,
+_moveQuickDialBox = false,
+_removeLastDialBox = false,
+_isRefresh = false,
+_classificationOpen = false,
+_x = 0,
+_y = 0,
+_dx = 0,
+_dy = 0,
+eventObj = '',
+eclone = '',
+ecloneCss = '',
+onDragID = '',
+onTargetID = '',
+onSelectedID = '',
+trends = [],
+onSeizeID = '',
+dialboxType = '',
+_cx = 0,
+_cy = 0,
+_cw = 0,
+_ch = 0;
 var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem'];
 (function ($) {
 	$.box = function (id, dbox, type) {
@@ -3926,28 +3984,28 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 		var box = function (id, dbox, type) {
 			var self = this;
 			self.boxOptions = {
-				id : id,
-				type : type,
-				title : '',
-				img : '',
-				url : '',
-				desc : '',
-				html : '',
-				color : '',
-				fit : '',
-				isApp : false,
-				isDel : false,
-				isCreate : false,
-				isFixed : false,
-				isVirtual : false,
-				isNew : false
+				id: id,
+				type: type,
+				title: '',
+				img: '',
+				url: '',
+				desc: '',
+				html: '',
+				color: '',
+				fit: '',
+				isApp: false,
+				isDel: false,
+				isCreate: false,
+				isFixed: false,
+				isVirtual: false,
+				isNew: false
 			};
 			self.set(null, dbox);
 			self.init()
 		};
 		box.prototype = {
-			boxObject : '',
-			set : function (key, value) {
+			boxObject: '',
+			set: function (key, value) {
 				var self = this;
 				if (key == '' || key == null) {
 					$.each(value, function (i, n) {
@@ -3957,7 +4015,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					self.boxOptions[key] = value
 				}
 			},
-			getImg : function () {
+			getImg: function () {
 				var self = this;
 				if (self.boxOptions.img != "") {
 					return self.boxOptions.img.trim()
@@ -3980,7 +4038,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				}
 				return urlImg + 'm/' + img + '.png'
 			},
-			getUrl : function () {
+			getUrl: function () {
 				var self = this,
 				url = self.boxOptions.url.trim();
 				if (url == '') {
@@ -3995,12 +4053,12 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					return "http://" + url
 				}
 			},
-			init : function () {
+			init: function () {
 				var self = this;
 				if (self.boxOptions.isApp) {
-					var boxItem = $('<div class="appBox ' + self.boxOptions.type + (self.boxOptions.isNew ? ' new' : '') + (self.boxOptions.isFixed ? ' boxFixed' : '') + (self.boxOptions.isApp.length == 32 ? ' chromeApp' : '') + '" id="appBox_' + self.boxOptions.id + '" appType="' + (self.boxOptions.appType ? self.boxOptions.appType : '') + '" url="' + self.getUrl() + '" appId="' + self.boxOptions.isApp + '"></div>').append($('<div class="boxLogo" notes="' + self.boxOptions.title + '"></div>')).append(self.boxOptions.title == "" ? "" : $('<div class="boxTitle"></div>').html('<a>' + self.boxOptions.title + '</a>')).append($('<button class="boxClose' + (self.boxOptions.isFixed ? ' hide' : '') + '"></button>'))
+					var boxItem = $('<div class="appBox ' + self.boxOptions.type + (self.boxOptions.isNew ? ' new': '') + (self.boxOptions.isFixed ? ' boxFixed': '') + (self.boxOptions.isApp.length == 32 ? ' chromeApp': '') + '" id="appBox_' + self.boxOptions.id + '" appType="' + (self.boxOptions.appType ? self.boxOptions.appType: '') + '" url="' + self.getUrl() + '" appId="' + self.boxOptions.isApp + '"></div>').append($('<div class="boxLogo" notes="' + self.boxOptions.title + '"></div>')).append(self.boxOptions.title == "" ? "": $('<div class="boxTitle"></div>').html('<a>' + self.boxOptions.title + '</a>')).append($('<button class="boxClose' + (self.boxOptions.isFixed ? ' hide': '') + '"></button>'))
 				} else {
-					var boxItem = $('<div class="appBox ' + self.boxOptions.type + (self.boxOptions.isNew ? ' new' : '') + (self.boxOptions.isFixed ? ' boxFixed' : '') + '" id="appBox_' + self.boxOptions.id + '" url="' + self.getUrl() + '"></div>').append($('<div class="boxLogo" notes="' + self.boxOptions.title + '"></div>')).append(self.boxOptions.title == "" ? "" : $('<div class="boxTitle"></div>').html('<a>' + self.boxOptions.title + '</a>')).append($('<button class="boxClose' + (self.boxOptions.isFixed ? ' hide' : '') + '"></button>')).append($('<button class="boxEdit ' + (self.boxOptions.isFixed ? ' hide' : '') + '" title="' + getI18nMsg('editDialbox') + '"></button>'))
+					var boxItem = $('<div class="appBox ' + self.boxOptions.type + (self.boxOptions.isNew ? ' new': '') + (self.boxOptions.isFixed ? ' boxFixed': '') + '" id="appBox_' + self.boxOptions.id + '" url="' + self.getUrl() + '"></div>').append($('<div class="boxLogo" notes="' + self.boxOptions.title + '"></div>')).append(self.boxOptions.title == "" ? "": $('<div class="boxTitle"></div>').html('<a>' + self.boxOptions.title + '</a>')).append($('<button class="boxClose' + (self.boxOptions.isFixed ? ' hide': '') + '"></button>')).append($('<button class="boxEdit ' + (self.boxOptions.isFixed ? ' hide': '') + '" title="' + getI18nMsg('editDialbox') + '"></button>'))
 				}
 				if (self.boxOptions.html != "") {
 					boxItem.append($('<div class="boxHtml"></div>').html(self.boxOptions.html))
@@ -4113,8 +4171,8 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						event.returnValue = true
 					}
 					_wheelFun = setTimeout(function () {
-							_wheelEvent = true
-						}, self.page3DSwitcherOpen == true ? 400 : 460)
+						_wheelEvent = true
+					}, self.page3DSwitcherOpen == true ? 400: 460)
 				}
 			};
 			window.onmousewheel = wheel;
@@ -4124,47 +4182,47 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 			window.onmessage = message
 		};
 		dialbox.prototype = {
-			container : "",
-			containerWidth : 0,
-			containerHeight : 0,
-			containerLeft : 0,
-			containerTop : 0,
-			QContainer : "",
-			QBContainer : "",
-			QBContainerWidth : 0,
-			QBContainerLeft : 0,
-			pageSwitcher : "",
-			pageIndexSwitcher : "",
-			pageSwitcherShow : false,
-			page3DSwitcherOpen : false,
-			dialBoxQuickHide : false,
-			titleShow : true,
-			cloudBoxShow : true,
-			cols : 4,
-			rows : 3,
-			num : 12,
-			Qnum : 10,
-			page : 1,
-			totalnum : 0,
-			QTotalnum : 0,
-			totalPage : 1,
-			opacity : 0.8,
-			spacing : 15,
-			QSpacing : 0,
-			QMaxSpacing : 4,
-			QMinSpacing : 0,
-			border : 1,
-			width : 214,
-			height : 166,
-			maxTop : "auto",
-			QWidth : 74,
-			QHeight : 74,
-			radius : 2,
-			appDialboxs : [],
-			update : false,
-			init : function (update) {
+			container: "",
+			containerWidth: 0,
+			containerHeight: 0,
+			containerLeft: 0,
+			containerTop: 0,
+			QContainer: "",
+			QBContainer: "",
+			QBContainerWidth: 0,
+			QBContainerLeft: 0,
+			pageSwitcher: "",
+			pageIndexSwitcher: "",
+			pageSwitcherShow: false,
+			page3DSwitcherOpen: false,
+			dialBoxQuickHide: false,
+			titleShow: true,
+			cloudBoxShow: true,
+			cols: 4,
+			rows: 3,
+			num: 12,
+			Qnum: 10,
+			page: 1,
+			totalnum: 0,
+			QTotalnum: 0,
+			totalPage: 1,
+			opacity: 0.8,
+			spacing: 15,
+			QSpacing: 0,
+			QMaxSpacing: 4,
+			QMinSpacing: 0,
+			border: 1,
+			width: 214,
+			height: 166,
+			maxTop: "auto",
+			QWidth: 74,
+			QHeight: 74,
+			radius: 2,
+			appDialboxs: [],
+			update: false,
+			init: function (update) {
 				var self = this;
-				self.update = typeof update == "undefined" ? false : update;
+				self.update = typeof update == "undefined" ? false: update;
 				self.container.empty();
 				self.QContainer.empty();
 				var _boxTypes = ["normal", "quick"];
@@ -4187,7 +4245,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				self.addQBoxes();
 				self.position()
 			},
-			addBoxes : function (order) {
+			addBoxes: function (order) {
 				var self = this;
 				var existNum = $(self.container.find('.appBox').not('.boxDrag')).length;
 				var boxes = self.getBoxes();
@@ -4211,8 +4269,8 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						if (('appBox_' + i) != onDragID) {
 							if (p >= start && p < end) {
 								boxQueue.push({
-									"id" : i,
-									"box" : n
+									"id": i,
+									"box": n
 								})
 							}
 							p++
@@ -4229,7 +4287,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					}
 				}
 			},
-			getBoxes : function () {
+			getBoxes: function () {
 				var self = this,
 				sum = 0;
 				var _boxes = PDI.get('dialBoxes', 'normal');
@@ -4240,29 +4298,29 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				});
 				self.totalnum = sum;
 				if (sum > 0) {
-					self.totalPage = ((self.totalnum % self.num) == 0) ? (self.totalnum / self.num) : parseInt(self.totalnum / self.num) + 1;
-					self.page = self.page > self.totalPage ? self.totalPage : self.page
+					self.totalPage = ((self.totalnum % self.num) == 0) ? (self.totalnum / self.num): parseInt(self.totalnum / self.num) + 1;
+					self.page = self.page > self.totalPage ? self.totalPage: self.page
 				}
 				PDI.set('privateSetup', 'dialBoxPage', self.page);
 				self.pageIndex();
 				return _boxes
 			},
-			addQBoxes : function () {
+			addQBoxes: function () {
 				var self = this;
 				var boxQueue = self.getQBoxes();
 				$.each(boxQueue, function (i, n) {
 					self.addBox(n['id'], n['box'], 'quick')
 				})
 			},
-			getQBoxes : function () {
+			getQBoxes: function () {
 				var self = this,
 				sum = 0;
 				var boxQueue = [];
 				$.each(PDI.get('dialBoxes', 'quick'), function (i, n) {
 					if (self.isDialboxShow(n)) {
 						boxQueue.push({
-							"id" : i,
-							"box" : n
+							"id": i,
+							"box": n
 						});
 						sum++
 					}
@@ -4270,14 +4328,14 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				self.QTotalnum = sum;
 				return boxQueue
 			},
-			addBox : function (id, boxObj, type, order) {
+			addBox: function (id, boxObj, type, order) {
 				var self = this;
 				var ignoreLogoList = ['weather'];
-				type = typeof type == "undefined" ? "normal" : type;
+				type = typeof type == "undefined" ? "normal": type;
 				var thisBox = $.box(id, boxObj, type);
 				var logoImg = new Image(),
 				logoImgUrl = thisBox.getImg();
-				var logoBoxHeight = self.titleShow == true ? (self.height + 32) : self.height;
+				var logoBoxHeight = self.titleShow == true ? (self.height + 32): self.height;
 				var logoBoxWidth = self.width;
 				var boxLogoColor = '191,0,0';
 				if (type == 'quick' && logoImgUrl.indexOf(urlImg) == 0 && logoImgUrl.indexOf('/m/') > -1) {
@@ -4309,7 +4367,6 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 								}
 							}
 						} catch (e) {}
-
 						var logoImgArray = urlRegEx(logoImgUrl);
 						if (!isApp || (isApp && (logoImgArray == null || logoImgArray[2] == "hao." + officialDomain))) {
 							try {
@@ -4327,7 +4384,6 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 									boxLogoColor = imageDataRgba
 								}
 							} catch (err) {}
-
 						}
 						boxObj.color = boxLogoColor;
 						if (self.radius < 30 && type != 'quick') {
@@ -4382,7 +4438,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				thisBox.boxObject.find('.boxLogo').css('backgroundImage', 'url(' + logoImgUrl + ')');
 				var iframeDialboxUrl = getIframeDialboxUrl(thisBox.boxOptions.url);
 				if (iframeDialboxUrl) {
-					var iframeOptions = "target=" + (targetSwitch ? "top" : "blank");
+					var iframeOptions = "target=" + (targetSwitch ? "top": "blank");
 					if (typeof thisBox.boxOptions.img != "undefined" && thisBox.boxOptions.img != "") {
 						iframeOptions += "&img=" + escape(thisBox.boxOptions.img)
 					}
@@ -4430,7 +4486,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				}
 				return thisBox
 			},
-			position : function () {
+			position: function () {
 				var self = this;
 				if (self.page3DSwitcherOpen == true) {
 					self.container.parent().removeClass("visual3D").addClass("visual3D")
@@ -4439,13 +4495,13 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				}
 				self.measurement();
 				self.container.css({
-					"width" : self.containerWidth + "px",
-					"left" : self.containerLeft + "px",
-					"height" : self.containerHeight + "px",
-					"top" : self.containerTop + "px"
+					"width": self.containerWidth + "px",
+					"left": self.containerLeft + "px",
+					"height": self.containerHeight + "px",
+					"top": self.containerTop + "px"
 				});
 				if (self.pageIndexSwitcher != '') {
-					var spaceBlank = self.spacing == 0 ? 40 : 20;
+					var spaceBlank = self.spacing == 0 ? 40: 20;
 					if ((self.containerTop + self.containerHeight + spaceBlank) <= (document.body.offsetHeight - 100)) {
 						self.pageIndexSwitcher.css("bottom", (document.body.offsetHeight - (self.containerTop + self.containerHeight + spaceBlank)) + "px")
 					} else {
@@ -4455,7 +4511,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				self.positionBox();
 				self.positionQBox()
 			},
-			measurement : function () {
+			measurement: function () {
 				var self = this;
 				var bodyWidth = document.body.offsetWidth,
 				bodyHeight = document.body.offsetHeight;
@@ -4466,15 +4522,15 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					for (var cols = 1; cols <= maxCols; cols++) {
 						if (self.num % cols == 0) {
 							matrix[cols] = {
-								"rows" : self.num / cols,
-								"cols" : cols
+								"rows": self.num / cols,
+								"cols": cols
 							}
 						}
 					}
 					var minDiff = '';
 					$.each(matrix, function (i, n) {
 						var itemWidth = self.width + self.spacing + 2 * self.border,
-						itemHeight = (self.titleShow == true ? (self.height + 32) : self.height) + self.spacing + 2 * self.border,
+						itemHeight = (self.titleShow == true ? (self.height + 32): self.height) + self.spacing + 2 * self.border,
 						curDiff = Math.abs((bodyWidth - n.cols * itemWidth - self.spacing) / 2 - (bodyHeight - 100 - n.rows * itemHeight - self.spacing));
 						if (curDiff < minDiff || minDiff == '') {
 							minDiff = curDiff;
@@ -4495,7 +4551,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 										self.containerTop = 0
 									}
 								} else {
-									self.containerTop = (self.maxTop - self.spacing) > 0 ? (self.maxTop - self.spacing) : 0
+									self.containerTop = (self.maxTop - self.spacing) > 0 ? (self.maxTop - self.spacing): 0
 								}
 							}
 							self.cols = n.cols;
@@ -4518,7 +4574,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					self.QBContainer.removeClass("hide")
 				}
 			},
-			positionBox : function () {
+			positionBox: function () {
 				var self = this;
 				var boxList = self.container.find('.appBox'),
 				not_boxDrag = boxList.not('.boxDrag');
@@ -4553,50 +4609,50 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 									var midIndex = parseInt(self.cols / 2);
 									if (i % self.cols < midIndex) {
 										$(not_boxDrag[i]).css({
-											"WebkitTransform" : "rotateY(" + ((midIndex - i % self.cols) * 2.5) + "deg)",
-											"WebkitTransformOrigin" : ((midIndex - i % self.cols + 1) * 50) + "% 0%"
+											"WebkitTransform": "rotateY(" + ((midIndex - i % self.cols) * 2.5) + "deg)",
+											"WebkitTransformOrigin": ((midIndex - i % self.cols + 1) * 50) + "% 0%"
 										})
 									} else {
 										$(not_boxDrag[i]).css({
-											"WebkitTransform" : "rotateY(" + ((midIndex - i % self.cols - 1) * 2.5) + "deg)",
-											"WebkitTransformOrigin" : ((midIndex - i % self.cols) * 50) + "% 0%"
+											"WebkitTransform": "rotateY(" + ((midIndex - i % self.cols - 1) * 2.5) + "deg)",
+											"WebkitTransformOrigin": ((midIndex - i % self.cols) * 50) + "% 0%"
 										})
 									}
 								} else {
 									var midIndex = parseInt(self.cols / 2);
 									if (i % self.cols != midIndex) {
 										$(not_boxDrag[i]).css({
-											"WebkitTransform" : "rotateY(" + ((midIndex - i % self.cols) * 2.5) + "deg)",
-											"WebkitTransformOrigin" : ((midIndex - i % self.cols + 1) * 50) + "% 0%"
+											"WebkitTransform": "rotateY(" + ((midIndex - i % self.cols) * 2.5) + "deg)",
+											"WebkitTransformOrigin": ((midIndex - i % self.cols + 1) * 50) + "% 0%"
 										})
 									} else {
 										$(not_boxDrag[i]).css({
-											"WebkitTransform" : "rotateY(0deg)",
-											"WebkitTransformOrigin" : "0% 0%"
+											"WebkitTransform": "rotateY(0deg)",
+											"WebkitTransformOrigin": "0% 0%"
 										})
 									}
 								}
 							}
 							$(not_boxDrag[i]).css({
-								"width" : self.width + "px",
-								"height" : (self.titleShow == true ? (self.height + 32) : self.height) + "px",
-								"left" : self.spacing + (i % self.cols) * (self.spacing + self.width + 2 * self.border) + 'px',
-								"top" : self.spacing + parseInt(i / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32) : self.height) + 2 * self.border) + 'px',
-								"display" : "block"
+								"width": self.width + "px",
+								"height": (self.titleShow == true ? (self.height + 32): self.height) + "px",
+								"left": self.spacing + (i % self.cols) * (self.spacing + self.width + 2 * self.border) + 'px',
+								"top": self.spacing + parseInt(i / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32): self.height) + 2 * self.border) + 'px',
+								"display": "block"
 							})
 						}
 					}
 				}, 0);
 				if (not_boxDrag) {
 					not_boxDrag.css({
-						"WebkitTransition" : "left .2s ease-in, top .2s ease-in, opacity .2s ease-in"
+						"WebkitTransition": "left .2s ease-in, top .2s ease-in, opacity .2s ease-in"
 					})
 				}
 				setTimeout(function () {
 					boxList.removeClass("new")
 				}, 800)
 			},
-			positionQBox : function () {
+			positionQBox: function () {
 				var self = this;
 				var quickBoxList = self.QContainer.find('.appBox'),
 				not_boxDrag = quickBoxList.not('.boxDrag');
@@ -4626,25 +4682,25 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					if (typeof not_boxDrag != 'undefined' && not_boxDrag.length > 0) {
 						for (var i = 0; i < not_boxDrag.length; i++) {
 							$(not_boxDrag[i]).css({
-								"width" : self.QWidth + "px",
-								"height" : self.QHeight + "px",
-								"left" : (self.QBContainerLeft + self.QSpacing + i * (self.QSpacing + self.QWidth)) + 'px',
-								"top" : "-29px",
-								"display" : "block"
+								"width": self.QWidth + "px",
+								"height": self.QHeight + "px",
+								"left": (self.QBContainerLeft + self.QSpacing + i * (self.QSpacing + self.QWidth)) + 'px',
+								"top": "-29px",
+								"display": "block"
 							})
 						}
 					}
 				}, 0);
 				if (not_boxDrag) {
 					not_boxDrag.css({
-						"WebkitTransition" : "left .2s ease-in, top .2s ease-in, opacity .2s ease-in"
+						"WebkitTransition": "left .2s ease-in, top .2s ease-in, opacity .2s ease-in"
 					})
 				}
 			},
-			dragBox : function (box) {
+			dragBox: function (box) {
 				var self = this;
 				box.boxObject.unbind('mousedown.dialbox').bind('mousedown.dialbox', function (e) {
-					var selfWidth = $(this).hasClass('quick') ? self.QWidth : self.width;
+					var selfWidth = $(this).hasClass('quick') ? self.QWidth: self.width;
 					if (_down == false && e.button != 2 && Math.abs(this.offsetWidth - selfWidth) < parseInt(selfWidth / 2)) {
 						if (!_edit) {
 							box.boxObject.find(".iframeDialboxMask").hide()
@@ -4667,58 +4723,58 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							_cw = parseInt(eventObj.css('width'));
 							_ch = parseInt(eventObj.css('height'));
 							_downfun = setTimeout(function () {
-									box.boxObject.find(".iframeDialboxMask").show();
-									if (_down == true) {
-										if (classification && classification.minClassificationSwitch == true) {
-											classification.hideMinClassification(true)
-										}
-										onDragID = eventObj.attr("id");
-										onTargetID = "";
-										_removeLastDialBox = false;
-										if (e.pageY >= (self.QContainer.offset().top - self.QHeight)) {
-											_quickDialBox = _moveQuickDialBox = true;
-											_y = e.pageY - self.QContainer.offset().top - parseInt(eventObj.css("top"));
-											_x = e.pageX - parseInt(eventObj.css("left"))
-										} else {
-											_quickDialBox = _moveQuickDialBox = false;
-											_y = e.pageY - self.container.offset().top - parseInt(eventObj.css("top"));
-											_x = e.pageX - self.container.offset().left - parseInt(eventObj.css("left"))
-										}
-										eclone = eventObj.clone();
-										eclone.empty();
-										eclone.addClass("boxClone");
-										eclone.css("visibility", "hidden");
-										eclone.insertAfter(eventObj);
-										eventObj.css({
-											"opacity" : 0.5,
-											"zIndex" : getMaxZindex(eventObj) + 1,
-											"WebkitTransition" : ""
-										});
-										eventObj.parent().parent().append(eventObj);
-										eventObj.css({
-											top : (e.pageY + self.container.parent().get(0).scrollTop - _y) + 'px',
-											left : (e.pageX - _x) + 'px'
-										});
-										eventObj.children().css("cursor", "move");
-										eventObj.addClass('boxDrag');
-										if (e.button != 2) {
-											_move = true
-										}
-										_editfun = setTimeout(function () {
-												_edit = true;
-												_move = true;
-												_down = false;
-												_realMove = true;
-												setTimeout(function () {
-													self.container.parent().removeClass('edit').addClass('edit');
-													if (self.container.attr('class').indexOf('normalDialbox op_') > -1) {
-														self.container.removeClass(self.container.attr('class').replace('normalDialbox ', ''))
-													}
-													app.loadAppContent(eventObj, 'cloud')
-												}, 0)
-											}, 500)
+								box.boxObject.find(".iframeDialboxMask").show();
+								if (_down == true) {
+									if (classification && classification.minClassificationSwitch == true) {
+										classification.hideMinClassification(true)
 									}
-								}, 120)
+									onDragID = eventObj.attr("id");
+									onTargetID = "";
+									_removeLastDialBox = false;
+									if (e.pageY >= (self.QContainer.offset().top - self.QHeight)) {
+										_quickDialBox = _moveQuickDialBox = true;
+										_y = e.pageY - self.QContainer.offset().top - parseInt(eventObj.css("top"));
+										_x = e.pageX - parseInt(eventObj.css("left"))
+									} else {
+										_quickDialBox = _moveQuickDialBox = false;
+										_y = e.pageY - self.container.offset().top - parseInt(eventObj.css("top"));
+										_x = e.pageX - self.container.offset().left - parseInt(eventObj.css("left"))
+									}
+									eclone = eventObj.clone();
+									eclone.empty();
+									eclone.addClass("boxClone");
+									eclone.css("visibility", "hidden");
+									eclone.insertAfter(eventObj);
+									eventObj.css({
+										"opacity": 0.5,
+										"zIndex": getMaxZindex(eventObj) + 1,
+										"WebkitTransition": ""
+									});
+									eventObj.parent().parent().append(eventObj);
+									eventObj.css({
+										top: (e.pageY + self.container.parent().get(0).scrollTop - _y) + 'px',
+										left: (e.pageX - _x) + 'px'
+									});
+									eventObj.children().css("cursor", "move");
+									eventObj.addClass('boxDrag');
+									if (e.button != 2) {
+										_move = true
+									}
+									_editfun = setTimeout(function () {
+										_edit = true;
+										_move = true;
+										_down = false;
+										_realMove = true;
+										setTimeout(function () {
+											self.container.parent().removeClass('edit').addClass('edit');
+											if (self.container.attr('class').indexOf('normalDialbox op_') > -1) {
+												self.container.removeClass(self.container.attr('class').replace('normalDialbox ', ''))
+											}
+											app.loadAppContent(eventObj, 'cloud')
+										}, 0)
+									}, 500)
+								}
+							}, 120)
 						}
 					}
 				});
@@ -4762,14 +4818,14 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							}
 							eventObj.removeClass('normal').addClass('quick');
 							eventObj.css({
-								"width" : self.QWidth + 'px',
-								"height" : self.QHeight + 'px'
+								"width": self.QWidth + 'px',
+								"height": self.QHeight + 'px'
 							});
 							eventObj.find('.boxTitle').css('backgroundColor', 'transparent');
 							eventObj.find('.boxLogo').removeClass('noTitle');
 							eventObj.find('.boxLogo').css({
-								"borderBottomWidth" : '0px',
-								"borderRadius" : 0
+								"borderBottomWidth": '0px',
+								"borderRadius": 0
 							});
 							var eventObjLogoBgImage = eventObj.find('.boxLogo').css("backgroundImage").replace(/\"/g, "");
 							if (eventObjLogoBgImage.indexOf(urlImg) == 4 && eventObjLogoBgImage.indexOf('/m/') > -1) {
@@ -4795,16 +4851,16 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 								ecloneCss = ''
 							} else {
 								ecloneCss = {
-									"width" : eclone.css("width"),
-									"height" : eclone.css("height"),
-									"top" : eclone.css("top"),
-									"left" : eclone.css("left"),
+									"width": eclone.css("width"),
+									"height": eclone.css("height"),
+									"top": eclone.css("top"),
+									"left": eclone.css("left"),
 								};
 								eclone.css({
-									"width" : self.QWidth + 'px',
-									"height" : self.QHeight + 'px',
-									"top" : "-" + (parseInt(self.QHeight / 2)) + "px",
-									"left" : (self.QBContainerLeft + self.QSpacing + self.QContainer.find('.appBox').length * (self.QSpacing + self.QWidth)) + 'px',
+									"width": self.QWidth + 'px',
+									"height": self.QHeight + 'px',
+									"top": "-" + (parseInt(self.QHeight / 2)) + "px",
+									"left": (self.QBContainerLeft + self.QSpacing + self.QContainer.find('.appBox').length * (self.QSpacing + self.QWidth)) + 'px',
 								})
 							}
 							if (l >= self.num) {
@@ -4823,12 +4879,12 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							}
 							eventObj.removeClass('quick').addClass('normal');
 							eventObj.css({
-								"width" : self.width + 'px',
-								"height" : (self.titleShow == true ? (self.height + 32) : self.height) + "px"
+								"width": self.width + 'px',
+								"height": (self.titleShow == true ? (self.height + 32): self.height) + "px"
 							});
 							eventObj.find('.boxLogo').css({
-								"borderBottomWidth" : (self.spacing == 0 || self.radius > 30) ? '0px' : '2px',
-								"borderRadius" : self.radius + 'px'
+								"borderBottomWidth": (self.spacing == 0 || self.radius > 30) ? '0px': '2px',
+								"borderRadius": self.radius + 'px'
 							});
 							var icolor = eventObj.find('.boxTitle').attr('icolor');
 							if (self.radius <= 30) {
@@ -4872,10 +4928,10 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 								ecloneCss = ''
 							} else {
 								ecloneCss = {
-									"width" : eclone.css("width"),
-									"height" : eclone.css("height"),
-									"top" : eclone.css("top"),
-									"left" : eclone.css("left"),
+									"width": eclone.css("width"),
+									"height": eclone.css("height"),
+									"top": eclone.css("top"),
+									"left": eclone.css("left"),
 								};
 								if (l >= self.num) {
 									l = l - 1;
@@ -4883,10 +4939,10 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 									_removeLastDialBox = true
 								}
 								eclone.css({
-									"width" : self.width + 'px',
-									"height" : (self.titleShow == true ? (self.height + 32) : self.height) + "px",
-									"left" : self.spacing + (l % self.cols) * (self.spacing + self.width + 2 * self.border) + 'px',
-									"top" : self.spacing + parseInt(l / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32) : self.height) + 2 * self.border) + 'px',
+									"width": self.width + 'px',
+									"height": (self.titleShow == true ? (self.height + 32): self.height) + "px",
+									"left": self.spacing + (l % self.cols) * (self.spacing + self.width + 2 * self.border) + 'px',
+									"top": self.spacing + parseInt(l / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32): self.height) + 2 * self.border) + 'px',
 								});
 								if (self.page3DSwitcherOpen == true) {
 									if (self.cols % 2 == 0) {
@@ -4906,8 +4962,8 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 										}
 									}
 									eclone.css({
-										"WebkitTransform" : lastTransform,
-										"WebkitTransformOrigin" : lastTransformOrigin
+										"WebkitTransform": lastTransform,
+										"WebkitTransformOrigin": lastTransformOrigin
 									})
 								}
 							}
@@ -4926,8 +4982,8 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							if (_flip) {
 								_flip = false;
 								if (dialboxType == '' && _quickDialBox != _moveQuickDialBox) {
-									var fromType = _quickDialBox ? 'quick' : 'normal';
-									var toType = _moveQuickDialBox ? 'quick' : 'normal';
+									var fromType = _quickDialBox ? 'quick': 'normal';
+									var toType = _moveQuickDialBox ? 'quick': 'normal';
 									PDI.moveDialbox(fromType, toType, parseInt(onDragID.replace('appBox_', '')), parseInt(onTargetID.replace('appBox_', '')));
 									onDragID = onTargetID;
 									dialboxType = 'normal'
@@ -4949,8 +5005,8 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 								_cw = parseInt(eclone.css('width'));
 								_ch = parseInt(eclone.css('height'));
 								var _flipfun = setTimeout(function () {
-										_flip = true
-									}, 1500)
+									_flip = true
+								}, 1500)
 							}
 						} else {
 							if (_flipfun != '') {
@@ -4959,19 +5015,19 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						}
 						if (_moveQuickDialBox == _quickDialBox) {
 							eventObj.css({
-								top : (e.pageY + self.container.parent().get(0).scrollTop - _y) + 'px',
-								left : (e.pageX - _x) + 'px'
+								top: (e.pageY + self.container.parent().get(0).scrollTop - _y) + 'px',
+								left: (e.pageX - _x) + 'px'
 							})
 						} else {
 							if (_moveQuickDialBox == false) {
 								eventObj.css({
-									top : (e.pageY + self.container.parent().get(0).scrollTop - parseInt(_y * (self.height / self.QHeight))) + 'px',
-									left : (e.pageX - parseInt(_x * (self.width / self.QWidth))) + 'px'
+									top: (e.pageY + self.container.parent().get(0).scrollTop - parseInt(_y * (self.height / self.QHeight))) + 'px',
+									left: (e.pageX - parseInt(_x * (self.width / self.QWidth))) + 'px'
 								})
 							} else {
 								eventObj.css({
-									top : (e.pageY + self.container.parent().get(0).scrollTop - parseInt(_y * (self.QHeight / self.height))) + 'px',
-									left : (e.pageX - parseInt(_x * (self.QWidth / self.width))) + 'px'
+									top: (e.pageY + self.container.parent().get(0).scrollTop - parseInt(_y * (self.QHeight / self.height))) + 'px',
+									left: (e.pageX - parseInt(_x * (self.QWidth / self.width))) + 'px'
 								})
 							}
 						}
@@ -5044,27 +5100,27 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					if (e.button != 2 && eventObj != '') {
 						if (_move) {
 							eventObj.css({
-								"opacity" : 1,
-								"zIndex" : ''
+								"opacity": 1,
+								"zIndex": ''
 							});
 							eventObj.children().css("cursor", "pointer");
 							if (self.page3DSwitcherOpen == true && !eventObj.hasClass('quick')) {
 								eventObj.css({
-									"WebkitTransform" : eclone.css('WebkitTransform'),
-									"WebkitTransformOrigin" : eclone.css('WebkitTransformOrigin')
+									"WebkitTransform": eclone.css('WebkitTransform'),
+									"WebkitTransformOrigin": eclone.css('WebkitTransformOrigin')
 								})
 							}
 							eventObj.css({
-								"top" : eclone.css('top'),
-								"left" : eclone.css('left'),
-								"WebkitTransition" : "left .2s ease-in, top .2s ease-in, opacity .2s ease-in"
+								"top": eclone.css('top'),
+								"left": eclone.css('left'),
+								"WebkitTransition": "left .2s ease-in, top .2s ease-in, opacity .2s ease-in"
 							});
 							eventObj.attr('id', eclone.attr('id'));
 							eventObj.insertAfter(eclone);
 							if (onTargetID != '') {
-								var fromType = _quickDialBox ? 'quick' : 'normal';
-								fromType = dialboxType == "" ? fromType : dialboxType;
-								var toType = _moveQuickDialBox ? 'quick' : 'normal';
+								var fromType = _quickDialBox ? 'quick': 'normal';
+								fromType = dialboxType == "" ? fromType: dialboxType;
+								var toType = _moveQuickDialBox ? 'quick': 'normal';
 								PDI.moveDialbox(fromType, toType, parseInt(onDragID.replace('appBox_', '')), parseInt(onTargetID.replace('appBox_', '')));
 								dialboxType = ''
 							}
@@ -5078,7 +5134,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							var l = normalBoxlist.length;
 							if (_moveQuickDialBox && _removeLastDialBox) {
 								var lastLeft = self.spacing + (l % self.cols) * (self.spacing + self.width + 2 * self.border) + 'px',
-								lastTop = self.spacing + parseInt(l / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32) : self.height) + 2 * self.border) + 'px';
+								lastTop = self.spacing + parseInt(l / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32): self.height) + 2 * self.border) + 'px';
 								if (self.page3DSwitcherOpen == true) {
 									if (self.cols % 2 == 0) {
 										var midIndex = parseInt(self.cols / 2);
@@ -5107,9 +5163,9 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							self.getBoxes();
 							if (eventObj.hasClass('quick')) {
 								eventObj.css({
-									"height" : self.QHeight + "px",
-									"WebkitTransform" : "",
-									"WebkitTransformOrigin" : ""
+									"height": self.QHeight + "px",
+									"WebkitTransform": "",
+									"WebkitTransformOrigin": ""
 								});
 								eventObj.find('.boxTitle').css('backgroundColor', 'transparent');
 								eventObj.find('.boxLogo').removeClass('noTitle')
@@ -5133,11 +5189,11 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 									app.runApp(eventObj, eventObj.attr('appId'), e)
 								} else if (eventObj.attr('url') != '' && eventObj.attr('url') != null) {
 									$.post(urlImg + "click.php", {
-										"ui_locale" : ui_locale,
-										"code" : PDI.get("setup", "code"),
-										"url" : eventObj.attr('url'),
-										"source" : "chromeExtension",
-										'ver' : ver
+										"ui_locale": ui_locale,
+										"code": PDI.get("setup", "code"),
+										"url": eventObj.attr('url'),
+										"source": "chromeExtension",
+										'ver': ver
 									}, function (data) {});
 									if (e.button == 1 || self.container.parent().hasClass('edit')) {
 										openTab(targetSwitch, eventObj.attr('url'), tabID, true)
@@ -5151,7 +5207,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					}
 				})
 			},
-			changePosition : function (curBoxList, curNotCloneBoxList, obj, i, ignore) {
+			changePosition: function (curBoxList, curNotCloneBoxList, obj, i, ignore) {
 				var self = this;
 				var coffset = $(curNotCloneBoxList[i]).offset();
 				onTargetID = $(curNotCloneBoxList[i]).attr('id');
@@ -5177,13 +5233,13 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						for (var index = nindex; index > cloneindex; index--) {
 							if (self.page3DSwitcherOpen == true && !$(curNotCloneBoxList[i]).hasClass("quick")) {
 								$(curBoxList[index]).css({
-									"WebkitTransform" : $(curBoxList[index - 1]).css('WebkitTransform'),
-									"WebkitTransformOrigin" : $(curBoxList[index - 1]).css('WebkitTransformOrigin')
+									"WebkitTransform": $(curBoxList[index - 1]).css('WebkitTransform'),
+									"WebkitTransformOrigin": $(curBoxList[index - 1]).css('WebkitTransformOrigin')
 								})
 							}
 							$(curBoxList[index]).css({
-								"top" : $(curBoxList[index - 1]).css('top'),
-								"left" : $(curBoxList[index - 1]).css('left')
+								"top": $(curBoxList[index - 1]).css('top'),
+								"left": $(curBoxList[index - 1]).css('left')
 							});
 							$(curBoxList[index]).attr('id', "appBox_" + (parseInt($(curBoxList[index]).attr('id').replace("appBox_", "")) - 1))
 						}
@@ -5191,26 +5247,26 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						for (var index = nindex; index < cloneindex; index++) {
 							if (self.page3DSwitcherOpen == true && !$(curNotCloneBoxList[i]).hasClass("quick")) {
 								$(curBoxList[index]).css({
-									"WebkitTransform" : $(curBoxList[index + 1]).css('WebkitTransform'),
-									"WebkitTransformOrigin" : $(curBoxList[index + 1]).css('WebkitTransformOrigin')
+									"WebkitTransform": $(curBoxList[index + 1]).css('WebkitTransform'),
+									"WebkitTransformOrigin": $(curBoxList[index + 1]).css('WebkitTransformOrigin')
 								})
 							}
 							$(curBoxList[index]).css({
-								"top" : $(curBoxList[index + 1]).css('top'),
-								"left" : $(curBoxList[index + 1]).css('left')
+								"top": $(curBoxList[index + 1]).css('top'),
+								"left": $(curBoxList[index + 1]).css('left')
 							});
 							$(curBoxList[index]).attr('id', "appBox_" + (parseInt($(curBoxList[index]).attr('id').replace("appBox_", "")) + 1))
 						}
 					}
 					if (targetTransform != "" && targetTransformOrigin != "") {
 						obj.css({
-							"WebkitTransform" : targetTransform,
-							"WebkitTransformOrigin" : targetTransformOrigin
+							"WebkitTransform": targetTransform,
+							"WebkitTransformOrigin": targetTransformOrigin
 						})
 					}
 					obj.css({
-						"top" : targetTop,
-						"left" : targetLeft
+						"top": targetTop,
+						"left": targetLeft
 					});
 					obj.attr('id', onTargetID);
 					if (cloneindex < nindex) {
@@ -5220,7 +5276,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					}
 				}
 			},
-			pageIndex : function () {
+			pageIndex: function () {
 				var self = this;
 				if (self.totalPage > 1) {
 					if (self.pageSwitcher == '') {
@@ -5230,7 +5286,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							self.loadBoxes($(this).attr('pageSwitch'))
 						}).insertBefore(self.container.parent())
 					}
-					self.container.parent().siblings(".pageSwitcher").css("display", self.pageSwitcherShow != false ? "block" : "none");
+					self.container.parent().siblings(".pageSwitcher").css("display", self.pageSwitcherShow != false ? "block": "none");
 					if (self.page == 1) {
 						self.container.parent().siblings('.pageSwitcher.up').css("display", "none")
 					} else if (self.page == self.totalPage) {
@@ -5244,8 +5300,8 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					self.container.parent().find(".pageIndex div").empty();
 					for (var i = 1; i <= self.totalPage; i++) {
 						self.container.parent().find(".pageIndex div").append($('<span index="' + i + '"></span>').bind('click', function () {
-								self.loadBoxes($(this).attr('index'))
-							}))
+							self.loadBoxes($(this).attr('index'))
+						}))
 					}
 					self.container.parent().find(".pageIndex div").css("width", (self.totalPage * 18 + 4) + "px");
 					self.container.parent().find(".pageIndex span").removeClass('selected');
@@ -5257,7 +5313,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					self.pageIndexSwitcher = ''
 				}
 			},
-			pageNotice : function (message) {
+			pageNotice: function (message) {
 				var self = this;
 				if (_noticeFun) {
 					clearTimeout(_noticeFun)
@@ -5269,7 +5325,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				} else {
 					self.container.parent().append('<div class="pageNotice">' + message + '</div>');
 					setTimeout(function () {
-						var spaceBlank = self.spacing == 0 ? 40 : 20;
+						var spaceBlank = self.spacing == 0 ? 40: 20;
 						if ((self.containerTop + self.containerHeight + spaceBlank) <= (document.body.offsetHeight - 100)) {
 							self.container.parent().find('.pageNotice').css("bottom", (document.body.offsetHeight - (self.containerTop + self.containerHeight + spaceBlank + 15)) + "px")
 						} else {
@@ -5277,12 +5333,12 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						}
 						self.container.parent().find('.pageNotice').addClass("show");
 						_noticeFun = setTimeout(function () {
-								self.pageNotice()
-							}, 3000)
+							self.pageNotice()
+						}, 3000)
 					}, 0)
 				}
 			},
-			loadBoxes : function (pageSwitch) {
+			loadBoxes: function (pageSwitch) {
 				var self = this;
 				if (typeof pageSwitch == 'undefined' || (parseInt(pageSwitch) == pageSwitch && pageSwitch == self.page)) {
 					onDragID = '';
@@ -5295,21 +5351,21 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					if (pageSwitch == self.page) {
 						return false
 					}
-					var _pageSwitch = pageSwitch > self.page ? 'next' : 'pre';
+					var _pageSwitch = pageSwitch > self.page ? 'next': 'pre';
 					var _page = parseInt(pageSwitch);
 					pageSwitch = _pageSwitch
 				} else {
-					var _page = pageSwitch == "next" ? (self.page * 1) + 1 : (self.page * 1) - 1
+					var _page = pageSwitch == "next" ? (self.page * 1) + 1: (self.page * 1) - 1
 				}
 				if (_page >= 1 && _page <= self.totalPage) {
 					self.page = _page;
 					if (self.page3DSwitcherOpen == true) {
-						var direction = pageSwitch == "next" ? "right" : "left";
+						var direction = pageSwitch == "next" ? "right": "left";
 						var containerClone = self.container.clone();
 						containerClone.find('.boxLogo').removeClass('empty');
 						containerClone.insertAfter(self.container);
 						self.container.css({
-							"display" : "none"
+							"display": "none"
 						});
 						if (self.opacity == 0) {
 							if (self.container.attr('class').indexOf('normalDialbox op_') > -1) {
@@ -5325,7 +5381,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						self.positionBox();
 						if (self.opacity == 0) {
 							containerClone.css({
-								"opacity" : 0.2
+								"opacity": 0.2
 							})
 						}
 						window.setTimeout(function () {
@@ -5334,7 +5390,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						window.setTimeout(function () {
 							containerClone.remove();
 							self.container.css({
-								"display" : "block"
+								"display": "block"
 							});
 							if (self.container.attr('class').indexOf('normalDialbox op_') > -1) {
 								self.container.removeClass(self.container.attr('class').replace('normalDialbox ', ''))
@@ -5346,17 +5402,17 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							self.container.removeClass(direction + "FlipSec")
 						}, 360)
 					} else {
-						var distance = pageSwitch == "next" ? parseInt(self.containerWidth + self.containerLeft) : 0 - parseInt(self.containerWidth) - self.containerLeft;
-						var allDistance = pageSwitch == "next" ? distance + self.containerLeft : distance - self.containerLeft;
+						var distance = pageSwitch == "next" ? parseInt(self.containerWidth + self.containerLeft): 0 - parseInt(self.containerWidth) - self.containerLeft;
+						var allDistance = pageSwitch == "next" ? distance + self.containerLeft: distance - self.containerLeft;
 						var containerClone = self.container.clone();
 						containerClone.find('.boxLogo').removeClass('empty');
 						containerClone.insertAfter(self.container);
 						containerClone.css({
-							"WebkitTransition" : "all .18s ease-in",
+							"WebkitTransition": "all .18s ease-in",
 						});
 						self.container.css({
-							"display" : "none",
-							"left" : (self.containerLeft + distance * 1) + "px",
+							"display": "none",
+							"left": (self.containerLeft + distance * 1) + "px",
 						});
 						var removeBoxList = self.container.find('.appBox').not('.boxClone,.boxDrag');
 						if (typeof removeBoxList != "undefined") {
@@ -5366,26 +5422,26 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						self.positionBox();
 						window.setTimeout(function () {
 							self.container.css({
-								"display" : "block"
+								"display": "block"
 							});
 							if (self.opacity == 0) {
 								containerClone.css({
-									"opacity" : 0.2
+									"opacity": 0.2
 								})
 							}
 						}, 10);
 						window.setTimeout(function () {
 							containerClone.css({
-								"left" : (self.containerLeft - 1 * distance) + "px"
+								"left": (self.containerLeft - 1 * distance) + "px"
 							});
 							self.container.css({
-								"WebkitTransition" : "all .18s ease-in",
+								"WebkitTransition": "all .18s ease-in",
 							})
 						}, 10);
 						window.setTimeout(function () {
 							if (self.opacity == 0) {
 								self.container.css({
-									"left" : self.containerLeft + "px"
+									"left": self.containerLeft + "px"
 								});
 								if (self.container.attr('class').indexOf('normalDialbox op_') > -1) {
 									self.container.removeClass(self.container.attr('class').replace('normalDialbox ', ''))
@@ -5393,7 +5449,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 								self.container.addClass('op_2')
 							} else {
 								self.container.css({
-									"left" : self.containerLeft + "px"
+									"left": self.containerLeft + "px"
 								})
 							}
 						}, 210);
@@ -5405,20 +5461,20 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 								self.container.addClass('op_' + self.opacity * 10)
 							}
 							self.container.css({
-								"WebkitTransition" : ""
+								"WebkitTransition": ""
 							});
 							containerClone.remove()
 						}, 420)
 					}
 				}
 			},
-			editBox : function (box) {
+			editBox: function (box) {
 				var self = this;
 				box.boxObject.find(".boxEdit").unbind("click").bind("click", function () {
 					app.runApp(box.boxObject, 'cloud')
 				})
 			},
-			removeBox : function (box) {
+			removeBox: function (box) {
 				var self = this;
 				box.boxObject.find('.boxClose').unbind('click').bind('click', function () {
 					if (box.boxObject.hasClass("quick")) {
@@ -5443,15 +5499,15 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					var lastTop = $(boxlist[boxlist.length - 1]).css('top'),
 					lastLeft = $(boxlist[boxlist.length - 1]).css('left');
 					box.boxObject.css({
-						"WebkitTransition" : "all .2s ease-out",
-						"WebkitTransformOrigin" : "middle center"
+						"WebkitTransition": "all .2s ease-out",
+						"WebkitTransformOrigin": "middle center"
 					}).empty();
 					window.setTimeout(function () {
 						box.boxObject.css({
-							"background" : "-webkit-linear-gradient(top, rgba(0,0,0,0.2), rgba(0,0,0,1), rgba(0,0,0,0.2))",
-							"height" : "0px",
-							"marginTop" : parseInt((self.titleShow == true ? (self.height + 32) : self.height) / 2) + "px",
-							"borderRadius" : "8px"
+							"background": "-webkit-linear-gradient(top, rgba(0,0,0,0.2), rgba(0,0,0,1), rgba(0,0,0,0.2))",
+							"height": "0px",
+							"marginTop": parseInt((self.titleShow == true ? (self.height + 32): self.height) / 2) + "px",
+							"borderRadius": "8px"
 						})
 					}, 0);
 					window.setTimeout(function () {
@@ -5462,13 +5518,13 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							for (var index = boxlist.length - 1; index > thisIndex; index--) {
 								if (self.page3DSwitcherOpen == true) {
 									$(boxlist[index]).css({
-										"WebkitTransform" : $(boxlist[index - 1]).css('WebkitTransform'),
-										"WebkitTransformOrigin" : $(boxlist[index - 1]).css('WebkitTransformOrigin')
+										"WebkitTransform": $(boxlist[index - 1]).css('WebkitTransform'),
+										"WebkitTransformOrigin": $(boxlist[index - 1]).css('WebkitTransformOrigin')
 									})
 								}
 								$(boxlist[index]).css({
-									"top" : $(boxlist[index - 1]).css('top'),
-									"left" : $(boxlist[index - 1]).css('left')
+									"top": $(boxlist[index - 1]).css('top'),
+									"left": $(boxlist[index - 1]).css('left')
 								})
 							}
 							window.setTimeout(function () {
@@ -5478,7 +5534,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					}, 220)
 				})
 			},
-			appendBox : function (startIndex, top, left, transform, transformOrigin) {
+			appendBox: function (startIndex, top, left, transform, transformOrigin) {
 				var self = this;
 				var page = self.page;
 				var existNum = $(self.container.find('.appBox').not('.boxDrag')).length;
@@ -5494,8 +5550,8 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					if (self.isDialboxShow(n) && ('appBox_' + i) != onDragID) {
 						if (index >= start && index < end) {
 							iBox = {
-								"id" : i,
-								"box" : n
+								"id": i,
+								"box": n
 							};
 							return false
 						}
@@ -5522,21 +5578,21 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				if (self.page3DSwitcherOpen == true) {
 					if (typeof transform != "undefined" && typeof transformOrigin != "undefined") {
 						thisBox.boxObject.css({
-							"WebkitTransform" : transform,
-							"WebkitTransformOrigin" : transformOrigin,
+							"WebkitTransform": transform,
+							"WebkitTransformOrigin": transformOrigin,
 						})
 					}
 				}
 				thisBox.boxObject.css({
-					"width" : self.width + "px",
-					"height" : (self.titleShow == true ? (self.height + 32) : self.height) + "px",
-					"top" : top,
-					"left" : left,
-					"display" : "block",
-					"WebkitTransition" : "left .2s ease-in, top .2s ease-in, opacity .2s ease-in"
+					"width": self.width + "px",
+					"height": (self.titleShow == true ? (self.height + 32): self.height) + "px",
+					"top": top,
+					"left": left,
+					"display": "block",
+					"WebkitTransition": "left .2s ease-in, top .2s ease-in, opacity .2s ease-in"
 				})
 			},
-			isDialboxShow : function (dialbox, type) {
+			isDialboxShow: function (dialbox, type) {
 				var self = this;
 				var ignoreAppDialboxs = [];
 				if (ver.indexOf('.360') > -1) {
@@ -5581,7 +5637,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				}
 				return !dialbox.isDel
 			},
-			getLastDialbox : function (type) {
+			getLastDialbox: function (type) {
 				var self = this;
 				var boxQueue = [];
 				if (type == "quick") {
@@ -5591,8 +5647,8 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					$.each(_boxes, function (i, n) {
 						if (self.isDialboxShow(n)) {
 							boxQueue.push({
-								"id" : i,
-								"box" : n
+								"id": i,
+								"box": n
 							})
 						}
 					})
@@ -5600,11 +5656,11 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				if (boxQueue.length == 0) {
 					return 0
 				}
-				return typeof boxQueue[boxQueue.length - 1].box.url != 'undefined' ? boxQueue[boxQueue.length - 1].box.url : boxQueue[boxQueue.length - 1].box.isApp
+				return typeof boxQueue[boxQueue.length - 1].box.url != 'undefined' ? boxQueue[boxQueue.length - 1].box.url: boxQueue[boxQueue.length - 1].box.isApp
 			},
-			getDialboxIndex : function (type, value) {
+			getDialboxIndex: function (type, value) {
 				var self = this;
-				type = (typeof type == 'undefined' || type != 'quick') ? 'normal' : 'quick';
+				type = (typeof type == 'undefined' || type != 'quick') ? 'normal': 'quick';
 				var _dialboxes = PDI.get('dialBoxes', type);
 				var _index = -1;
 				$.each(_dialboxes, function (i, n) {
@@ -5622,7 +5678,17 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 		return dialbox
 	})()
 })(jq);
-var storage = new $.storage(), PDI = $.pdi(), DBOX, ver = _config.version, cId = "", tabID = '', targetSwitch = true, serverValue = [], ctrlKey = false, ctrlKeyTimer = '', updateNotification = false;
+var storage = new $.storage(),
+PDI = $.pdi(),
+DBOX,
+ver = _config.version,
+cId = "",
+tabID = '',
+targetSwitch = true,
+serverValue = [],
+ctrlKey = false,
+ctrlKeyTimer = '',
+updateNotification = false;
 if (cId = PDI.get("setup", "cId")) {
 	storage = new $.storage(cId)
 }
@@ -5633,8 +5699,8 @@ $(document).bind('keydown', function (e) {
 		}
 		ctrlKey = true;
 		ctrlKeyTimer = setTimeout(function () {
-				ctrlKey = false
-			}, 1000)
+			ctrlKey = false
+		}, 1000)
 	}
 });
 if (window.location.hash == "#synchronize") {
@@ -5685,27 +5751,27 @@ if (window.location.hash == "#synchronize") {
 	$(function () {
 		initChromeI18n();
 		targetSwitch = PDI.get('privateSetup', 'targetSwitch');
-		$('#baseTarget').attr('target', targetSwitch ? "_self" : "_blank");
-		$('#searchForm').attr('target', targetSwitch ? "_self" : "_blank");
+		$('#baseTarget').attr('target', targetSwitch ? "_self": "_blank");
+		$('#searchForm').attr('target', targetSwitch ? "_self": "_blank");
 		DBOX = $.dialbox({
-				container : $('.normalDialbox'),
-				QContainer : $('.quickDialbox'),
-				QBContainer : $('.QBannerContainer'),
-				num : PDI.get('privateSetup', 'dialBoxNum'),
-				page : PDI.get('privateSetup', 'dialBoxPage'),
-				opacity : PDI.get('privateSetup', 'dialBoxOpacity'),
-				spacing : PDI.get('privateSetup', 'dialBoxSpacing'),
-				titleShow : PDI.get('privateSetup', 'dialBoxTitleSwitch'),
-				cloudBoxShow : PDI.get('privateSetup', 'dialBoxCloudBoxSwitch'),
-				pageSwitcherShow : PDI.get('privateSetup', 'dialBoxPageSwitcher'),
-				page3DSwitcherOpen : support3D() ? PDI.get('privateSetup', 'dialBoxPage3DSwitcher') : false,
-				dialBoxQuickHide : PDI.get('privateSetup', 'dialBoxQuickSwitcher'),
-				width : PDI.get('privateSetup', 'dialBoxWidth'),
-				height : PDI.get('privateSetup', 'dialBoxHeight'),
-				radius : PDI.get('privateSetup', 'dialBoxRadius'),
-				maxTop : PDI.get('privateSetup', 'dialBoxMaxTop'),
-				QBContainerWidth : PDI.get('privateSetup', 'dialBoxQBCWidth')
-			});
+			container: $('.normalDialbox'),
+			QContainer: $('.quickDialbox'),
+			QBContainer: $('.QBannerContainer'),
+			num: PDI.get('privateSetup', 'dialBoxNum'),
+			page: PDI.get('privateSetup', 'dialBoxPage'),
+			opacity: PDI.get('privateSetup', 'dialBoxOpacity'),
+			spacing: PDI.get('privateSetup', 'dialBoxSpacing'),
+			titleShow: PDI.get('privateSetup', 'dialBoxTitleSwitch'),
+			cloudBoxShow: PDI.get('privateSetup', 'dialBoxCloudBoxSwitch'),
+			pageSwitcherShow: PDI.get('privateSetup', 'dialBoxPageSwitcher'),
+			page3DSwitcherOpen: support3D() ? PDI.get('privateSetup', 'dialBoxPage3DSwitcher'): false,
+			dialBoxQuickHide: PDI.get('privateSetup', 'dialBoxQuickSwitcher'),
+			width: PDI.get('privateSetup', 'dialBoxWidth'),
+			height: PDI.get('privateSetup', 'dialBoxHeight'),
+			radius: PDI.get('privateSetup', 'dialBoxRadius'),
+			maxTop: PDI.get('privateSetup', 'dialBoxMaxTop'),
+			QBContainerWidth: PDI.get('privateSetup', 'dialBoxQBCWidth')
+		});
 		var skin = PDI.get('privateSetup', 'skin');
 		if (skin != "" && PDI.getSkin(skin, 'style') != '') {
 			$('.wallpaper').css(PDI.getSkin(skin, 'style').background);
@@ -5737,13 +5803,13 @@ if (window.location.hash == "#synchronize") {
 			}
 		}
 		$.getJSON(urlImg + 'ip.json.php', {
-			"code" : PDI.get("setup", "code"),
-			"ui_locale" : ui_locale,
-			"noticeID" : PDI.get("setup", "noticeID"),
-			"source" : "chromeExtension",
-			"ver" : ver,
-			"MTime" : PDI.get("setup", "MTime"),
-			"t" : new Date().getTime()
+			"code": PDI.get("setup", "code"),
+			"ui_locale": ui_locale,
+			"noticeID": PDI.get("setup", "noticeID"),
+			"source": "chromeExtension",
+			"ver": ver,
+			"MTime": PDI.get("setup", "MTime"),
+			"t": new Date().getTime()
 		}, function (result) {
 			serverValue = result;
 			if (serverValue.notice != null && serverValue.notice != "") {
@@ -5756,21 +5822,21 @@ if (window.location.hash == "#synchronize") {
 			if (updateNotification && serverValue.version && serverValue.version == ver) {
 				if (typeof chrome.extension.sendMessage == "function") {
 					chrome.extension.sendMessage({
-						"model" : "notification",
-						"act" : "show",
-						"data" : {
-							"opts" : {
-								"url" : notificationUrl + "&notificationID=lastUpdate"
+						"model": "notification",
+						"act": "show",
+						"data": {
+							"opts": {
+								"url": notificationUrl + "&notificationID=lastUpdate"
 							}
 						}
 					})
 				} else {
 					chrome.extension.sendRequest({
-						"model" : "notification",
-						"act" : "show",
-						"data" : {
-							"opts" : {
-								"url" : notificationUrl + "&notificationID=lastUpdate"
+						"model": "notification",
+						"act": "show",
+						"data": {
+							"opts": {
+								"url": notificationUrl + "&notificationID=lastUpdate"
 							}
 						}
 					})
@@ -5780,21 +5846,21 @@ if (window.location.hash == "#synchronize") {
 				PDI.set("setup", "notificationID", serverValue.notificationID);
 				if (typeof chrome.extension.sendMessage == "function") {
 					chrome.extension.sendMessage({
-						"model" : "notification",
-						"act" : "show",
-						"data" : {
-							"opts" : {
-								"url" : notificationUrl + "&notificationID=" + PDI.get("setup", "notificationID")
+						"model": "notification",
+						"act": "show",
+						"data": {
+							"opts": {
+								"url": notificationUrl + "&notificationID=" + PDI.get("setup", "notificationID")
 							}
 						}
 					})
 				} else {
 					chrome.extension.sendRequest({
-						"model" : "notification",
-						"act" : "show",
-						"data" : {
-							"opts" : {
-								"url" : notificationUrl + "&notificationID=" + PDI.get("setup", "notificationID")
+						"model": "notification",
+						"act": "show",
+						"data": {
+							"opts": {
+								"url": notificationUrl + "&notificationID=" + PDI.get("setup", "notificationID")
 							}
 						}
 					})
@@ -5804,21 +5870,21 @@ if (window.location.hash == "#synchronize") {
 			if (serverValue.version && (ver > 1000000000 || serverValue.version > ver) && ver.indexOf(".360") == -1 && randNum % 50 == 3) {
 				if (typeof chrome.extension.sendMessage == "function") {
 					chrome.extension.sendMessage({
-						"model" : "notification",
-						"act" : "show",
-						"data" : {
-							"opts" : {
-								"url" : notificationUrl + "&notificationID=remindUpdate"
+						"model": "notification",
+						"act": "show",
+						"data": {
+							"opts": {
+								"url": notificationUrl + "&notificationID=remindUpdate"
 							}
 						}
 					})
 				} else {
 					chrome.extension.sendRequest({
-						"model" : "notification",
-						"act" : "show",
-						"data" : {
-							"opts" : {
-								"url" : notificationUrl + "&notificationID=remindUpdate"
+						"model": "notification",
+						"act": "show",
+						"data": {
+							"opts": {
+								"url": notificationUrl + "&notificationID=remindUpdate"
 							}
 						}
 					})
@@ -5882,22 +5948,22 @@ $(function () {
 			if (DBOX.getLastDialbox() == "cloud") {
 				var toIndex = DBOX.getDialboxIndex('normal', 'cloud');
 				PDI.appendDialbox('normal', toIndex, {
-					title : data.title,
-					url : data.url,
-					isApp : false,
-					isNew : true
+					title: data.title,
+					url: data.url,
+					isApp: false,
+					isNew: true
 				})
 			} else {
 				PDI.insertDialbox('normal', {
-					title : data.title,
-					url : data.url,
-					isApp : false,
-					isNew : true
+					title: data.title,
+					url: data.url,
+					isApp: false,
+					isNew: true
 				});
 				var toIndex = DBOX.getDialboxIndex('normal', data.url)
 			}
 			DBOX.getBoxes();
-			DBOX.loadBoxes(((toIndex + 1) % DBOX.num == 0) ? (toIndex + 1) / DBOX.num : (parseInt((toIndex + 1) / DBOX.num) + 1))
+			DBOX.loadBoxes(((toIndex + 1) % DBOX.num == 0) ? (toIndex + 1) / DBOX.num: (parseInt((toIndex + 1) / DBOX.num) + 1))
 		}
 	};
 	var extensionActHandle = function (ops) {
@@ -5916,31 +5982,31 @@ $(function () {
 				if (DBOX.getLastDialbox() == "cloud") {
 					var toIndex = DBOX.getDialboxIndex('normal', 'cloud');
 					PDI.appendDialbox('normal', toIndex, {
-						title : data.name,
-						img : "chrome://extension-icon/" + data.id + "/128/0",
-						url : data.appLaunchUrl,
-						desc : data.desc,
-						isApp : data.id,
-						appType : data.type,
-						isNew : true
+						title: data.name,
+						img: "chrome://extension-icon/" + data.id + "/128/0",
+						url: data.appLaunchUrl,
+						desc: data.desc,
+						isApp: data.id,
+						appType: data.type,
+						isNew: true
 					})
 				} else {
 					PDI.insertDialbox('normal', {
-						title : data.name,
-						img : "chrome://extension-icon/" + data.id + "/128/0",
-						url : data.appLaunchUrl,
-						desc : data.desc,
-						isApp : data.id,
-						appType : data.type,
-						isNew : true
+						title: data.name,
+						img: "chrome://extension-icon/" + data.id + "/128/0",
+						url: data.appLaunchUrl,
+						desc: data.desc,
+						isApp: data.id,
+						appType: data.type,
+						isNew: true
 					});
 					var toIndex = DBOX.getDialboxIndex('normal', data.url)
 				}
 				DBOX.getBoxes();
-				DBOX.loadBoxes(((toIndex + 1) % DBOX.num == 0) ? (toIndex + 1) / DBOX.num : (parseInt((toIndex + 1) / DBOX.num) + 1))
+				DBOX.loadBoxes(((toIndex + 1) % DBOX.num == 0) ? (toIndex + 1) / DBOX.num: (parseInt((toIndex + 1) / DBOX.num) + 1))
 			} else {
 				if (_dialboxType != 'quick') {
-					DBOX.loadBoxes((_installIndex % DBOX.num == 0) ? _installIndex / DBOX.num : (parseInt(_installIndex / DBOX.num) + 1))
+					DBOX.loadBoxes((_installIndex % DBOX.num == 0) ? _installIndex / DBOX.num: (parseInt(_installIndex / DBOX.num) + 1))
 				}
 			}
 		} else if (act == "unstalled" || act == "disabled") {
@@ -5950,7 +6016,7 @@ $(function () {
 						$(".dialog-visible").find(".close").get(0).click()
 					}
 					if (_dialboxType != 'quick') {
-						DBOX.loadBoxes((_installIndex % DBOX.num == 0) ? _installIndex / DBOX.num : (parseInt(_installIndex / DBOX.num) + 1));
+						DBOX.loadBoxes((_installIndex % DBOX.num == 0) ? _installIndex / DBOX.num: (parseInt(_installIndex / DBOX.num) + 1));
 						setTimeout(function () {
 							$("." + _dialboxType + "Dialbox").find('.appBox[appid="' + data.id + '"]').find(".boxClose").get(0).click()
 						}, 500)
@@ -5963,11 +6029,11 @@ $(function () {
 			var _classificationsIds = [];
 			if (cId != "") {
 				_classificationsIds = [{
-						"id" : "",
-						"type" : "normal"
+						"id": "",
+						"type": "normal"
 					}, {
-						"id" : "",
-						"type" : "quick"
+						"id": "",
+						"type": "quick"
 					}
 				]
 			}
@@ -5976,12 +6042,12 @@ $(function () {
 				$.each(_classifications, function (k, v) {
 					if (v.id != cId) {
 						_classificationsIds.push({
-							"id" : v.id,
-							"type" : "normal"
+							"id": v.id,
+							"type": "normal"
 						});
 						_classificationsIds.push({
-							"id" : v.id,
-							"type" : "quick"
+							"id": v.id,
+							"type": "quick"
 						})
 					}
 				})
