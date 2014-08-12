@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class RealJSFormatter: public JSParser
 {
 public:
-	// typedef map<string, char> StrCharMap;
-	typedef const char *StrItemInSet;
+	// typedef map<string, Char> StrCharMap;
+	typedef const Char *StrItemInSet;
 
 	/*
 	 * CR_READ
@@ -71,21 +71,17 @@ public:
 		, KEY_FUNCTION	= 5 , KEY_RETURN	= 6 , KEY_FOR	= 7 , KEY_IF	= 8
 	};
 
-	static const StrItemInSet s_specKeywordSet[]; // 后面要跟着括号的关键字集合
-	static const size_t s_len_specKeywordSet[];
-	static KEY_INDEX RealJSFormatter::findInKeywordSet(const CharString<char> &str);
-
 	//virtual ~RealJSFormatter()
 	//{}
 
-	inline void SetInitIndent(const char *initIndent) { m_initIndent = initIndent; }
+	inline void SetInitIndent(const Char *initIndent) { m_initIndent = initIndent; }
 
 	void Go();
 
-	static const char* Trim(const CharString<char> &str, const char ** const pend);
-	static const char* RealJSFormatter::TrimRightSpace(const CharString<char> &str);
+	static const Char* Trim(const CharString &str, const Char ** const pend);
+	static const Char* RealJSFormatter::TrimRightSpace(const CharString &str);
 
-	RealJSFormatter(const CharString<char> &input, CharString<char> &output, const FormatterOption &option)
+	RealJSFormatter(const ::CharString<Byte> &input, CharString &output, const FormatterOption &option)
 		: m_struOption(option), out(output)
 		, JSParser(input.c_str(), input.length())
 	{
@@ -93,28 +89,28 @@ public:
 	}
 	
 protected:
-	CharString<char> &out;
-	void PutLine(const char *start, const char *const end);
+	CharString &out;
+	void PutLine(const Char *start, const Char *const end);
 	inline void StartParse() {
 		this->JSParser::StartParse();
 		m_lineBuffer.setLength(0);
 		m_lineBuffer.c_str()[0] = 0;
 	}
 	inline void EndParse() {
-		const char *end;
-		const char *start = Trim(m_lineBuffer, &end);
+		const Char *end;
+		const Char *start = Trim(m_lineBuffer, &end);
 		if(start < end) { PutLine(start, end); }
 		out.c_str()[out.length()] = 0;
 		this->JSParser::EndParse();
 	}
 
 private:
-	CharString<char> m_lineBuffer;
+	CharString m_lineBuffer;
 
 	void Init();
 
-	void PopMultiBlock(char previousStackTop);
-	void ProcessOper(const char ach0);
+	void PopMultiBlock(const Char previousStackTop);
+	void ProcessOper(const Char ach0);
 	void ProcessString();
 	
 	void correctCommentFlag() { if(!m_bNewLine) m_bCommentPut = false; } // 这个一定会发生在注释之后的任何输出后面
@@ -122,7 +118,7 @@ private:
 	inline void PutLF()		{ m_bNewLine = true; } // { PutString("\n", 1); }
 	inline void PutSpace()	{ m_lineBuffer.addOrDouble(' '); } // { PutString(" ", 1); }
 	inline void PutTokenA()	{ PutString(m_tokenA.c_str(), m_tokenA.length()); }
-	void PutString(const char *str, size_t const length);
+	void PutString(const Char *str, size_t const length);
 	
 	int m_nLineIndents;
 	
@@ -141,7 +137,7 @@ private:
 
 	bool m_bCommentPut; // 刚刚输出了注释
 
-	const char *m_initIndent; // 起始缩进
+	const Char *m_initIndent; // 起始缩进
 	size_t m_len_initIndent;
 
 	// 以下为配置项

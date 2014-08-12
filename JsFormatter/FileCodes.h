@@ -7,6 +7,7 @@
 
 namespace FileAnaly
 {
+// "CP_UNICODE" := little-endian
 #define CP_UNICODE ((DWORD)(-1))
 #define CP_UNKNOWN 0
 
@@ -45,7 +46,7 @@ namespace FileAnaly
 	inline void MToWide(CharString<char>& dest, const CharString<char>& ori, DWORD codepage)
 	{
 		int len = ori.length();
-		dest.expand(len * 2 + 4);
+		dest.reset(len * 2 + 4);
 		dest.setLength( MultiByteToWideChar(codepage, 0, ori.c_str(), len, (wchar_t*) dest.c_str(), len + 2) * 2 );
 		char * str = dest.c_str() + dest.length();
 		str[1] = str[0] = '\0';
@@ -54,7 +55,7 @@ namespace FileAnaly
 	inline void WideToM(CharString<char>& dest, const CharString<char>& ori,DWORD codepage)
 	{
 		int len = (ori.length() + 1) / 2;
-		dest.expand(len * 3 + 4);
+		dest.reset(len * 3 + 4);
 		dest.setLength(WideCharToMultiByte(codepage, 0, (wchar_t*) ori.c_str(), len, dest.c_str(), len * 3 + 2, NULL, NULL) );
 		char * str = dest.c_str() + dest.length();
 		str[0] = 0;

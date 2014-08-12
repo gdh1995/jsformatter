@@ -21,20 +21,17 @@
     <ClInclude Include="realjsformatter.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="version.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CharString.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="FileCodes.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="alldefs.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="jsMinNpp.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="jsparser.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -44,15 +41,18 @@
     <ClCompile Include="FileCode.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="jsMinNpp.rc">
-      <Filter>资源文件</Filter>
-    </ResourceCompile>
+    <ClCompile Include="JsFormatter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="js_icon_x3.ico">
       <Filter>资源文件</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="JsFormatter.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

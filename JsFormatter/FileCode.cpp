@@ -3,7 +3,6 @@
 const char *err_str = NULL;
 const void *err_msg = NULL;
 
-
 int codec(CharString<char> *file, DWORD oldpage, DWORD const newpage) {
 	int re = 0x8;
 	if (oldpage == CP_UNKNOWN) {
@@ -52,18 +51,18 @@ int codec(CharString<char> *file, DWORD oldpage, DWORD const newpage) {
 	}
 	if (oldpage == newpage) {
 		re = 0;
-	} else if (oldpage == CP_UNICODE) {
-		CharString<char> temp((CharString<char> &&) *file);
-		FileAnaly::WideToM(*file, temp, newpage);
-		re = 0;
-	} else if (newpage == CP_UNICODE) {
-		CharString<char> temp((CharString<char> &&) *file);
-		FileAnaly::MToWide(*file, temp, newpage);
-		re = 0;
-	} else {
+	} else if (1) {
 		CharString<char> temp;
-		FileAnaly::MToWide(temp, *file, oldpage);
-		FileAnaly::WideToM(*file, temp, newpage);
+		if (oldpage != CP_UNICODE) {
+			FileAnaly::MToWide(temp, *file, oldpage);
+		} else {
+			temp = (CharString<char> &&) *file;
+		}
+		if (newpage != CP_UNICODE) {
+			FileAnaly::WideToM(*file, temp, newpage);
+		} else {
+			*file = (CharString<char> &&) temp;
+		}
 		re = 0;
 	}
 	return re;

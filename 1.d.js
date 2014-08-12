@@ -28,7 +28,8 @@
 			init : function () {
 				var self = this;
 				self.ua = window.navigator.userAgent;
-				self.version = (self.ua.match(/.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/) || []);
+				/*adfsd*/
+				self.version = (self.ua.match(/.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/) || []); //  a sdf
 				self.safari = (/Safari/gi).test(window.navigator.appVersion);
 				self.webkit = /webkit/i.test(self.ua);
 				self.opera = /opera/i.test(self.ua) || (self.webkit && /opr/i.test(self.ua));

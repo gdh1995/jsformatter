@@ -122,14 +122,20 @@ public:
 	typedef ttype Char;
 	short more;
 	explicit inline CharString(): mdata(NULL), mlength(0), mcapacity(0), mflag(0), more(0) { }
-	explicit inline CharString(ttype* ori, size_t len, size_t capa, short flag = 0, short more = 0): mdata(ori), mlength(len), mcapacity(capa), mflag(flag), more(more) { }
+	explicit inline CharString(ttype* ori, size_t len, size_t capa, short flag = 0, short more = 0)
+		: mdata(ori), mlength(len), mcapacity(capa), mflag(flag), more(more) { }
+	//	// only save the pointer and length; do not copy the value
+	//	explicit inline CharString(const ttype* ori, size_t len, short more)
+	//		: mdata(const_cast<ttype *>(ori)), mlength(len), mcapacity(len), mflag(1), more(more) { }
 	explicit CharString(const ttype* ori);
+	// copy the value
 	explicit CharString(const ttype* ori, const ttype* end);
 	explicit CharString(const CharString& ori);
 	explicit CharString(CharString&& ori);
 	inline ~CharString() {
 		if(mdata && !mflag)
 			free(mdata);
+		// remove 'mdata = NULL' to speed up
 	}
 
 	inline bool isempty() const { return 0 == mlength; }
@@ -143,6 +149,17 @@ public:
 
 	inline void setLength(size_t len) { mlength = len; }
 	inline void autoLength() { mlength = KMP::length(mdata); }
+	inline void reset(size_t size) {
+		if(size > mcapacity || mflag) {
+			if (mdata && !mflag) {
+				free(mdata);
+			}
+			mdata = (ttype*)malloc(sizeof(ttype) * size);
+			mcapacity = size;
+			mflag = 0;
+		}
+		mlength = 0;
+	}
 	inline void expand0(size_t size) {
 		mdata = (ttype*)realloc(mdata, sizeof(ttype) * size);
 		mcapacity = size;
@@ -168,12 +185,13 @@ public:
 	inline bool operator!=(const ttype* ori) { return !(operator==(ori)); }
 	inline bool operator==(const ttype ch) { return (mlength == 1) && ch == mdata[0]; }
 	inline bool operator!=(const ttype ch) { return (mlength != 1) || ch != mdata[0]; }
-	inline bool findIn(const ttype* str_to_find_in) const {
-		if (mlength == 1) {
-			for (register const char ch = mdata[0], *s = str_to_find_in; *s; s++) {
-				if (*s == ch) {
-					return true;
-				}
+	inline bool findIn(const ttype* const str_to_find_in) const {
+		return mlength == 1 && findIn(mdata[0], str_to_find_in);
+	}
+	static bool findIn(const ttype ch, const ttype* const str_to_find_in) {
+		for (register const ttype *s = str_to_find_in - 1; *++s; ) {
+			if (*s == ch) {
+				return true;
 			}
 		}
 		return false;
@@ -305,7 +323,7 @@ void CharString<ttype>::operator = (CharString&& ori)
 	mdata = ori.mdata;
 	ori.mdata = NULL;
 	mlength = ori.mlength;
-	ori.length = 0;
+	ori.mlength = 0;
 	mcapacity = ori.mcapacity;
 	ori.mcapacity = 0;
 	mflag = ori.mflag;

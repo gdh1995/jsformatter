@@ -50,7 +50,7 @@ const JSParser::Char JSParser::s_strBeforeReg[] = _T("(,=:[!&|?+{};\n");
 //		/* 7+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 //	};
 
-const JSParser::Byte JSParser::s_normalCharMap[128] = {
+static const JSParser::Byte s_normalCharMap[128] = {
 	/*  + x: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F */
 	/* 0+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	/* 1+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -61,8 +61,15 @@ const JSParser::Byte JSParser::s_normalCharMap[128] = {
 	/* 6+ */ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	/* 7+ */ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1
 };
+bool JSParser::IsNormalChar(Char ch)
+{
+	return ((UChar) ch > 126u) || s_normalCharMap[ch];
+	// ((ch >= _T('a') && ch <= _T('z')) || (ch >= _T('0') && ch <= _T('9')) ||
+	//	(ch >= _T('A') && ch <= _T('Z')) || ch == _T('_') || ch == _T('$') ||
+	//	((unsigned int) ch > 126u) );
+}
 
-const JSParser::Byte JSParser::s_singleOperMap[128] = {
+static const JSParser::Byte s_singleOperMap[128] = {
 	/*  + x: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F */
 	/* 0+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
 	/* 1+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -73,6 +80,14 @@ const JSParser::Byte JSParser::s_singleOperMap[128] = {
 	/* 6+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	/* 7+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0
 };
+bool JSParser::IsSingleOper(Char ch)
+{
+	return ((UChar) ch <= 126u) && s_singleOperMap[ch];
+	// (ch == _T('.') || ch == _T('(') || ch == _T(')') ||
+	//	ch == _T('[') || ch == _T(']') || ch == _T('{') || ch == _T('}') ||
+	//	ch == _T(',') || ch == _T(';') || ch == _T('~') ||
+	//	ch == _T('\n'));
+}
 
 void JSParser::GetTokenRaw()
 {
@@ -82,19 +97,20 @@ void JSParser::GetTokenRaw()
 	//	}
 
 	// normal procedure
+	if (m_tokenB.length() > 0) {
+		m_tokenB.reset(0);
+	}
 	if(!m_bRegular && !m_bPosNeg) {
 		m_tokenB.expand(8);
 		m_tokenB.setLength(0);
 		m_tokenB.c_str()[0] = 0;
 
-		m_tokenB.more = TYPE_STRING;
+		m_tokenB.more = STRING_TYPE;
 	}
 	else if(m_bRegular) {
-		//m_tokenB.push_back(_T('/'));
-		m_tokenB.more = TYPE_REGULAR; // 正则
 	}
 	else {
-		m_tokenB.more = TYPE_STRING; // 正负数
+		m_tokenB.more = STRING_TYPE; // 正负数
 	}
 
 	bool bQuote = false;
@@ -105,7 +121,41 @@ void JSParser::GetTokenRaw()
 	bool bLineBegin = false;
 	Char chQuote; // 记录引号类型 ' 或 "
 	Char chComment; // 注释类型 / 或 *
+	
+	// 正则需要在 token 级别判断
+	if(m_bRegular) { // 正则状态全部输出，直到 /
+		size_t b_len = 1;
+		for(; m_charB; ) {
+			m_charA = m_charB;
+			b_len++;
+			m_charB = GetChar();
 
+			if(m_charA == _T('\\')) {
+				if ((m_charB == _T('/') || m_charB == _T('\\'))) { // 转义字符
+					b_len++;
+					m_charB = GetChar();
+				}
+			}
+			else if(m_charA == _T('/') && m_charB != _T('*') && m_charB != _T('|')) { // 正则可能结束
+				if(!bRegularFlags && IsNormalChar(m_charB)) {
+					bRegularFlags = true; // 正则的 flags 部分
+				}
+				else {
+					break;
+				}
+			}
+
+			if(bRegularFlags && !IsNormalChar(m_charB)) {
+				bRegularFlags = false;
+				break;
+			}
+		}
+		m_tokenB.setLength(b_len);
+		m_tokenB.more = REGULAR_TYPE;
+		m_bRegular = false;
+		return;
+	}
+		
 	for(; ; ) {
 		if(m_charB == 0) {
 			m_bRegular = false; // js content error
@@ -128,36 +178,7 @@ void JSParser::GetTokenRaw()
 		* 输出或不输出 m_charA
 		* 下一次循环时自动会用 m_charB 覆盖 m_charA
 		*/
-
-		// 正则需要在 token 级别判断
-		if(m_bRegular) { // 正则状态全部输出，直到 /
-			m_tokenB.addOrDouble(m_charA);
-
-			if(m_charA == _T('\\')) {
-				if ((m_charB == _T('/') || m_charB == _T('\\'))) { // 转义字符
-					m_tokenB.addOrDouble(m_charB);
-					m_charB = GetChar();
-				}
-			}
-			else if(m_charA == _T('/') && m_charB != _T('*') && m_charB != _T('|')) { // 正则可能结束
-				if(!bRegularFlags && IsNormalChar(m_charB)) {
-					bRegularFlags = true; // 正则的 flags 部分
-				}
-				else {
-					m_bRegular = false; // 正则结束
-					break;
-				}
-			}
-
-			if(bRegularFlags && !IsNormalChar(m_charB)) {
-				bRegularFlags = false;
-				m_bRegular = false; // 正则结束
-				break;
-			}
-
-			continue;
-		}
-		else if(bQuote) { // 引号状态，全部输出，直到引号结束
+		if(bQuote) { // 引号状态，全部输出，直到引号结束
 			m_tokenB.addOrDouble(m_charA);
 
 			if(m_charA == _T('\\') && (m_charB == chQuote || m_charB == _T('\\'))) { // 转义字符
@@ -171,7 +192,7 @@ void JSParser::GetTokenRaw()
 			continue;
 		}
 		else if(bComment) { // 注释状态，全部输出
-			if(m_tokenB.more == TYPE_COMMENT_2) {
+			if(m_tokenB.more == COMMENT_TYPE_2) {
 				// /*...*/每行前面的\t, _T(' ')都要删掉
 				if(bLineBegin) {
 					if(m_charA == _T('\t') || m_charA == _T(' '))
@@ -184,7 +205,7 @@ void JSParser::GetTokenRaw()
 			m_tokenB.addOrDouble(m_charA);
 
 			if(chComment == _T('*')) { // 直到 */
-				m_tokenB.more = TYPE_COMMENT_2;
+				m_tokenB.more = COMMENT_TYPE_2;
 				if(m_charA == _T('*') && m_charB == _T('/')) {
 					m_tokenB.addOrDouble(m_charB);
 					m_charB = GetChar();
@@ -192,7 +213,7 @@ void JSParser::GetTokenRaw()
 				}
 			}
 			else { // 直到换行
-				m_tokenB.more = TYPE_COMMENT_1;
+				m_tokenB.more = COMMENT_TYPE_1;
 				if(m_charA == _T('\n'))
 					break;
 			}
@@ -201,7 +222,7 @@ void JSParser::GetTokenRaw()
 		}
 
 		if (IsNormalChar(m_charA)) {
-			m_tokenB.more = TYPE_STRING;
+			m_tokenB.more = STRING_TYPE;
 			m_tokenB.addOrDouble(m_charA);
 
 			// 解决类似 82e-2, 442e+6, 555E-6 的问题
@@ -235,7 +256,7 @@ void JSParser::GetTokenRaw()
 			bQuote= true;
 			chQuote = m_charA;
 
-			m_tokenB.more = TYPE_STRING;
+			m_tokenB.more = STRING_TYPE;
 			m_tokenB.addOrDouble(m_charA);
 			continue;
 		}
@@ -250,7 +271,7 @@ void JSParser::GetTokenRaw()
 		else if(IsSingleOper(m_charA) || IsNormalChar(m_charB) ||
 			IsBlankChar(m_charB) || IsQuote(m_charB))
 		{
-			m_tokenB.more = TYPE_OPER;
+			m_tokenB.more = OPER_TYPE;
 			m_tokenB.setLength(1);
 			register Char *s1 = m_tokenB.c_str();
 			s1[0] = m_charA; // 单字符符号
@@ -261,7 +282,7 @@ void JSParser::GetTokenRaw()
 			(m_charA == _T('-') && m_charB == _T('>'))) // 多字符符号
 		{
 			// 的确是多字符符号
-			m_tokenB.more = TYPE_OPER;
+			m_tokenB.more = OPER_TYPE;
 			m_tokenB.addOrDouble(m_charA);
 			m_tokenB.addOrDouble(m_charB);
 			m_charB = GetChar();
@@ -287,7 +308,7 @@ void JSParser::GetTokenRaw()
 		}
 		else {
 			// 还是单字符的
-			m_tokenB.more = TYPE_OPER;
+			m_tokenB.more = OPER_TYPE;
 			m_tokenB.setLength(1);
 			register Char *s1 = m_tokenB.c_str();
 			s1[0] = m_charA; // 单字符符号
@@ -337,9 +358,9 @@ void JSParser::PrepareRegular()
 	*/
 	Char tokenALast = m_tokenA.size() > 0 ? m_tokenA[m_tokenA.size() - 1] : 0;
 	Char tokenBFirst = m_tokenB[0];
-	if (tokenBFirst == _T('/') && m_tokenB.more != TYPE_COMMENT_1 &&
-		m_tokenB.more != TYPE_COMMENT_2 && ( m_tokenA == _T("return") ||
-		(m_tokenA.more != TYPE_STRING && CharString::findIn(tokenALast, s_strBeforeReg))
+	if (tokenBFirst == _T('/') && m_tokenB.more != COMMENT_TYPE_1 &&
+		m_tokenB.more != COMMENT_TYPE_2 && ( m_tokenA == _T("return") ||
+		(m_tokenA.more != STRING_TYPE && CharString::findIn(tokenALast, s_strBeforeReg))
 		) )
 	{
 		m_bRegular = true;
@@ -356,9 +377,9 @@ void JSParser::PreparePosNeg()
 	* 而且 m_charB 是一个 NormalChar
 	* 那么 m_tokenB 实际上是一个正负数
 	*/
-	if(m_tokenB.more == TYPE_OPER && (m_tokenB == _T('-') || m_tokenB == _T('+')) &&
-		(m_tokenA.more != TYPE_STRING || m_tokenA == _T("return")) &&
-		m_tokenA.more != TYPE_REGULAR && m_tokenA != _T("++") && m_tokenA != _T("--") &&
+	if(m_tokenB.more == OPER_TYPE && (m_tokenB == _T('-') || m_tokenB == _T('+')) &&
+		(m_tokenA.more != STRING_TYPE || m_tokenA == _T("return")) &&
+		m_tokenA.more != REGULAR_TYPE && m_tokenA != _T("++") && m_tokenA != _T("--") &&
 		(m_tokenA != _T(']') && m_tokenA != _T(')')) &&
 		IsNormalChar(m_charB))
 	{
@@ -388,7 +409,7 @@ void JSParser::PrepareTokenB()
 			return;
 
 		for(c = c > 2 ? 2 : c; c > 0; --c) {
-			m_tokenBQueue.push(CharString(_T("\n"), 1, 2, 1, TYPE_OPER));
+			m_tokenBQueue.push(CharString(_T("\n"), 1, 2, 1, OPER_TYPE));
 		}
 		m_tokenBQueue.push(m_tokenB);
 		m_tokenB = m_tokenBQueue.front();
