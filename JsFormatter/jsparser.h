@@ -36,6 +36,7 @@ class JSParser
 {
 public:
 	typedef char Byte;
+	typedef unsigned char UByte;
 
 #if defined UNICODE || defined _UNICODE
 	typedef wchar_t Char;
@@ -47,40 +48,29 @@ public:
 	#define _T(x) (x)
 #endif
 
-public:
 	typedef ConstString<Char> ConstString; // Token item
 	// typedef std::queue<Token> TokenQueue;
-
+	
+	// 严禁修改TOKEN_xxx的编号顺序, 除非到cpp里进行完全除错
 	enum TOKEN_TYPE {
-		REGULAR_TOKEN = 0,
-		OPER_TOKEN = 1,
-		STRING_TOKEN = 2,
-		// 为了配合PrepareRegular()
+		TOKEN_REGULAR = 0,
+		TOKEN_OPER = 1,
+
+		TOKEN_KEY = 2,
+		TOKEN_STRING = 3,
+
+		// 为了配合PrepareTokenB()
 		// Comment类的token需要大于任意其它token
-		COMMENT_1_TOKEN = 3, // 单行注释
-		COMMENT_2_TOKEN = 4, // 多行注释
-		// TODO: 增加一个注释类token表示行尾
-		//CRLF_TOKEN = 11,
+		TOKEN_COMMENT_LINE = 4, // 单行注释
+		TOKEN_COMMENT_BLOCK = 5, // 多行注释
+		TOKEN_BLANK_LINE = 6 // 空行标记
 	};
 	// .more: Token 类型
 	typedef ConstString Token;
-	
-public:
-	explicit JSParser() {
-		Init();
-	}
 
-	// bool m_debug;
-	// inline const char *GetDebugOutput() { return m_debugOutput; }
-	// void PrintDebug();
-	
-	inline void Init() {
-		// m_debug = false;
-	}
-
-public:
-	static const Byte s_normalCharMap[128];
-	// 一般字符
+	// 一般字符 (包括数字和 . ) 的bool映射
+	static const  Byte s_normalCharMap[128];
+	// 一般字符 (包括数字和 . )
 	static inline bool IsNormalChar(Char ch) { return ((UChar) ch > 126u) || s_normalCharMap[ch]; }
 	// 数字和.
 	static inline bool IsNumChar(Char ch) { return ((ch >= _T('0') && ch <= _T('9')) || ch == _T('.')); }
@@ -88,24 +78,50 @@ public:
 	static inline bool IsBlankChar(Char ch) { return (ch == _T(' ') || ch == _T('\t') || ch == _T('\n') || ch == _T('\r')); }
 	// 引号
 	static inline bool IsQuote(Char ch) { return (ch == _T('\'') || ch == _T('\"')); }
-
-	static const Byte s_singleOperNextCharMap[128];
+	// 单字符操作符之后可能跟的字符的bool映射
+	static const  Byte s_singleOperNextCharMap[128];
 	// 一般字符 + 空白字符 + 引号
 	static inline bool IsSingleOperNextChar(Char ch) { return ((UChar) ch > 126u) || s_singleOperNextCharMap[ch]; }
-
-	static const Byte s_singleOperMap[128];
+	// 单字符操作符的bool映射
+	static const  Byte s_singleOperMap[128];
 	// 单字符符号
 	static inline bool IsSingleOper(Char ch) { return ((UChar) ch <= 126u) && s_singleOperMap[ch]; }
+	// 判断正则时，正则前面可以出现的字符
+	static const  Char s_operCharBeforeReg[];
 	
-	static const Char s_operCharBeforeReg[]; // 判断正则时，正则前面可以出现的字符
+public:
+	explicit JSParser() {
+		// m_debug = false;
+		Init();
+	}
+
+	explicit JSParser(const Byte *in, size_t len_in)
+		: m_in(in), m_in_cur(in - sizeof(Char))
+		, m_in_last(in + len_in - sizeof(Char))
+	{
+		Init();
+	}
 	
-protected:
+	inline void Init() const {
+	}
+
+	inline void setInput(const Byte *in, size_t len_in = 0) {
+		m_in = in;
+		m_in_cur = in - sizeof(Char);
+		m_in_last = in + len_in - sizeof(Char);
+	}
+
+	// bool m_debug;
+	// inline const char *GetDebugOutput() const { return m_debugOutput; }
+	// void PrintDebug() const;
+	
+public:
 	// char m_debugOutput[1024];
 	
-	Token m_tokenA;
+	mutable Token m_tokenA;
 	mutable Token m_tokenB;
 
-	inline bool GetToken() {
+	inline bool GetToken() const {
 		PrepareTokenB();
 		// Attention: raw__debug() is so ugly and slow that we have to give up it.
 		//	m_tokenA.raw() = m_tokenB.raw();
@@ -128,9 +144,15 @@ protected:
 		// PrintDebug();
 	}
 
-private:
-	const Char *m_in;
+protected:
+	enum BoolFlag {
+		PosNeg = 0x1, // tokenB 实际是正负数
+	};
+	mutable Byte m_bFlag;
+	mutable Char m_charB;
+
 	mutable const Char *m_in_cur;
+	const Char *m_in;
 	const Char *m_in_last;
 	// 这种方式较好地照顾了m_in == NULL或者(int)len_in <= 0的情形
 	inline Char GetChar() const {
@@ -139,30 +161,9 @@ private:
 	}
 	inline const Char *CurPos() const { return m_in_cur; }
 
-public:
-	explicit JSParser(const Byte *in, size_t len_in)
-		: m_in(in), m_in_cur(in - 1)
-		, m_in_last(in + (len_in / sizeof(Char)) - 1)
-	{
-		Init();
-	}
-
-	inline void setInput(const Byte *in, size_t len_in = 0) {
-		m_in = in;
-		m_in_cur = in - 1;
-		m_in_last = in + (len_in / sizeof(Char)) - 1;
-	}
-	
-protected:
-	mutable Char m_charB;
-	mutable Byte m_bFlag;
-	enum BoolFlag {
-		PosNeg = 0x1, // tokenB 实际是正负数
-	};
-
-private:
+	// 获取下一个token并存储到m_tokenB
 	void GetTokenRaw() const;
-	// 通过词法判断 tokenB 是正则或者正负数等等并加以处理
+	// 通过词法判断 m_tokenB 是否代表正则或者正负数等等并加以处理
 	void PrepareTokenB() const;
 
 private: // 阻止拷贝

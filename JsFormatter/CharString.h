@@ -148,17 +148,11 @@ public:
 		if(mcapacity <= mlength + 2) { // TODO
 			expand0(mlength * 2 + 4);
 		}
-		// TODO: remove the last '\0'
-		//*
 		mdata[mlength++] = ch;
-		/*/
-		register ttype *p1 = mdata + (mlength++);
-		*p1 = ch;
-		*++p1 = 0;
-		//*/
 	}
 	// 将begin指向的以end为结束位置的字符串复制到自身末尾;
-	void addline(const ttype* begin, const ttype* end);
+	// addCrLf: 3表示附加CRLF, 2表示附加CR, 1表示附加LF, 0表示什么都不附加
+	void addLine(const ttype* begin, const ttype* end, char addCrLf);
 	static CharString Concat(const CharString& s1, const CharString& s2);
 
 	int subString(size_t pos, size_t len, CharString& target) const;
@@ -298,17 +292,19 @@ void CharString<ttype>::operator += (const CharString& ori)
 }
 
 template <typename ttype>
-void CharString<ttype>::addline(const ttype* begin, const ttype*const end)
+void CharString<ttype>::addLine(const ttype* begin, const ttype*const end, char addCrLf)
 {
 	if(end > begin)
 	{
-		if((end - begin) + 2 >= (mcapacity - mlength))
-			expand0(mlength + (end - begin) + 3);
+		if((end - begin) + 4 >= (int) (mcapacity - mlength))
+			expand0(mlength + ((end - begin) + 4));
 		register ttype *p1 = mdata + mlength;
 		for(register const ttype *p2 = begin, *const end2 = end; end2 > p2; )
 			*p1++ = *p2++;
-		*p1++ = '\r';
-		*p1++ = '\n';
+		if (addCrLf & 0x2)
+			*p1++ = '\r';
+		if (addCrLf & 0x1)
+			*p1++ = '\n';
 		*p1 = 0;
 		mlength = p1 - mdata;
 	}

@@ -41,6 +41,10 @@ public:
 	inline const StringStruct& raw() const { return *this; }
 	inline ttype* c_str() { return mdata; }
 	inline const ttype* c_str() const { return mdata; }
+	inline const ttype* start() const { return mdata; }
+	inline const ttype*   str() const { return mdata; }
+	inline const ttype* c_end() const { return mdata + mlength; }
+	inline const ttype*   end() const { return mdata + mlength; }
 
 	inline bool nempty() const { return 0 != mlength; }
 	inline bool empty() const { return 0 == mlength; }

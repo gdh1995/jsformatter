@@ -54,8 +54,7 @@ Javascript formatter ", JS_FORMATTER_VERSION_VALUE, " - by <gdh1995@qq.com>\n\
 Thanks for & core code from: JSToolNpp (www.sunjw.us/jstoolnpp).\n")
 
 
-int main(int n, char *s[])
-{
+int main(int n, char *s[]) {
 	argn = n;
 	args = s;
 	if (argn < 3) {
@@ -63,30 +62,22 @@ int main(int n, char *s[])
 		return 0;
 	}
 
-#ifdef __TEST__
-	for (int i0 = 0; i0 < 1; i0++) {
-#endif
-		int i = 0;
-		do {
-			p[i]();
-		} while (re == 0 && ++i < sizeof(p) / sizeof(p[0]));
-#ifdef __TEST__
-		for (i = 0;  i < __TEST__; i++) {
-			jsFormat();
-		}
-#endif
-		if (re != 0) {
-			if (err_str) {
-				fprintf(stderr, "ERROR: %s.\n%s\n", err_str, err_msg ? ((const char *) err_msg) : "");
-			} else {
-				fprintf(stderr, "ERROR: %d @ %d.\n", re, i);
-			}
-		} else {
-			printf("%s => %s\n", args[argIndex], args[argIndex + 1]);
-		}
-#ifdef __TEST__
+	int i = 0;
+	do {
+		p[i]();
+	} while (re == 0 && ++i < sizeof(p) / sizeof(p[0]));
+	if (re != 0) {
+		if (err_str)
+			fprintf(stderr, "ERROR: %s.\n%s\n", err_str, err_msg ? ((const char *) err_msg) : "");
+		else
+			fprintf(stderr, "ERROR: %d @ %d.\n", re, i);
 	}
+	else {
+#ifdef __TEST__
+		for (i = 0;  i < __TEST__; i++) jsFormat();
 #endif
+		printf("%s => %s\n", args[argIndex], args[argIndex + 1]);
+	}
 	return re;
 }
 
@@ -101,17 +92,20 @@ void write() {
 		re = 0x11;
 		err_str = "fail to open the file to write";
 		err_msg = args[argIndex + 1];
-	} else if (strJSFormat.size() > 0 &&
-		fwrite(strJSFormat.c_str(), strJSFormat.size() * sizeof(RealJSFormatter::Char), 1, fp) != 1)
+	}
+	else if (strJSFormat.size() > 0 &&
+		fwrite(strJSFormat.str(), strJSFormat.size() * sizeof(RealJSFormatter::Char), 1, fp) != 1)
 	{
 		re = 0x12;
 		err_str = "fail to write data into the file";
 		err_msg = args[argIndex + 1];
-	} else if (fflush(fp) != 0) {
+	}
+	else if (fflush(fp) != 0) {
 		re = 0x13;
 		err_str = "fail to save the data";
 		err_msg = args[argIndex + 1];
-	} else if (fclose(fp) != 0) {
+	}
+	else if (fclose(fp) != 0) {
 		re = 0x14;
 		err_str = "fail to save the data";
 		err_msg = args[argIndex + 1];
@@ -122,15 +116,14 @@ void jsFormat()
 {
 	re = 0;
 	size_t jsLen = file.size();
-	if (jsLen == 0) {
+	if (jsLen == 0)
 		return;
-	}
 
 	// clear old result (if any)
-	strJSFormat.reset(jsLen + 1024);
+	strJSFormat.reset(((int) (jsLen * 1.1)) + 1024);
 	strJSFormat.c_str()[0] = 0;
 	try {
-		RealJSFormatter jsformat(file, strJSFormat, g_options);
+		const RealJSFormatter jsformat(file.str(), file.size(), strJSFormat, g_options);
 		jsformat.Go();
 		re = 0;
 	}

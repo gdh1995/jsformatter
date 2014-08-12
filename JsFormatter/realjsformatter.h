@@ -31,7 +31,7 @@ public:
 	static const size_t sc_lineBufferReservedSize = 4000;
 	typedef CharString<Char> CharString; // out format
 
-	typedef std::stack<Char> CharStack;
+	typedef std::stack<Byte> ByteStack;
 	typedef std::stack<bool> BoolStack;
 	// 更改/warn: 严禁修改JS_xxx的编号顺序, 除非到cpp里进行完全除错
 	enum JS_TOKEN_TYPE {
@@ -46,7 +46,7 @@ public:
 		// -
 		JS_TRY		=  6, // 't'; "finally"
 		// -
-		JS_FUNCTION	=  7, // 'n'
+		JS_FUNCTION	=  7, // 'n'; must: function = assign - 1 (L0313)
 		JS_ASSIGN	=  8, // means '='
 		// -
 		JS_HELPER	=  9, // means '\\'
@@ -54,88 +54,93 @@ public:
 		JS_DO		= 10, // 'd'
 		// -
 		JS_CASE		= 11, // 'c'
-		JS_BLOCK	= 12, // means '{'
-		JS_BRACKET	= 13, // means '('
-		JS_SQUARE	= 14, // means '['
+		JS_BRACKET	= 12, // means '('
+		JS_SQUARE	= 13, // means '['
+		JS_BLOCK	= 14, // means '{'
 		JS_NULL		= 15
 	};
-	static const Byte s_tokenIDMap[128];
-	static inline JS_TOKEN_TYPE GetTokenIndex(Char ch) { return (JS_TOKEN_TYPE) s_tokenIDMap[ch]; }
+	static JS_TOKEN_TYPE findSomeKeyword(const Token &str);
 
 	struct FormatterOption {
-		short hnChPerInd;
+		unsigned short uhChPerInd;
 		Char chIndent;
 		bool bNotPutCR; // false: 换行使用"\r\n"; true: 换行使用'\n'
 		bool bBracketAtNewLine; // false: 括号前不换行
 		bool bEmpytLineIndent; // false: 空行不输出缩进字符
 	};
 
-	inline void setInitIndents(const int initIndents) { m_nIndents = initIndents; }
-	inline void reserveLineBuffer(const size_t len) { m_lineBuffer.expand(len); }
-
-	void Go();
-
-	RealJSFormatter(const ::CharString<Byte> &input, CharString &output, const FormatterOption &option)
-		: m_struOption(option), out(output)
-		, JSParser(input.c_str(), input.length())
+public:
+	RealJSFormatter(const Byte* input, size_t len_in, CharString &output, const FormatterOption &option)
+		: m_struOption(option), out(&output)
+		, JSParser(input, len_in)
 	{
 		Init();
 	}
-	
+
+	void Init() const;
+	inline void setInitIndents(const int initIndents) { m_nIndents = initIndents; }
+	inline void reserveLineBuffer(const size_t len) { m_line.expand(len); }
+
+	void Go() const;
+
 protected:
-	mutable CharString &out;
-	void PutLine(const Char *start, int len) const;
+	// "Force"只表示需求这种, 不该起决定作用
+	// 严禁修改INSERT_xxx的编号顺序, 除非到cpp里进行完全除错
+	enum INSERT_MODE {
+		INSERT_NONE = 0, // 慎用, 要注意配合ProcessAndPutBlockComment()
+		INSERT_UNKNOWN = 1,
+
+		INSERT_SPACE = 2, // 要提前输出一个空格
+
+		INSERT_NEWLINE = 3, // 准备换行, 但有可能变成空格
+
+		INSERT_NEWLINE_SHOULD = 4, // 更应该输出换行
+		
+		INSERT_NULL = 5 // 已经输出换行过了
+	};
+	
+	CharString *out;
+
+	void PutTokenRaw(const Char *const start, int len) const;
+	inline void PutTokenA() const {
+		PutTokenRaw(m_tokenA.c_str(), m_tokenA.size());
+	}
+	void PutNewLine() const;
+	void PutLine(const Char *start, int len, bool insertBlank = false) const;
+
 	void StartParse() const {
-		m_lineBuffer.setLength(0);
-		m_lineBuffer.c_str()[0] = 0;
+		m_line.setLength(0);
+		m_line.c_str()[0] = 0;
 		this->JSParser::StartParse();
 	}
 	void EndParse() const {
 		this->JSParser::EndParse();
 		int len;
-		const Char *start = m_lineBuffer.trim(&len);
-		if(len > 0) { PutLine(m_lineBuffer.c_str(), m_lineBuffer.length()); }
-		out.c_str()[out.length()] = 0;
+		const Char *start = m_line.trim(&len);
+		if(len > 0) { PutLine(m_line.c_str(), m_line.length()); }
+		out->c_str()[out->length()] = 0;
 	}
-
-	// rem: after it, m_eInsertChar should be set INSERT_NULL manually
-	void PutTokenA();
-	void PutNewLine();
 	
-	// 配置项
-	const FormatterOption m_struOption;
+protected:
+	mutable CharString m_line;
+	mutable int m_nIndents; // 缩进数量 (计算blockStack效果不好)
+	mutable unsigned short m_uhLineIndents;
+	// TODO: check if we can remove it
+	mutable bool m_bBlockStmt; // block 真正开始了
+	mutable bool m_bAssign;
 
-private:
-	mutable CharString m_lineBuffer;
-
-	void Init();
+	mutable ByteStack m_blockStack;
+	// 使用栈是为了解决在判断条件中出现循环的问题
+	mutable BoolStack m_brcNeedStack; // if 之类的后面的括号
 
 	void PopMultiBlock(const Char previousStackTop) const;
-	void ProcessOper();
-	void ProcessString();
-	
-	mutable CharStack m_blockStack;
-	mutable int m_nIndents; // 缩进数量 (计算blockStack效果不好)
-	short m_nLineIndents;
+	void ProcessOper() const;
+	void ProcessID() const;
+	void ProcessAndPutString() const;
+	void ProcessAndPutBlockComment() const;
 
-	// 使用栈是为了解决在判断条件中出现循环的问题
-	BoolStack m_brcNeedStack; // if 之类的后面的括号
-
-	// "Force"只表示需求这种, 不该起决定作用
-	enum INSERT_MODE {
-		INSERT_NULL = 0,
-		INSERT_FORCE_NULL = 1,
-		INSERT_SPACE = 2, // 要提前输出一个空格
-		INSERT_FORCE_SPACE = 3, // 要提前输出一个空格
-		INSERT_NEWLINE = 4, // 准备换行的标志
-		INSERT_NEWLINE_MAY_SPACE = 5,
-		INSERT_FORCE_NEWLINE = 6
-	};
-	char m_eInsertChar;
-
-	// TODO: check if we can remove it
-	bool m_bBlockStmt; // block 真正开始了
-	bool m_bAssign;
+public:
+	FormatterOption m_struOption; // 配置项
 
 private: // 阻止拷贝
 	RealJSFormatter(const RealJSFormatter&);
