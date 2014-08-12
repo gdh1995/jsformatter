@@ -112,6 +112,7 @@ void write() {
 	}
 }
 
+RealJSFormatter jsformat(NULL, 0, strJSFormat, g_options);
 void jsFormat()
 {
 	re = 0;
@@ -122,14 +123,12 @@ void jsFormat()
 	// clear old result (if any)
 	strJSFormat.reset(((int) (jsLen * 1.1)) + 1024);
 	strJSFormat.c_str()[0] = 0;
-	try {
-		const RealJSFormatter jsformat(file.str(), file.size(), strJSFormat, g_options);
-		jsformat.Go();
-		re = 0;
-	}
-	catch(std::exception ex) {
-		re = 1;
-		err_str = "std::exception";
-		err_msg = ex.what();
-	}
+	jsformat.setInput(file.c_str(), file.size());
+	jsformat.Go();
+	re = 0;
+	//catch(std::exception ex) {
+	//	re = 1;
+	//	err_str = "std::exception";
+	//	err_msg = ex.what();
+	//}
 }

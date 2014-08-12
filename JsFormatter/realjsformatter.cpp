@@ -62,7 +62,7 @@ void RealJSFormatter::Init() const {
 }
 
 // 更改/mod: 修复';'后'{'不换行; "if"等紧跟';'时插入空格
-// TODO: 增加'\n'识别逻辑
+// 更改/mod: 补回连续换行的处理逻辑
 // TODO: 增加"var"的判定, 调整','换行逻辑, 改成var内可以不换行
 
 //void RealJSFormatter::PutNewLine() {
@@ -73,10 +73,8 @@ void RealJSFormatter::Init() const {
 
 void RealJSFormatter::PutTokenRaw(const Char*const str, int len) const {
 	if (m_line.more >= INSERT_NEWLINE) {
-		if (m_line.more < INSERT_NULL) {
-			PutLine(m_line.c_str(), m_line.size()); // 输出行缓冲
-			m_line.setLength(0);
-		}
+		if (m_line.more < INSERT_NULL)
+			PutLineBuffer();
 		if (m_nIndents < 0)
 			m_nIndents = 0; // 出错修正
 		m_uhLineIndents = m_nIndents;
@@ -101,9 +99,9 @@ void RealJSFormatter::PutLine(const Char *start, int len, bool insertBlank) cons
 		len2 += m_uhLineIndents * m_struOption.uhChPerInd;
 		indent = true;
 	}
-	out->expand(out->size() + len2);
+	m_out->expand(m_out->size() + len2);
 
-	Char *str = out->c_str() + out->size();
+	Char *str = m_out->c_str() + m_out->size();
 
 	// TODO: asm it
 	if (indent) {
@@ -121,7 +119,8 @@ void RealJSFormatter::PutLine(const Char *start, int len, bool insertBlank) cons
 	if (!m_struOption.bNotPutCR)
 		*str++ = _T('\r');
 	*str++ = _T('\n');
-	out->setLength(str - out->c_str());
+	*str = 0;
+	m_out->setLength(str - m_out->c_str());
 }
 
 void RealJSFormatter::PopMultiBlock(const Char previousStackTop) const {
@@ -166,24 +165,21 @@ void RealJSFormatter::Go() const {
 			m_line.more = INSERT_UNKNOWN;
 			break;
 		case TOKEN_OPER: ProcessOper(); break;
-		case TOKEN_KEY: ProcessID(); break;
+		case TOKEN_ID: ProcessID(); break;
 		case TOKEN_STRING: ProcessAndPutString(); break;
 		case TOKEN_COMMENT_LINE:
 			// 更改/mod: 手动换行; 此处不判断m_tokenA.nempty(), 留待别处
 			if (m_line.more < INSERT_NULL)
 				m_line.more = INSERT_SPACE;
 			PutTokenA();
-			PutLine(m_line.c_str(), m_line.size()); // 输出行缓冲
-			m_line.setLength(0);
+			PutLineBuffer();
 			m_line.more = INSERT_NULL;
 			break;
 		case TOKEN_COMMENT_BLOCK: ProcessAndPutBlockComment(); break;
 		case TOKEN_BLANK_LINE:
-			if (m_line.more < INSERT_NULL) {
-				PutLine(m_line.c_str(), m_line.size()); // 输出行缓冲
-				m_line.setLength(0);
-			}
-			PutLine(NULL, 0); // 输出空行
+			if (m_line.more < INSERT_NULL)
+				PutLineBuffer();
+			PutLine(NULL, 0, 0); // 输出空行
 			m_line.more = INSERT_NULL;
 			break;
 		}
@@ -360,7 +356,7 @@ void RealJSFormatter::ProcessOper() const {
 						else
 							m_line.more = INSERT_NEWLINE;
 					}
-					else if (m_tokenB.more == TOKEN_KEY && bSpace && (
+					else if (m_tokenB.more == TOKEN_ID && bSpace && (
 						(topStack == JS_IF  && m_tokenB.equals(_T("else"),  4)) ||
 						(topStack == JS_DO  && m_tokenB.equals(_T("while"), 5)) ||
 						(topStack == JS_TRY && m_tokenB.equals(_T("catch"), 5)) ))
@@ -456,7 +452,7 @@ void RealJSFormatter::ProcessID() const {
 			m_bAssign = true;
 
 		PutTokenA();
-		if (m_tokenB.more >= TOKEN_KEY || m_tokenB == _T('{')) {
+		if (m_tokenB.more >= TOKEN_ID || m_tokenB == _T('{')) {
 			m_line.more = INSERT_SPACE; // '{': such as "return {'a':1};"
 			//	if (m_blockStack.top() != _T('v'))
 			//		m_blockStack.push(_T('v')); // 声明变量
@@ -477,7 +473,7 @@ void RealJSFormatter::ProcessID() const {
 	m_blockStack.push(token_type1);
 	++m_nIndents; // 无需 ()，直接缩进
 	m_bBlockStmt = false; // 等待 block 内部的 statment
-	m_line.more = (m_tokenB.more >= TOKEN_KEY || m_struOption.bBracketAtNewLine)
+	m_line.more = (m_tokenB.more >= TOKEN_ID || m_struOption.bBracketAtNewLine)
 		? INSERT_NEWLINE : INSERT_SPACE;
 	return;
 }
@@ -486,33 +482,35 @@ void RealJSFormatter::ProcessAndPutString() const {
 	if (StackTopEq(m_blockStack, JS_ASSIGN))
 		m_bAssign = true;
 
-	bool bNewLineNeeded = false;
+	bool bNewLineNotNeeded = true;
 	const Char *const end = m_tokenA.c_end();
-	register const Char *str = m_tokenA.c_str() - 1;
-	for (; end > ++str; ) {
+	const Char *str0;
+	for (register const Char *str = m_tokenA.c_str() - 1; end > ++str; ) {
 		if (*str == '\r' || *str == '\n') {
-			bNewLineNeeded = true;
+			bNewLineNotNeeded = false;
+			str0 = str;
 			break;
 		}
 	}
-	if (bNewLineNeeded) {
-		out->expand(out->length() + m_tokenA.length() + 8);
-		PutTokenRaw(m_tokenA.c_str(), str - m_tokenA.c_str());
-		PutLine(m_line.c_str(), m_line.size()); // 输出行缓冲
-		m_line.setLength(0);
-		if (*str == _T('\r'))
-			++str;
-		if (str < end && *str == _T('\n'))
-			++str;
-		while (str < end) {
+	if (bNewLineNotNeeded)
+		PutTokenA();
+	else {
+		m_out->expand(m_out->size() + m_tokenA.size() + 8);
+		PutTokenRaw(m_tokenA.c_str(), str0 - m_tokenA.c_str());
+		PutLineBuffer();
+		if (*str0 == _T('\r'))
+			++str0;
+		if (*str0 == _T('\n'))
+			++str0;
+		for (register const Char *str = str0; ; ) {
 			register const Char *str2 = str;
 			while(++str2 < end && *str2 != '\r' && *str2 != '\n') {}
 			if (str2 < end) {
-				out->addLine(str, str2, m_struOption.bNotPutCR ? 1 : 3);
+				m_out->addLine(str, str2, m_struOption.bNotPutCR ? 1 : 3);
 				str = str2;
 				if (*str == _T('\r'))
 					++str;
-				if (str < end && *str == _T('\n'))
+				if (*str == _T('\n'))
 					++str;
 			}
 			else {
@@ -522,14 +520,9 @@ void RealJSFormatter::ProcessAndPutString() const {
 			}
 		}
 	}
-	else
-		PutTokenA();
-
 	// 更改/warn: 如果'.'算进normal_char, 则"."就算不是TOKEN_OPER类型, 此处需要判断'.', 
-	m_line.more = (m_tokenB.more >= TOKEN_KEY && m_tokenB[0] != _T('.'))
+	m_line.more = (m_tokenB.more >= TOKEN_ID && m_tokenB[0] != _T('.'))
 		? INSERT_SPACE : INSERT_UNKNOWN;
-	return;
-	
 }
 
 void RealJSFormatter::ProcessAndPutBlockComment() const {
@@ -537,37 +530,32 @@ void RealJSFormatter::ProcessAndPutBlockComment() const {
 	if (m_line.more < INSERT_NEWLINE) {
 		register const Char *str = m_tokenA.c_str() - 1;
 		while(end > ++str && *str != _T('\r') && *str != _T('\n')) {}
-		if (end == str) {
-			if (m_line.nempty())
-				m_line.more = INSERT_SPACE;
+		if (str >= end) {
+			m_line.more = INSERT_SPACE; // 不用判断 m_line.nempty()
 			PutTokenA();
-			m_line.more = INSERT_SPACE;
 			return;
 		}
+		m_line.more = INSERT_NEWLINE;
 	}
 	
-	out->expand(out->length() + m_tokenA.length() + m_line.size() + 64);
-	if (m_line.more > INSERT_NONE && m_line.more < INSERT_NULL) {
-		PutLine(m_line.c_str(), m_line.size()); // 输出行缓冲
-		m_line.setLength(0);
-	}
-	if (m_nIndents < 0)
-		m_nIndents = 0; // 出错修正
-	m_uhLineIndents = m_nIndents;
+	m_out->expand(m_out->size() + m_tokenA.size() + m_line.size() + 64);
+	PutTokenRaw(NULL, 0);
 
-	for (register const Char *str = m_tokenA.c_str(); str < end; ) {
-		if (*str == _T('\t') || *str == _T(' ')) {
+	for (register const Char *str = m_tokenA.c_str(); ; ) {
+		while (*str == _T('\t') || *str == _T(' '))
 			++str;
-			continue;
-		}
 		register const Char *str2 = str;
 		while(++str2 < end && *str2 != '\r' && *str2 != '\n') {}
 		PutLine(str, str2 - str, *str == _T('*'));
-		str = str2;
-		if (str < end && *str == _T('\r'))
-			++str;
-		if (str < end && *str == _T('\n'))
-			++str;
+		if (str2 < end) {
+			str = str2;
+			if (*str == _T('\r'))
+				++str;
+			if (*str == _T('\n'))
+				++str;
+		}
+		else
+			break;
 	}
 	m_line.more = INSERT_NULL;
 }

@@ -131,7 +131,7 @@ public:
 		if(size > mcapacity) {
 #ifdef _DEBUG
 			if (mflag)
-				exit(-2);
+				throw mflag;
 #endif
 			mdata = (ttype*)realloc(mdata, sizeof(ttype) * size);
 			mcapacity = size;

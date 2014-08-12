@@ -29,7 +29,7 @@ class RealJSFormatter: public JSParser
 {
 public:
 	static const size_t sc_lineBufferReservedSize = 4000;
-	typedef CharString<Char> CharString; // out format
+	typedef CharString<Char> CharString; // output format
 
 	typedef std::stack<Byte> ByteStack;
 	typedef std::stack<bool> BoolStack;
@@ -68,16 +68,20 @@ public:
 		bool bBracketAtNewLine; // false: 括号前不换行
 		bool bEmpytLineIndent; // false: 空行不输出缩进字符
 	};
+	
+private:
+	CharString *m_out;
 
 public:
 	RealJSFormatter(const Byte* input, size_t len_in, CharString &output, const FormatterOption &option)
-		: m_struOption(option), out(&output)
+		: m_struOption(option), m_out(&output)
 		, JSParser(input, len_in)
 	{
 		Init();
 	}
 
 	void Init() const;
+	inline CharString &getOutputObject() { return *m_out; }
 	inline void setInitIndents(const int initIndents) { m_nIndents = initIndents; }
 	inline void reserveLineBuffer(const size_t len) { m_line.expand(len); }
 
@@ -87,7 +91,7 @@ protected:
 	// "Force"只表示需求这种, 不该起决定作用
 	// 严禁修改INSERT_xxx的编号顺序, 除非到cpp里进行完全除错
 	enum INSERT_MODE {
-		INSERT_NONE = 0, // 慎用, 要注意配合ProcessAndPutBlockComment()
+		INSERT_NONE = 0,
 		INSERT_UNKNOWN = 1,
 
 		INSERT_SPACE = 2, // 要提前输出一个空格
@@ -98,15 +102,21 @@ protected:
 		
 		INSERT_NULL = 5 // 已经输出换行过了
 	};
-	
-	CharString *out;
 
+	// 带格式输出指定字符串到行缓冲区
 	void PutTokenRaw(const Char *const start, int len) const;
-	inline void PutTokenA() const {
-		PutTokenRaw(m_tokenA.c_str(), m_tokenA.size());
+	
+	// 带格式输出m_tokenA到行缓冲区
+	inline void PutTokenA() const { PutTokenRaw(m_tokenA.c_str(), m_tokenA.size()); }
+	
+	// 带缩进输出字符串及换行标志到m_out
+	void PutLine(const Char *start, int len, bool insertBlank) const;
+	
+	// 带缩进输出行缓冲区到m_out
+	inline void PutLineBuffer() const {
+		PutLine(m_line.c_str(), m_line.size(), false);
+		m_line.setLength(0);
 	}
-	void PutNewLine() const;
-	void PutLine(const Char *start, int len, bool insertBlank = false) const;
 
 	void StartParse() const {
 		m_line.setLength(0);
@@ -115,10 +125,8 @@ protected:
 	}
 	void EndParse() const {
 		this->JSParser::EndParse();
-		int len;
-		const Char *start = m_line.trim(&len);
-		if(len > 0) { PutLine(m_line.c_str(), m_line.length()); }
-		out->c_str()[out->length()] = 0;
+		PutLineBuffer();
+		m_out->c_str()[m_out->size()] = 0;
 	}
 	
 protected:
@@ -130,8 +138,7 @@ protected:
 	mutable bool m_bAssign;
 
 	mutable ByteStack m_blockStack;
-	// 使用栈是为了解决在判断条件中出现循环的问题
-	mutable BoolStack m_brcNeedStack; // if 之类的后面的括号
+	mutable BoolStack m_brcNeedStack; // if 之类的后面的括号 (使用栈是为了解决在判断条件中出现循环的问题)
 
 	void PopMultiBlock(const Char previousStackTop) const;
 	void ProcessOper() const;
