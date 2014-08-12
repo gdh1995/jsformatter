@@ -147,8 +147,11 @@ public:
 	inline ttype* c_str() { return mdata; }
 	inline const ttype* c_str() const { return mdata; }
 
+	inline void setData(ttype *start) { mdata = start; }
 	inline void setLength(size_t len) { mlength = len; }
 	inline void autoLength() { mlength = KMP::length(mdata); }
+	// Attention: below are some dangerous functions
+	inline void doNotFree() { mflag = 1; }
 	inline void reset(size_t size) {
 		if(size > mcapacity || mflag) {
 			if (mdata && !mflag) {
@@ -175,16 +178,20 @@ public:
 	
 	inline ttype operator[] (size_t pos) const { return mdata[pos]; }
 	inline ttype& get(size_t pos) { return mdata[pos]; }
-
-	bool operator == (const ttype* ori) const;
-	int strncmp(const ttype* str2, size_t len2) const;
+	inline const ttype& get(size_t pos) const { return mdata[pos]; }
+	
+	bool equals(const ttype ch1, const ttype ch2) const { return (mlength == 2) && mdata[0] == ch1 && mdata[1] == ch2; };
 	bool equals(const ttype* str2, size_t len2) const;
-	bool equals(const ttype ch1, const ttype ch2) const {
-		return (mlength == 2) && mdata[0] == ch1 && mdata[1] == ch2;
-	};
-	inline bool operator!=(const ttype* ori) { return !(operator==(ori)); }
-	inline bool operator==(const ttype ch) { return (mlength == 1) && ch == mdata[0]; }
-	inline bool operator!=(const ttype ch) { return (mlength != 1) || ch != mdata[0]; }
+	bool nequals(const ttype ch1, const ttype ch2) const { return (mlength != 2) || mdata[0] != ch1 || mdata[1] != ch2; };
+	bool nequals(const ttype* str2, size_t len2) const;
+	inline bool operator == (const CharString& ori) const { return this->equals(ori.mdata, ori.mlength); }
+private:
+	// 不建议同以'\0'结尾的字符串进行比较
+	bool operator == (const ttype* ori) const;
+	inline bool operator!=(const ttype* ori) const { return !(this->operator==(ori)); }
+public:
+	inline bool operator==(const ttype ch) const { return (mlength == 1) && ch == mdata[0]; }
+	inline bool operator!=(const ttype ch) const { return (mlength != 1) || ch != mdata[0]; }
 	inline bool findIn(const ttype* const str_to_find_in) const {
 		return mlength == 1 && findIn(mdata[0], str_to_find_in);
 	}
@@ -197,18 +204,16 @@ public:
 		return false;
 	}
 
-	bool operator == (const CharString& ori) const;
 	void operator = (CharString&& ori);
 	// 使用“右值构造”和“右值赋值”还不能完全代替它，因为要有减少内存分配的考虑;
 	void copyFrom(const CharString&) { copyFrom(ori.mdata, ori.mlength); }
 	void copyFrom(const ttype* ori, size_t newlen);
 	void operator += (const CharString& ori);
-
 	inline void addOrDouble(const ttype ch) {
 		if(mcapacity <= mlength + 2) { // TODO
 			expand0(mlength * 2 + 4);
 		}
-		/*
+		//*
 		mdata[mlength++] = ch;
 		/*/
 		register ttype *p1 = mdata + (mlength++);
@@ -216,7 +221,6 @@ public:
 		*++p1 = 0;
 		//*/
 	}
-
 	// 将begin指向的以end为结束位置的字符串复制到自身末尾;
 	void addline(const ttype* begin, const ttype* end);
 
@@ -334,36 +338,14 @@ void CharString<ttype>::operator = (CharString&& ori)
 template <typename ttype>
 bool CharString<ttype>::operator == (const ttype* ori) const
 {
-	if(NULL == ori || 0 == *ori)
+	if(NULL == ori)
 		return (0 == mlength);
-	else if(0 == mlength)
-		return false;
-	else if(mdata != ori)
-	{
-		register const ttype *p1 = mdata - 1, *p2 = ori - 1, *const end = mdata + mlength;
-		while(*++p1 == *++p2)
-		{
-			if(p1 == end)
-				break;
-		}
-		return (*p1 == *p2);
+	register const ttype *p1 = mdata, *p2 = ori, *const end = mdata + mlength;
+	while(p1 < end) {
+		if(*p1++ != *p2++)
+			return false;
 	}
-	else
-		return true;
-}
-
-template <typename ttype>
-int CharString<ttype>::strncmp(const ttype* str2, size_t len2) const
-{
-	if(len2 != mlength)
-		return -1;
-	register const ttype *p1 = mdata - 1, *p2 = str2 - 1, *const end = mdata + mlength;
-	while( !((*++p1) - (*++p2)) )
-	{
-		if(p1 == end)
-			break;
-	}
-	return (*p1 - *p2);
+	return (0 == *p2);
 }
 
 template <typename ttype>
@@ -371,32 +353,25 @@ bool CharString<ttype>::equals(const ttype* str2, size_t len2) const
 {
 	if(len2 != mlength)
 		return false;
-	register const ttype *p1 = mdata - 1, *p2 = str2 - 1, *const end = mdata + mlength;
-	while( !((*++p1) - (*++p2)) )
-	{
-		if(p1 == end)
-			break;
+	register const ttype *p1 = mdata, *p2 = str2, *const end = mdata + mlength;
+	while(p1 < end) {
+		if(*p1++ != *p2++)
+			return false;
 	}
-	return (*p1 == *p2);
+	return true;
 }
 
 template <typename ttype>
-bool CharString<ttype>::operator == (const CharString& ori) const
+bool CharString<ttype>::nequals(const ttype* str2, size_t len2) const
 {
-	if(this == &ori)
+	if(len2 != mlength)
 		return true;
-	else if(mlength == ori.mlength)
-	{
-		register ttype *p1 = mdata - 1, *p2 = ori.mdata - 1, *end = mdata + mlength;
-		while(*++p1 == *++p2)
-		{
-			if(p1 == end)
-				break;
-		}
-		return (*p1 == *p2);
+	register const ttype *p1 = mdata, *p2 = str2, *const end = mdata + mlength;
+	while(p1 < end) {
+		if(*p1++ != *p2++)
+			return true;
 	}
-	else
-		return false;
+	return false;
 }
 
 template <typename ttype>

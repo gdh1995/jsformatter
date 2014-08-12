@@ -24,7 +24,7 @@
 #if defined UNICODE || defined _UNICODE
 	DWORD out_codec = CP_UNICODE;
 #else
-	DWORD out_codec = CP_UTF8;
+	DWORD out_codec = CP_THREAD_ACP;
 #endif
 
 RealJSFormatter::FormatterOption g_options = {
@@ -67,6 +67,9 @@ int main(int n, char *s[])
 		int i = 0;
 		for (; re == 0 && i < sizeof(p) / sizeof(p[0]); i++) {
 			p[i]();
+		}
+		for (i = 0;  i < 0; i++) {
+			jsFormat();
 		}
 		if (re != 0) {
 			if (err_str) {

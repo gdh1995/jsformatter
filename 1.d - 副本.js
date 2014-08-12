@@ -1,14 +1,12 @@
 (function ($)¹¬´óºº { //  a sdf
-	/=\a/.test(1);
 	$.browser = function () {
 		return new browser()
 	};
 	var a2 = 3e4,
-	a3 = -.3e4,
+	a3 =  - .3e4,
 	a4 = -4e-4;
 	/*ad
 	fsd*/
-	/a/.test(1);
 	var browser = (function () {
 		var browser = function () {
 			var self = this;
@@ -661,8 +659,8 @@ function rstr_hmac_md5(key, data) {
 	var ipad = Array(16),
 	opad = Array(16);
 	for (var i = 0; i < 16; i++) {
-		ipad[i] = bkey[i]^0x36363636;
-		opad[i] = bkey[i]^0x5C5C5C5C
+		ipad[i] = bkey[i]^0 x36363636;
+		opad[i] = bkey[i]^0 x5C5C5C5C
 	}
 	var hash = binl_md5(ipad.concat(rstr2binl(data)), 512 + data.length * 8);
 	return binl2rstr(binl_md5(opad.concat(hash), 512 + 128))
@@ -678,7 +676,7 @@ function rstr2hex(input) {
 	var x;
 	for (var i = 0; i < input.length; i++) {
 		x = input.charCodeAt(i);
-		output += hex_tab.charAt((x >>> 4) & 0x0F) + hex_tab.charAt(x & 0x0F)
+		output += hex_tab.charAt((x >>> 4) & 0 x0F) + hex_tab.charAt(x & 0 x0F)
 	}
 	return output
 }
@@ -697,7 +695,7 @@ function rstr2b64(input) {
 			if (i * 8 + j * 6 > input.length * 8)
 				output += b64pad;
 			else
-				output += tab.charAt((triplet >>> 6 * (3 - j)) & 0x3F)
+				output += tab.charAt((triplet >>> 6 * (3 - j)) & 0 x3F)
 		}
 	}
 	return output
@@ -741,31 +739,31 @@ function str2rstr_utf8(input) {
 	while (++i < input.length) {
 		x = input.charCodeAt(i);
 		y = i + 1 < input.length ? input.charCodeAt(i + 1) : 0;
-		if (0xD800 <= x && x <= 0xDBFF && 0xDC00 <= y && y <= 0xDFFF) {
-			x = 0x10000 + ((x & 0x03FF) << 10) + (y & 0x03FF);
+		if (0 xD800 <= x && x <= 0 xDBFF && 0 xDC00 <= y && y <= 0 xDFFF) {
+			x = 0 x10000 + ((x & 0 x03FF) << 10) + (y & 0 x03FF);
 			i++
 		}
-		if (x <= 0x7F)
+		if (x <= 0 x7F)
 			output += String.fromCharCode(x);
-		else if (x <= 0x7FF)
-			output += String.fromCharCode(0xC0 | ((x >>> 6) & 0x1F), 0x80 | (x & 0x3F));
-		else if (x <= 0xFFFF)
-			output += String.fromCharCode(0xE0 | ((x >>> 12) & 0x0F), 0x80 | ((x >>> 6) & 0x3F), 0x80 | (x & 0x3F));
-		else if (x <= 0x1FFFFF)
-			output += String.fromCharCode(0xF0 | ((x >>> 18) & 0x07), 0x80 | ((x >>> 12) & 0x3F), 0x80 | ((x >>> 6) & 0x3F), 0x80 | (x & 0x3F))
+		else if (x <= 0 x7FF)
+			output += String.fromCharCode(0 xC0 | ((x >>> 6) & 0 x1F), 0 x80 | (x & 0 x3F));
+		else if (x <= 0 xFFFF)
+			output += String.fromCharCode(0 xE0 | ((x >>> 12) & 0 x0F), 0 x80 | ((x >>> 6) & 0 x3F), 0 x80 | (x & 0 x3F));
+		else if (x <= 0 x1FFFFF)
+			output += String.fromCharCode(0 xF0 | ((x >>> 18) & 0 x07), 0 x80 | ((x >>> 12) & 0 x3F), 0 x80 | ((x >>> 6) & 0 x3F), 0 x80 | (x & 0 x3F))
 	}
 	return output
 }
 function str2rstr_utf16le(input) {
 	var output = "";
 	for (var i = 0; i < input.length; i++)
-		output += String.fromCharCode(input.charCodeAt(i) & 0xFF, (input.charCodeAt(i) >>> 8) & 0xFF);
+		output += String.fromCharCode(input.charCodeAt(i) & 0 xFF, (input.charCodeAt(i) >>> 8) & 0 xFF);
 	return output
 }
 function str2rstr_utf16be(input) {
 	var output = "";
 	for (var i = 0; i < input.length; i++)
-		output += String.fromCharCode((input.charCodeAt(i) >>> 8) & 0xFF, input.charCodeAt(i) & 0xFF);
+		output += String.fromCharCode((input.charCodeAt(i) >>> 8) & 0 xFF, input.charCodeAt(i) & 0 xFF);
 	return output
 }
 function rstr2binl(input) {
@@ -773,17 +771,17 @@ function rstr2binl(input) {
 	for (var i = 0; i < output.length; i++)
 		output[i] = 0;
 	for (var i = 0; i < input.length * 8; i += 8)
-		output[i >> 5] |= (input.charCodeAt(i / 8) & 0xFF) << (i % 32);
+		output[i >> 5] |= (input.charCodeAt(i / 8) & 0 xFF) << (i % 32);
 	return output
 }
 function binl2rstr(input) {
 	var output = "";
 	for (var i = 0; i < input.length * 32; i += 8)
-		output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0xFF);
+		output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0 xFF);
 	return output
 }
 function binl_md5(x, len) {
-	x[len >> 5] |= 0x80 << ((len) % 32);
+	x[len >> 5] |= 0 x80 << ((len) % 32);
 	x[(((len + 64) >>> 9) << 4) + 14] = len;
 	var a = 1732584193;
 	var b = -271733879;
@@ -881,9 +879,9 @@ function md5_ii(a, b, c, d, x, s, t) {
 	return md5_cmn(c^(b | (~d)), a, b, x, s, t)
 }
 function safe_add(x, y) {
-	var lsw = (x & 0xFFFF) + (y & 0xFFFF);
+	var lsw = (x & 0 xFFFF) + (y & 0 xFFFF);
 	var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-	return (msw << 16) | (lsw & 0xFFFF)
+	return (msw << 16) | (lsw & 0 xFFFF)
 }
 function bit_rol(num, cnt) {
 	return (num << cnt) | (num >>> (32 - cnt))

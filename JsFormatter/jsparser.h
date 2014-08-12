@@ -69,11 +69,13 @@ public:
 	};
 
 	enum TOKEN_TYPE {
-		TYPE_STRING = 0,
-		TYPE_OPER = 1,
-		TYPE_REGULAR = 2,
-		TYPE_COMMENT_1 = 9, // 单行注释
-		TYPE_COMMENT_2 = 10, // 多行注释
+		STRING_TOKEN = 0,
+		OPER_TOKEN = 1,
+		REGULAR_TOKEN = 2,
+		// 为了配合PrepareRegular()
+		// Comment类的token需要大于任意其它token
+		COMMENT_1_TOKEN = 9, // 单行注释
+		COMMENT_2_TOKEN = 10, // 多行注释
 	};
 
 	// .type: Token 类型
@@ -84,7 +86,7 @@ protected:
 public:
 	typedef std::stack<Char> CharStack;
 	typedef std::stack<bool> BoolStack;
-	typedef std::queue<Token> TokenQueue;
+	//typedef std::queue<Token> TokenQueue;
 
 	explicit JSParser() {
 		Init();
@@ -95,6 +97,7 @@ public:
 
 	// bool m_debug;
 	// inline const char *GetDebugOutput() { return m_debugOutput; }
+	// void PrintDebug();
 	
 	inline void Init() {
 		// m_debug = false;
@@ -109,10 +112,10 @@ public:
 protected:
 	// char m_debugOutput[1024];
 
-	Char m_charA;
-	Char m_charB;
+	// Char m_charA;
 	Token m_tokenA;
-	Token m_tokenB;
+	mutable Token m_tokenB;
+	mutable Char m_charB;
 	// int m_lineCount;
 	// int m_tokenCount;
 	
@@ -122,20 +125,27 @@ protected:
 	// 数字和.
 	static inline bool IsNumChar(Char ch) { return ((ch >= _T('0') && ch <= _T('9')) || ch == _T('.')); }
 	// 空白字符
-	static inline bool IsBlankChar(Char ch) { return (ch == _T(' ') || ch == _T('\t') || ch == _T('\r')); }
+	static inline bool IsBlankChar(Char ch) { return (ch == _T(' ') || ch == _T('\t') || ch == _T('\n') || ch == _T('\r')); }
+	// 引号
+	static inline bool IsQuote(Char ch) { return (ch == _T('\'') || ch == _T('\"')); }
+
+	static const Byte s_singleOperNextCharMap[128];
+	// 一般字符 + 空白字符 + 引号
+	static inline bool IsSingleOperNextChar(Char ch) { return ((UChar) ch > 126u) || s_singleOperNextCharMap[ch]; }
 
 	static const Byte s_singleOperMap[128];
 	// 单字符符号
 	static inline bool IsSingleOper(Char ch) { return ((UChar) ch <= 126u) && s_singleOperMap[ch]; }
-	// 引号
-	static inline bool IsQuote(Char ch) { return (ch == _T('\'') || ch == _T('\"')); }
-
+	
+	static const Char s_operCharBeforeReg[]; // 判断正则时，正则前面可以出现的字符
+	
+	
 	bool GetToken(); // 处理过负数, 正则等等的 GetToken 函数
 
 	inline void StartParse() {
 		// m_startClock = clock();
-		m_bRegular = false;
-		m_bPosNeg = false;
+		// m_bRegular = false;
+		m_bFlag = 0;
 		m_charB = GetChar();
 		GetTokenRaw();
 	}
@@ -153,7 +163,6 @@ protected:
 	inline Char GetChar() const {
 		return (m_getPos < m_len_in) ? (((const Char*)m_in)[m_getPos++]) : 0;
 	}
-
 	inline const Char *CurPos() const {
 		return (Char *)(m_in + m_getPos);
 	}
@@ -175,27 +184,28 @@ private:
 	//virtual int GetChar() = 0; // JUST get next char from input
 	
 	// 注释
-	inline bool IsComment() const { return (m_charA == _T('/') && (m_charB == _T('/') || m_charB == _T('*'))); } // 要联合判断 charA, charB
+	// inline bool IsComment() const { return (m_charA == _T('/') && (m_charB == _T('/') || m_charB == _T('*'))); } // 要联合判断 charA, charB
 
-	void GetTokenRaw();
+	void GetTokenRaw() const;
 
-	void PrepareRegular(); // 通过词法判断 tokenB 正则
-	void PreparePosNeg(); // 通过词法判断 tokenB 正负数
-	void PrepareTokenB();
+	void PrepareRegular() const; // 通过词法判断 tokenB 正则
+	void PreparePosNeg()  const; // 通过词法判断 tokenB 正负数
+	//void PrepareTokenB();
 
-	// void PrintDebug();
-
-	static const Char s_strBeforeReg[]; // 判断正则时，正则前面可以出现的字符
-
-	bool m_bRegular; // tokenB 实际是正则 GetToken 用到的两个成员状态
-	bool m_bPosNeg; // tokenB 实际是正负数
-	TokenQueue m_tokenBQueue;
+protected:
+	// bool m_bRegular; // tokenB 实际是正则 GetToken 用到的两个成员状态
+	mutable Byte m_bFlag;
+	enum BoolFlag {
+		PosNeg = 0x1, // tokenB 实际是正负数
+	};
+	//TokenQueue m_tokenBQueue;
 
 	// bool m_bGetTokenInit; // 是否是第一次执行 GetToken
 
 	// double m_duration;
 
 private:
+
 	// 阻止拷贝
 	JSParser(const JSParser&);
 	JSParser& operator =(const JSParser&);

@@ -1,4 +1,4 @@
-(function ($)å®«å¤§æ±‰ {
+(function ($)¹¬´óºº {
 	$.browser = function () {
 		return new browser()
 	};
@@ -575,7 +575,7 @@ function replaceLocationDB() {
 					if (typeof _normalDialboxes != "undefined" && _normalDialboxes && _normalDialboxes.length > 0) {
 						$.each(_normalDialboxes, function (i, n) {
 							if (_normalDialboxes[i]['isApp'] == "taobaoPlus") {
-								_normalDialboxes[i]['title'] = "æ·˜å®ç‰¹å–";
+								_normalDialboxes[i]['title'] = "ÌÔ±¦ÌØÂô";
 								delete _normalDialboxes[i]['isApp'];
 								_save = true
 							}
@@ -596,7 +596,7 @@ function replaceLocationDB() {
 					if (typeof _quickDialboxes != "undefined" && _quickDialboxes && _quickDialboxes.length > 0) {
 						$.each(_quickDialboxes, function (i, n) {
 							if (_quickDialboxes[i]['isApp'] == "taobaoPlus") {
-								_quickDialboxes[i]['title'] = "æ·˜å®ç‰¹å–";
+								_quickDialboxes[i]['title'] = "ÌÔ±¦ÌØÂô";
 								delete _quickDialboxes[i]['isApp'];
 								_save = true
 							}
@@ -1349,10 +1349,10 @@ var _configList = {
 					"img" : "app/quickSearch/img/logo.png",
 					"isApp" : "quickSearch"
 				}, {
-					"title" : "Ğ¯Ğ½Ğ´ĞµĞºÑ",
+					"title" : "§Á§ß§Õ§Ö§Ü§ã",
 					"url" : "www.yandex.ru"
 				}, {
-					"title" : "Ğ’ĞšĞ¾Ğ½Ñ‚Ğ°ĞºÑ‚Ğµ",
+					"title" : "§£§¬§à§ß§ä§Ñ§Ü§ä§Ö",
 					"url" : "www.vk.com"
 				}, {
 					"title" : "Google",
@@ -1365,7 +1365,7 @@ var _configList = {
 					"url" : "rover.ebay.com/rover/1/711-53200-19255-0/1?icep_ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&ipn=psmain&icep_vectorid=229466&kwid=902099&mtid=824&kw=lg&t=http://www.ebay.com",
 					"html" : "<img border='0' width='1' height='1' src='http://rover.ebay.com/roverimp/1/711-53200-19255-0/1?ff3=1&pub=5575024025&toolid=10001&campid=5337261379&customid=&mpt=[CACHEBUSTER]'>"
 				}, {
-					"title" : "ĞŸĞ¾Ñ€Ñ‚Ğ°Ğ» Mail.Ru",
+					"title" : "§±§à§â§ä§Ñ§İ Mail.Ru",
 					"url" : "www.mail.ru"
 				}, {
 					"title" : "Walmart",
@@ -1388,7 +1388,7 @@ var _configList = {
 					"title" : "Bet365",
 					"url" : "www.bet365.com"
 				}, {
-					"title" : "ĞĞ´Ğ½Ğ¾ĞºĞ»Ğ°ÑÑĞ½Ğ¸ĞºĞ¸.ru",
+					"title" : "§°§Õ§ß§à§Ü§İ§Ñ§ã§ã§ß§Ú§Ü§Ú.ru",
 					"url" : "www.odnoklassniki.ru"
 				}, {
 					"title" : "Wikipedia",
@@ -1403,7 +1403,7 @@ var _configList = {
 					"title" : "avito.ru",
 					"url" : "www.avito.ru"
 				}, {
-					"title" : "Ğ’ĞµĞ±-ÑĞµÑ€Ğ²Ğ¸Ñ uCoz",
+					"title" : "§£§Ö§Ò-§ã§Ö§â§Ó§Ú§ã uCoz",
 					"url" : "www.ucoz.ru"
 				}, {
 					"title" : "Webstore",
@@ -1844,7 +1844,7 @@ var _configList = {
 					"title" : "Ask",
 					"url" : "www.ask.com"
 				}, {
-					"title" : "MercadoLibre MÃ©xico",
+					"title" : "MercadoLibre M¨¦xico",
 					"url" : "www.mercadolibre.com"
 				}, {
 					"title" : "BestBuy",
@@ -1943,19 +1943,19 @@ var _configList = {
 					"title" : "Amazon",
 					"url" : "www.amazon.co.jp"
 				}, {
-					"title" : "æ¥½å¤©å¸‚å ´",
+					"title" : "˜SÌìÊĞˆö",
 					"url" : "www.rakuten.co.jp"
 				}, {
 					"title" : "FC2 BLOG",
 					"url" : "fc2blog.us"
 				}, {
-					"title" : "ä¾¡æ ¼.com",
+					"title" : "ı¸ñ.com",
 					"url" : "kakaku.com"
 				}, {
 					"title" : "Facebook",
 					"url" : "www.facebook.com"
 				}, {
-					"title" : "é’ç©ºæ–‡åº«",
+					"title" : "Çà¿ÕÎÄì",
 					"url" : "www.aozora.gr.jp"
 				}, {
 					"title" : "Net price",
@@ -1964,7 +1964,7 @@ var _configList = {
 					"title" : "Twitter",
 					"url" : "www.twitter.com"
 				}, {
-					"title" : "ï¼’ã¡ã‚ƒã‚“ã­ã‚‹",
+					"title" : "£²¤Á¤ã¤ó¤Í¤ë",
 					"url" : "www.2ch.net"
 				}, {
 					"title" : "Copon",
@@ -1979,7 +1979,7 @@ var _configList = {
 					"title" : "Livedoor",
 					"url" : "www.livedoor.com"
 				}, {
-					"title" : "ãã‚‹ãªã³",
+					"title" : "¤°¤ë¤Ê¤Ó",
 					"url" : "www.gnavi.co.jp"
 				}, {
 					"title" : "Vector",
@@ -2043,10 +2043,10 @@ var _configList = {
 					"img" : "app/quickSearch/img/logo.png",
 					"isApp" : "quickSearch"
 				}, {
-					"title" : "å¥‡æ‘©",
+					"title" : "ÆæÄ¦",
 					"url" : "tw.yahoo.com"
 				}, {
-					"title" : "è°·å“¥",
+					"title" : "¹È¸ç",
 					"url" : "www.google.com.hk"
 				}, {
 					"title" : "YouTube",
@@ -2066,16 +2066,16 @@ var _configList = {
 					"url" : "linksynergy.walmart.com/fs-bin/click?id=gOJBBPK4GAk&offerid=223073.10006940&type=3&subid=0&t=http://www.walmart.com",
 					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=223073.10006940&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "è‡‰è­œ",
+					"title" : "Ä˜×V",
 					"url" : "www.facebook.com"
 				}, {
-					"title" : "å·´å“ˆå§†ç‰¹é›»ç©è³‡è¨Šç«™",
+					"title" : "°Í¹şÄ·ÌØëŠÍæÙYÓÕ¾",
 					"url" : "www.gamer.com.tw"
 				}, {
 					"title" : "Wikipedia",
 					"url" : "www.wikipedia.org"
 				}, {
-					"title" : "ç™¾åº¦",
+					"title" : "°Ù¶È",
 					"url" : "www.baidu.com/index.php?tn=16046049_dg"
 				}, {
 					"title" : "Wikipedia",
@@ -2084,20 +2084,20 @@ var _configList = {
 					"title" : "Bet365",
 					"url" : "www.bet365.com"
 				}, {
-					"title" : "æ¨ç‰¹",
+					"title" : "ÍÆÌØ",
 					"url" : "www.twitter.com"
 				}, {
-					"title" : "æ–°æµªå¾®åš",
+					"title" : "ĞÂÀËÎ¢²©",
 					"url" : "weibo.com"
 				}, {
 					"title" : "BestBuy",
 					"url" : "click.linksynergy.com/fs-bin/click?id=gOJBBPK4GAk&offerid=306581.146&type=3&subid=0&t=http://www.bestbuy.com",
 					"html" : "<img src='http://ad.linksynergy.com/fs-bin/show?id=gOJBBPK4GAk&bids=306581.146&type=3&subid=0' width='1' height='1' border='0'>"
 				}, {
-					"title" : "æ„›å¥‡è—",
+					"title" : "ÛÆæË‡",
 					"url" : "www.iqiyi.com"
 				}, {
-					"title" : "äººäººç¶²",
+					"title" : "ÈËÈË¾W",
 					"url" : "www.renren.com"
 				}, {
 					"title" : "Webstore",
@@ -2231,64 +2231,64 @@ var _configList = {
 					"img" : "app/quickSearch/img/logo.png",
 					"isApp" : "quickSearch"
 				}, {
-					"title" : "ç™¾åº¦",
+					"title" : "°Ù¶È",
 					"url" : "www.baidu.com/index.php?tn=16046049_dg"
 				}, {
-					"title" : "æ·˜å®",
+					"title" : "ÌÔ±¦",
 					"url" : "www.taobao.com/?tn=newtab"
 				}, {
-					"title" : "QQç©ºé—´",
+					"title" : "QQ¿Õ¼ä",
 					"url" : "qzone.qq.com"
 				}, {
-					"title" : "äº¬ä¸œ",
+					"title" : "¾©¶«",
 					"url" : "p.yiqifa.com/c?s=b9e10055&w=433447&c=254&i=160&l=0&e=&t=http://www.jd.com"
 				}, {
-					"title" : "çˆ±æ·˜å®",
+					"title" : "°®ÌÔ±¦",
 					"url" : "www.taobao.com/go/chn/tbk_channel/onsale.php?pid=mm_13164080_2437641_9653920&eventid=101329&t=http://ai.taobao.com"
 				}, {
-					"title" : "äºšé©¬é€Š",
+					"title" : "ÑÇÂíÑ·",
 					"url" : "www.amazon.cn/?_encoding=UTF8&camp=536&creative=3200&linkCode=ur2&tag=weidunewtab-23"
 				}, {
-					"title" : "å½“å½“",
+					"title" : "µ±µ±",
 					"url" : "union.dangdang.com/transfer.php?from=P-308058&ad_type=10&sys_id=1&backurl=http://www.dangdang.com"
 				}, {
-					"title" : "æºç¨‹",
+					"title" : "Ğ¯³Ì",
 					"url" : "p.yiqifa.com/c?s=301697aa&w=433447&c=297&i=19323&l=0&e=&t=http://u.ctrip.com/union/redirect.aspx"
 				}, {
-					"title" : "1å·åº—",
+					"title" : "1ºÅµê",
 					"url" : "p.yiqifa.com/c?s=ceb1fc1e&w=433447&c=139&i=802&l=0&e=&t=http://www.yhd.com"
 				}, {
 					"title" : "5336.com",
 					"url" : "www.5336.com"
 				}, {
-					"title" : "å¤©çŒ«",
+					"title" : "ÌìÃ¨",
 					"url" : "s.click.taobao.com/t?e=zGU34CA7K%2BPkqB05%2Bm7rfGGjlY60oHcc7bkKOQiRddrNEyGLx31dnc6%2Fz%2BaQS2UNDUWpebTcEEjBuk1W5odmLS8%3D&pid=mm_13164080_0_0&t=http://www.tmall.com"
 				}, {
-					"title" : "æ–°æµªå¾®åš",
+					"title" : "ĞÂÀËÎ¢²©",
 					"url" : "weibo.com"
 				}, {
-					"title" : "æ˜“è¿…",
+					"title" : "Ò×Ñ¸",
 					"url" : "p.yiqifa.com/c?s=e3694872&w=433447&c=6828&i=24002&l=0&e=&t=http://www.yixun.com"
 				}, {
-					"title" : "ä¼˜é…·",
+					"title" : "ÓÅ¿á",
 					"url" : "www.youku.com"
 				}, {
-					"title" : "è‹å®æ˜“è´­",
+					"title" : "ËÕÄşÒ×¹º",
 					"url" : "p.yiqifa.com/c?s=afa04194&w=433447&c=4459&i=5662&l=0&e=&t=http://www.suning.com"
 				}, {
-					"title" : "ç½‘æ˜“",
+					"title" : "ÍøÒ×",
 					"url" : "www.163.com"
 				}, {
-					"title" : "å”¯å“ä¼š",
+					"title" : "Î¨Æ·»á",
 					"url" : "p.yiqifa.com/c?s=e24e6362&w=433447&c=4018&i=2882&l=0&e=&t=http://www.vip.com"
 				}, {
-					"title" : "å‡¤å‡°ç½‘",
+					"title" : "·ï»ËÍø",
 					"url" : "www.ifeng.com"
 				}, {
-					"title" : "äººäººç½‘",
+					"title" : "ÈËÈËÍø",
 					"url" : "www.renren.com"
 				}, {
-					"title" : "èšç¾ä¼˜å“",
+					"title" : "¾ÛÃÀÓÅÆ·",
 					"url" : "p.yiqifa.com/c?s=75cfd8b8&w=433447&c=5227&i=10462&l=0&e=&t=http://www.jumei.com"
 				}, {
 					"title" : "Webstore",

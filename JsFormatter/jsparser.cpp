@@ -21,7 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "alldefs.h"
 #include "jsparser.h"
 
-const JSParser::Char JSParser::s_strBeforeReg[] = _T("(,=:[!&|?+{};\n");
+// 更改/mod: 除去'\n', 因为OPER_TOKEN下属字符串不会包含'\n'
+const JSParser::Char JSParser::s_operCharBeforeReg[] = _T("(,=:[!&|?+{};");
 
 //	void JSParser::PrintDebug()
 //	{
@@ -54,7 +55,19 @@ const JSParser::Byte JSParser::s_normalCharMap[128] = {
 	/*  + x: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F */
 	/* 0+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	/* 1+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	/* 2+ */ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	/* 2+ */ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, // '.' == 0x2E;
+	/* 3+ */ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,
+	/* 4+ */ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	/* 5+ */ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
+	/* 6+ */ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	/* 7+ */ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1
+};
+
+const JSParser::Byte JSParser::s_singleOperNextCharMap[128] = {
+	/*  + x: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F */
+	/* 0+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0,
+	/* 1+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	/* 2+ */ 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
 	/* 3+ */ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,
 	/* 4+ */ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	/* 5+ */ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
@@ -64,7 +77,7 @@ const JSParser::Byte JSParser::s_normalCharMap[128] = {
 
 const JSParser::Byte JSParser::s_singleOperMap[128] = {
 	/*  + x: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F */
-	/* 0+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+	/* 0+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	/* 1+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	/* 2+ */ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0,
 	/* 3+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -74,227 +87,191 @@ const JSParser::Byte JSParser::s_singleOperMap[128] = {
 	/* 7+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0
 };
 
-void JSParser::GetTokenRaw()
+void JSParser::GetTokenRaw() const
 {
-	//	if(!m_bGetTokenInit)
-	//	{
-	//		m_charB = GetChar();
-	//	}
+	m_tokenB.more = OPER_TOKEN;
+	const Char * start0;
+	size_t len0 = 0; // 0 means "auto calc the size"
 
-	// normal procedure
-	if(!m_bRegular && !m_bPosNeg) {
-		m_tokenB.expand(8);
-		m_tokenB.setLength(0);
-		m_tokenB.c_str()[0] = 0;
-
-		m_tokenB.more = TYPE_STRING;
-	}
-	else if(m_bRegular) {
-		//m_tokenB.push_back(_T('/'));
-		m_tokenB.more = TYPE_REGULAR; // 正则
+	if(m_bFlag & BoolFlag::PosNeg) {
+		start0 = CurPos() - 2;
 	}
 	else {
-		m_tokenB.more = TYPE_STRING; // 正负数
+		register Char chB = m_charB;
+		while (IsBlankChar(chB)) {
+			chB = GetChar();
+		}
+		m_charB = chB;
+		start0 = CurPos() - 1;
 	}
-
-	bool bQuote = false;
-	bool bComment = false;
-	bool bRegularFlags = false;
-	bool bFirst = true;
-	bool bNum = false; // 是不是数字
-	bool bLineBegin = false;
-	Char chQuote; // 记录引号类型 ' 或 "
-	Char chComment; // 注释类型 / 或 *
-
-	for(; ; ) {
-		if(m_charB == 0) {
-			m_bRegular = false; // js content error
-			break;
-		}
-
-		m_charA = m_charB;
-		m_charB = GetChar();
-		// \r\n -> \n (next character)
-		if(m_charA == _T('\r')) {
-			m_charA = _T('\n');
-			if (m_charB == _T('\n'))
-				m_charB = GetChar();
-		}
-		//	if(m_charA == _T('\n'))
-		//		++m_lineCount;
-
-		/*
-		* 参考 m_charB 来处理 m_charA
-		* 输出或不输出 m_charA
-		* 下一次循环时自动会用 m_charB 覆盖 m_charA
-		*/
-
-		// 正则需要在 token 级别判断
-		if(m_bRegular) { // 正则状态全部输出，直到 /
-			m_tokenB.addOrDouble(m_charA);
-
-			if(m_charA == _T('\\')) {
-				if ((m_charB == _T('/') || m_charB == _T('\\'))) { // 转义字符
-					m_tokenB.addOrDouble(m_charB);
-					m_charB = GetChar();
+	const Char charA = m_charB;
+	m_charB = GetChar();
+	if (IsNormalChar(charA)) {
+		// 更改/mod: 将_T('.')视为单词的一部分,
+		// 如果要改回, 只需修改s_normalCharMap[0x2E] = 0;
+		m_tokenB.more = STRING_TOKEN;
+		register Char chB = m_charB;
+		if (IsNumChar(charA)) {
+			while (IsNumChar(chB)) {
+				chB = GetChar(); // loop until m_charB is not a normal character
+			}
+			if ((chB | _T('\x20')) == _T('e')) {
+				chB = GetChar();
+				// 解决类似 82e-2, 442e+6, 555E-6 的问题
+				if (chB == _T('-') || chB == _T('+')) {
+					chB = GetChar();
 				}
 			}
-			else if(m_charA == _T('/') && m_charB != _T('*') && m_charB != _T('|')) { // 正则可能结束
-				if(!bRegularFlags && IsNormalChar(m_charB)) {
-					bRegularFlags = true; // 正则的 flags 部分
+		}
+		while (IsNormalChar(chB)) {
+			chB = GetChar(); // loop until m_charB is not a normal character
+		}
+		m_charB = chB;
+	}
+	else if (IsQuote(charA)) { // 引号
+		m_tokenB.more = STRING_TOKEN;
+		const Char chQuote = charA;
+		register Char chB = m_charB;
+		for(; chB; chB = GetChar()) { // 引号状态，全部输出，直到引号结束
+			if (chB == chQuote) {
+				chB = GetChar();
+				break;
+			}
+			if (chB == _T('\\')) { // 转义字符
+				GetChar();
+			}
+		}
+		m_charB = chB;
+	}
+	else if (charA == _T('/') && (m_charB == _T('/') || m_charB == _T('*'))) { // 注释
+		if (m_charB == _T('/')) { // 直到换行
+			m_tokenB.more = COMMENT_1_TOKEN;
+			len0 = 2;
+			register Char chB;
+			for (; chB = GetChar(); ) {
+				if (chB == '\n') {
+					len0 = CurPos() - start0 - 1;
+					chB = GetChar();
+					break;
 				}
-				else {
-					m_bRegular = false; // 正则结束
+				else if(chB == _T('\r')) {
+					len0 = CurPos() - start0 - 1;
+					chB = GetChar();
+					if (chB == _T('\n')) {
+						chB = GetChar();
+					}
 					break;
 				}
 			}
-
-			if(bRegularFlags && !IsNormalChar(m_charB)) {
-				bRegularFlags = false;
-				m_bRegular = false; // 正则结束
-				break;
-			}
-
-			continue;
+			m_charB = chB;
 		}
-		else if(bQuote) { // 引号状态，全部输出，直到引号结束
-			m_tokenB.addOrDouble(m_charA);
-
-			if(m_charA == _T('\\') && (m_charB == chQuote || m_charB == _T('\\'))) { // 转义字符
-				m_tokenB.addOrDouble(m_charB);
-				m_charB = GetChar();
+		else { // 直到 */
+			m_tokenB.more = COMMENT_2_TOKEN;
+			len0 = 2;
+			{
+				register Char chB;
+				for (; chB = GetChar(); ) {
+					if (chB == '\n') {
+						len0 = CurPos() - start0 - 1;
+						chB = GetChar();
+						break;
+					}
+					else if(chB == _T('\r')) {
+						len0 = CurPos() - start0 - 1;
+						chB = GetChar();
+						if (chB == _T('\n')) { chB = GetChar(); }
+						break;
+					}
+					else if (chB == '*') {
+						chB = GetChar();
+						if (chB == '/') { chB = GetChar(); }
+						else if (chB) { continue; }
+						len0 = 0;
+						break;
+					}
+				}
+				m_charB = chB;
 			}
-
-			if(m_charA == chQuote) // 引号结束
-				break;
-
-			continue;
-		}
-		else if(bComment) { // 注释状态，全部输出
-			if(m_tokenB.more == TYPE_COMMENT_2) {
-				// /*...*/每行前面的\t, _T(' ')都要删掉
-				if(bLineBegin) {
-					if(m_charA == _T('\t') || m_charA == _T(' '))
+			if (len0) {
+				m_tokenB.reset(len0 + 4);
+				m_tokenB.copyFrom(start0, len0);
+				m_tokenB.addOrDouble(_T('\n'));
+				bool bLineBegin = true;
+				register Char chB = m_charB;
+				for (; chB; ) {
+					if(bLineBegin) {
+						if(chB == _T('\t') || chB == _T(' ')) {
+							chB = GetChar();
+							continue; // /*...*/每行前面的_T('\t'), _T(' ')都要删掉
+						}
+						bLineBegin = false;
+						if (chB == _T('*')) {
+							m_tokenB.addOrDouble(_T(' '));
+						}
+					}
+					if(chB == _T('\r')) {
+						bLineBegin = true;
+						m_tokenB.addOrDouble(_T('\n'));
+						chB = GetChar();
+						if (chB == _T('\n'))
+							chB = GetChar();
 						continue;
-					else if (m_charA == _T('*'))
-						m_tokenB.addOrDouble(_T(' '));
+					} else if (chB == _T('\n')) {
+						bLineBegin = true;
+					}
+					m_tokenB.addOrDouble(chB);
+					if(chB == _T('*')) {
+						chB = GetChar();
+						if (chB == _T('/')) {
+							m_tokenB.addOrDouble(chB);
+							chB = GetChar();
+							break;
+						}
+						continue;
+					}
+					chB = GetChar();
 				}
-				bLineBegin = (m_charA == _T('\n'));
-			}
-			m_tokenB.addOrDouble(m_charA);
 
-			if(chComment == _T('*')) { // 直到 */
-				m_tokenB.more = TYPE_COMMENT_2;
-				if(m_charA == _T('*') && m_charB == _T('/')) {
-					m_tokenB.addOrDouble(m_charB);
-					m_charB = GetChar();
-					break;
-				}
+				m_charB = chB;
+				return;
 			}
-			else { // 直到换行
-				m_tokenB.more = TYPE_COMMENT_1;
-				if(m_charA == _T('\n'))
-					break;
-			}
-
-			continue;
-		}
-
-		if (IsNormalChar(m_charA)) {
-			m_tokenB.more = TYPE_STRING;
-			m_tokenB.addOrDouble(m_charA);
-
-			// 解决类似 82e-2, 442e+6, 555E-6 的问题
-			// 因为这是立即数，所以只能符合以下的表达形式
-			bool bNumOld = bNum;
-			if (bFirst || bNumOld) { // 只有之前是数字才改变状态
-				bNum = IsNumChar(m_charA);
-				bFirst = false;
-			}
-			if (bNumOld && !bNum && (m_charA == _T('e') || m_charA == _T('E'))) {
-				if (m_charB == _T('-') || m_charB == _T('+')) {
-					bNum = true;
-					m_tokenB.addOrDouble(m_charB);
-					m_charB = GetChar();
-				}
-				else if (IsNumChar(m_charB)) {
-					bNum = true;
-				}
-			}
-
-			if(!IsNormalChar(m_charB)) { // loop until m_charB is not a normal character
-				m_bPosNeg = false;
-				break;
-			}
-		}
-		else if(IsBlankChar(m_charA))
-			continue; // 忽略空白字符
-
-		else if(IsQuote(m_charA)) {
-			// 引号
-			bQuote= true;
-			chQuote = m_charA;
-
-			m_tokenB.more = TYPE_STRING;
-			m_tokenB.addOrDouble(m_charA);
-			continue;
-		}
-		else if(IsComment()) {
-			// 注释
-			bComment = true;
-			chComment = m_charB;
-
-			m_tokenB.addOrDouble(m_charA);
-			continue;
-		}
-		else if(IsSingleOper(m_charA) || IsNormalChar(m_charB) ||
-			IsBlankChar(m_charB) || IsQuote(m_charB))
-		{
-			m_tokenB.more = TYPE_OPER;
-			m_tokenB.setLength(1);
-			register Char *s1 = m_tokenB.c_str();
-			s1[0] = m_charA; // 单字符符号
-			s1[1] = 0;
-			break;
-		}
-		else if((m_charB == _T('=') || m_charB == m_charA) ||
-			(m_charA == _T('-') && m_charB == _T('>'))) // 多字符符号
-		{
-			// 的确是多字符符号
-			m_tokenB.more = TYPE_OPER;
-			m_tokenB.addOrDouble(m_charA);
-			m_tokenB.addOrDouble(m_charB);
-			m_charB = GetChar();
-			if (m_charB == _T('=') && (m_tokenB == _T("==") || m_tokenB == _T("!=") ||
-				m_tokenB == _T("<<") || m_tokenB == _T(">>")))
-			{
-				// 三字符 ===, !==, <<=, >>=
-				m_tokenB.addOrDouble(m_charB);
-				m_charB = GetChar();
-			}
-			else if (m_charB == _T('>') && m_tokenB == _T(">>"))
-			{
-				// >>>, >>>=
-				m_tokenB.addOrDouble(m_charB);
-				m_charB = GetChar();
-				if(m_charB == _T('=')) // >>>=
-				{
-					m_tokenB.addOrDouble(m_charB);
-					m_charB = GetChar();
-				}
-			}
-			break;
-		}
-		else {
-			// 还是单字符的
-			m_tokenB.more = TYPE_OPER;
-			m_tokenB.setLength(1);
-			register Char *s1 = m_tokenB.c_str();
-			s1[0] = m_charA; // 单字符符号
-			s1[1] = 0;
-			break;
 		}
 	}
+	else if(IsSingleOper(charA) || IsSingleOperNextChar(m_charB)) // 单字符符号
+	{
+	}
+	else if(m_charB == _T('=') || m_charB == charA) // 多字符符号
+	{
+		register Char charB = m_charB;
+		m_charB = GetChar();
+		if (m_charB == _T('=')) {
+			if (( charB == _T('<') && charA == _T('<') ) ||
+				( charB == _T('>') && charA == _T('>') ) ||
+				( charB == _T('=') && (charA == _T('=') || charA == _T('!')) ))
+			{ // 三字符 ===, !==, <<=, >>=
+				m_charB = GetChar();
+			}
+		}
+		else if (m_charB == _T('>') && charB == _T('>') && charA == _T('>')) {
+			m_charB = GetChar();
+			if(m_charB == _T('=')) { // >>>=
+				m_charB = GetChar();
+			} else { // >>>
+			}
+		}
+	}
+	// 更改/mod: ECMAScript的操作符列表不包含"->", 所以屏蔽之
+	//else if ((charA == _T('-') && m_charB == _T('>'))) {
+	//m_charB = GetChar();
+	//}
+	else { // 还是单字符的
+	}
+	if (m_charB == 0) {
+		m_charB = 0; // TODO: check the last
+	}
+	m_tokenB.setData(const_cast<Char *>(start0));
+	m_tokenB.setLength(len0 ? len0 : (CurPos() - start0 - 1));
+	m_tokenB.doNotFree();
 }
 
 bool JSParser::GetToken()
@@ -312,43 +289,63 @@ bool JSParser::GetToken()
 	// ++m_tokenCount;
 	m_tokenA = m_tokenB;
 
-	if(m_tokenBQueue.size() == 0)
+	// 更改/mod: .size() == 0恒成立
+	//if(m_tokenBQueue.size() == 0)
 	{
 		GetTokenRaw();
-		PrepareTokenB(); // 看看是不是要跳过换行
+		// PrepareTokenB(); // 看看是不是要跳过换行
 	}
-	else
-	{
-		// 有排队的换行
-		m_tokenB = m_tokenBQueue.front();
-		m_tokenBQueue.pop();
-	}
+	//else
+	//{
+	//	// 有排队的换行
+	//	m_tokenB = m_tokenBQueue.front();
+	//	m_tokenBQueue.pop();
+	//}
 
 	return m_tokenA.length() != 0;
 }
 
-void JSParser::PrepareRegular()
+void JSParser::PrepareRegular() const
 {
+	// 更改/mod: 放开注释的限制
+	// 更改/warn: 默认m_tokenA.more == OPER_TOKEN时, m_tokenA不为空
+	// >>> 需要m_tokenA不被赋值给其它Token对象 + OPER_TOKEN不是.more的默认值
 	/*
 	* 先处理一下正则
 	* m_tokenB[0] == /，且 m_tokenB 不是注释
 	* m_tokenA 不是 STRING (除了 m_tokenA == return)
 	* 而且 m_tokenA 的最后一个字符是下面这些
 	*/
-	Char tokenALast = m_tokenA.size() > 0 ? m_tokenA[m_tokenA.size() - 1] : 0;
-	Char tokenBFirst = m_tokenB[0];
-	if (tokenBFirst == _T('/') && m_tokenB.more != TYPE_COMMENT_1 &&
-		m_tokenB.more != TYPE_COMMENT_2 && ( m_tokenA == _T("return") ||
-		(m_tokenA.more != TYPE_STRING && CharString::findIn(tokenALast, s_strBeforeReg))
-		) )
+	if (m_tokenB.more == OPER_TOKEN  && m_tokenB[0] == _T('/') && (
+		(m_tokenA.more == OPER_TOKEN && CharString::findIn(m_tokenA[m_tokenA.size() - 1], s_operCharBeforeReg)) ||
+		m_tokenA.more >= COMMENT_1_TOKEN || m_tokenA.equals(_T("return"), 6) ) )
 	{
-		m_bRegular = true;
-		GetTokenRaw(); // 把正则内容加到 m_tokenB
+		register Char chB = m_charB;
+		//	//	// TODO: what are '*' and '|'
+		//	//	if (chB != _T('*') && chB != _T('|')) { // 正则可能结束
+		for (; chB; chB = GetChar()) { // 正则状态全部输出，直到 /
+			if (chB == _T('\\')) { // 转义字符
+				GetChar();
+			}
+			else if (chB == _T('/')) {
+				chB = GetChar();
+				break;
+			}
+		}
+		// 备注/info: 也可以只识别小写"g", "i", "m", 但用IsNormalChar可以产生更长的Token
+		while (IsNormalChar(chB)) { // 正则的 flags 部分
+			chB = GetChar();
+		}
+		m_charB = chB;
+		m_tokenB.setLength(CurPos() - m_tokenB.c_str() - 1);
+		m_tokenB.doNotFree();
+		m_tokenB.more = REGULAR_TOKEN;
 	}
 }
 
-void JSParser::PreparePosNeg()
+void JSParser::PreparePosNeg()  const
 {
+	// 更改/mod: 强制 m_tokenA 为 OPER_TOKEN 或者 return
 	/*
 	* 如果 m_tokenB 是 -,+ 号
 	* 而且 m_tokenA 不是字符串型也不是正则表达式
@@ -356,42 +353,48 @@ void JSParser::PreparePosNeg()
 	* 而且 m_charB 是一个 NormalChar
 	* 那么 m_tokenB 实际上是一个正负数
 	*/
-	if(m_tokenB.more == TYPE_OPER && (m_tokenB == _T('-') || m_tokenB == _T('+')) &&
-		(m_tokenA.more != TYPE_STRING || m_tokenA == _T("return")) &&
-		m_tokenA.more != TYPE_REGULAR && m_tokenA != _T("++") && m_tokenA != _T("--") &&
-		(m_tokenA != _T(']') && m_tokenA != _T(')')) &&
+	if(m_tokenB.more == OPER_TOKEN && (m_tokenB == _T('-') || m_tokenB == _T('+')) &&
+		((m_tokenA.more == OPER_TOKEN && m_tokenA != _T(']') && m_tokenA != _T(')') &&
+		m_tokenA.nequals(_T('+'), _T('+')) && m_tokenA.nequals(_T('-'), _T('-'))) || 
+		m_tokenA.equals(_T("return"), 6)) &&
 		IsNormalChar(m_charB))
 	{
 		// m_tokenB 实际上是正负数
-		m_bPosNeg = true;
+		m_bFlag |= BoolFlag::PosNeg;
 		GetTokenRaw();
+		m_bFlag &= ~(BoolFlag::PosNeg);
 	}
 }
 
-void JSParser::PrepareTokenB()
-{
-	/*
-	* 跳过 else, while, catch, ',', ';', ')', '{' 之前的换行
-	* 如果最后读到的不是上面那几个，再把去掉的换行补上
-	*/
-	int c = 0;
-	while(m_tokenB == _T('\n') || m_tokenB.equals(_T('\r'), _T('\n'))) {
-		++c;
-		GetTokenRaw();
-	}
-
-	if ( (m_tokenB != _T(',') && m_tokenB != _T(')') && m_tokenB != _T(';')) &&
-		m_tokenB != _T("else") && m_tokenB != _T("while") && m_tokenB != _T("catch") )
-	{
-		// 将去掉的换行压入队列，先处理 空{}
-		if(m_tokenA == _T('{') && m_tokenB == _T('}'))
-			return;
-
-		for(c = c > 2 ? 2 : c; c > 0; --c) {
-			m_tokenBQueue.push(CharString(_T("\n"), 1, 2, 1, TYPE_OPER));
-		}
-		m_tokenBQueue.push(m_tokenB);
-		m_tokenB = m_tokenBQueue.front();
-		m_tokenBQueue.pop();
-	}
-}
+//void JSParser::PrepareTokenB()
+//{
+//	// 更改/mod: 注释掉while, 因为GetTokenRaw已经直接跳过\r\n
+//	/*
+//	* 跳过 else, while, catch, ',', ';', ')', '{' 之前的换行
+//	* 如果最后读到的不是上面那几个，再把去掉的换行补上
+//	*/
+//	//int c = 0;
+//	//while (m_tokenB == _T('\n')) {
+//	//	++c;
+//	//	GetTokenRaw();
+//	//}
+//
+//	if ( (m_tokenB != _T(',') && m_tokenB != _T(')') && m_tokenB != _T(';')) &&
+//		m_tokenB.nequals(_T("else"), 4) && m_tokenB.nequals(_T("while"), 5) && m_tokenB.nequals(_T("catch"), 5) )
+//	{
+//		// 将去掉的换行压入队列，先处理 空{}
+//		if(m_tokenA == _T('{') && m_tokenB == _T('}'))
+//			return;
+//
+//		//for(c = c > 2 ? 2 : c; c > 0; --c) {
+//		//	m_tokenBQueue.push(CharString(_T("\n"), 1, 2, 1, OPER_TOKEN));
+//		//}
+//		if (m_tokenBQueue.size() == 0) {
+//			return;
+//		}
+//		// 更改/mod: 测试发现完全执行不到这儿
+//		//m_tokenBQueue.push(m_tokenB);
+//		//m_tokenB = m_tokenBQueue.front();
+//		//m_tokenBQueue.pop();
+//	}
+//}
