@@ -28,7 +28,10 @@
 #endif
 // */
 
+#ifdef _DEBUG
 #define __TEST__ 0
-
+#else
+#define __TEST__ 0
+#endif
 
 #endif

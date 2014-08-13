@@ -25,6 +25,9 @@ public:
 	inline void setData(ttype *start) { mdata = start; }
 	inline void setLength(size_t len) { mlength = len; }
 	inline void autoLength() { mlength = lengthOf(mdata); }
+	
+	inline short getFlag() { return mflag; }
+	inline void setFlag(short flag) { mflag = flag; }
 	inline void setFlag0() { mflag = 0; }
 	inline void setFlag1() { mflag = 1; }
 
@@ -56,11 +59,13 @@ public:
 	inline ttype operator [] (size_t pos) const { return mdata[pos]; }
 	inline ttype& get(size_t pos) { return mdata[pos]; }
 	inline const ttype& get(size_t pos) const { return mdata[pos]; }
+	inline ttype& at(size_t pos) { return pos < mlength ? mdata[pos] : 0; }
+	inline const ttype& at(size_t pos) const { return pos < mlength ? mdata[pos] : 0; }
 	
 	inline bool  equals(const ttype ch1, const ttype ch2) const { return (mlength == 2) && mdata[0] == ch1 && mdata[1] == ch2; };
 	inline bool nequals(const ttype ch1, const ttype ch2) const { return (mlength != 2) || mdata[0] != ch1 || mdata[1] != ch2; };
-	bool  equals(const ttype* str2, size_t len2) const;
-	bool nequals(const ttype* str2, size_t len2) const;
+		   bool  equals(const ttype* str2, size_t len2) const;
+		   bool nequals(const ttype* str2, size_t len2) const;
 	inline bool operator == (const ConstString& ori) const { return this->equals(ori.mdata, ori.mlength); }
 	inline bool operator != (const ConstString& ori) const { return this->nequals(ori.mdata, ori.mlength); }
 	inline bool operator == (const ttype ch) const { return (mlength == 1) && ch == mdata[0]; }

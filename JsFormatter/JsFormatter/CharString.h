@@ -81,7 +81,7 @@ protected:
 	static const size_t sc_step_autoalloc = (4096 / sizeof(ttype)) > 4
 		? (4096 / sizeof(ttype)) : 4;
 
-/*
+//*
 private:
 	void operator = (const CharString& ori);
 /*/
@@ -138,12 +138,14 @@ public:
 		}
 	}
 	inline void reserve(size_t size) { expand(size); }
+	inline size_t capacity() const { return mcapacity; }
 	
 	void operator = (CharString&& ori);
 	// 使用“右值构造”和“右值赋值”还不能完全代替它，因为要有减少内存分配的考虑;
 	void copyFrom(const CharString&) { copyFrom(ori.mdata, ori.mlength); }
 	void copyFrom(const ttype* ori, size_t newlen);
 	void operator += (const CharString& ori);
+	inline void push_back(const ttype ch) { addOrDouble(ch); }
 	inline void addOrDouble(const ttype ch) {
 		if(mcapacity <= mlength + 2) { // TODO
 			expand0(mlength * 2 + 4);

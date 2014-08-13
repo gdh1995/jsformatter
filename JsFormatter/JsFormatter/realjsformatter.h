@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "jsparser.h"
 #include "CharString.h"
-#include <stack>
+#include <vector>
 
 class RealJSFormatter: public JSParser
 {
@@ -31,36 +31,34 @@ public:
 	static const size_t sc_lineBufferReservedSize = 4000;
 	typedef CharString<Char> CharString; // output format
 
-	typedef std::stack<Byte> ByteStack;
-	typedef std::stack<bool> BoolStack;
 	// 更改/warn: 严禁修改JS_xxx的编号顺序, 除非到cpp里进行完全除错
 	enum JS_TOKEN_TYPE {
 		JS_IF		=  0, // 'i'
-		// -
-		JS_FOR		=  1, // 'f'
+		// - 发现JS_FOR和JS_CATCH都没有具体出现过
+		JS_FOR		=  1, JS_CATCH	=  1, // 'f', 'h'
 		JS_WHILE	=  2, // 'w'
-		JS_CATCH	=  3, // 'h'
-		JS_SWITCH	=  4, // 's'
 		// -
-		JS_ELSE		=  5, // 'e'
+		JS_SWITCH	=  3, // 's'
 		// -
-		JS_TRY		=  6, // 't'; "finally"
+		JS_ELSE		=  4, // 'e'
 		// -
-		JS_FUNCTION	=  7, // 'n'; must: function = assign - 1 (L0313)
+		JS_TRY		=  5, // 't'; "finally"
 		// -
-		JS_START	=  8, // means the start of one statment (from JS_ASSIGN)
+		JS_DO		=  6, // 'd'
 		// -
-		JS_HELPER	=  9, // means '\\'
+		JS_FUNCTION	=  7, // 'n';
 		// -
-		JS_DO		= 10, // 'd'
+		JS_CASE		=  8, // 'c'
+		JS_SQUARE	=  9, // means '['
+		JS_BRACKET	= 10, // means '('
 		// -
-		JS_CASE		= 11, // 'c'
-		JS_BRACKET	= 12, // means '('
-		JS_SQUARE	= 13, // means '['
+		JS_BLOCK	= 11, // means '{'
 		// -
-		JS_BLOCK	= 14, // means '{'
-		JS_NULL		= 15
+		JS_NULL		= 12
 	};
+	
+	typedef std::vector<Char> ByteStack;
+	
 	static JS_TOKEN_TYPE findSomeKeyword(const Token &str);
 
 	struct FormatterOption {
@@ -95,13 +93,13 @@ protected:
 	enum INSERT_MODE {
 		INSERT_NONE = 0,
 		INSERT_UNKNOWN = 1,
-
+		// -
 		INSERT_SPACE = 2, // 要提前输出一个空格
-
+		// -
 		INSERT_NEWLINE = 3, // 准备换行, 但有可能变成空格
-
+		// -
 		INSERT_NEWLINE_SHOULD = 4, // 更应该输出换行
-		
+		// -
 		INSERT_NULL = 5 // 已经输出换行过了
 	};
 
@@ -120,6 +118,13 @@ protected:
 		m_line.setLength(0);
 	}
 
+	inline Char StackTop() const { return m_blockStack.back(); }
+	inline Char StackTop2() const { return m_blockStack.end()[-2]; }
+	inline void StackPush(const JS_TOKEN_TYPE ch) const { return m_blockStack.push_back(ch); }
+	inline void StackPop() const { return m_blockStack.pop_back(); }
+	inline bool StackTopEq(const JS_TOKEN_TYPE eq) const { return eq == m_blockStack.back(); }
+	inline bool StackTopGE(const JS_TOKEN_TYPE eq) const { return eq <= m_blockStack.back(); }
+
 	void StartParse() const {
 		m_line.setLength(0);
 		m_line.c_str()[0] = 0;
@@ -135,11 +140,8 @@ protected:
 	mutable CharString m_line;
 	mutable int m_nIndents; // 缩进数量 (计算blockStack效果不好)
 	mutable unsigned short m_uhLineIndents;
-	//mutable bool m_bBlockStmt; // block 真正开始了
-	//mutable bool m_bAssign;
-
-	mutable ByteStack m_blockStack;
-	mutable BoolStack m_brcNeedStack; // if 之类的后面的括号 (使用栈是为了解决在判断条件中出现循环的问题)
+	mutable bool m_bMoreIndent; // 是否在语句中
+	mutable bool m_bNeedBracket; // if 之类的后面的括号 (使用栈是为了解决在判断条件中出现循环的问题)
 
 	void PopMultiBlock(const Char previousStackTop) const;
 	void ProcessOper() const;
@@ -150,6 +152,10 @@ protected:
 	void ProcessLineComment() const;
 	void ProcessAndPutBlockComment() const;
 	void ProcessAndPutBlankLine() const;
+
+private:
+	mutable ByteStack m_blockStack;
+	//mutable BoolStack m_brcNeedStack; // if 之类的后面的括号 (使用栈是为了解决在判断条件中出现循环的问题)
 
 public:
 	FormatterOption m_struOption; // 配置项

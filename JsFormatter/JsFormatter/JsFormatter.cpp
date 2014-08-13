@@ -1,21 +1,3 @@
-//this file a source file of JSMinNpp
-//Copyright (C) 2007 Don HO <donho@altern.org>
-//Copyright (C) 2010-2010 Sun Junwen
-//
-//This program is free software; you can redistribute it and/or
-//modify it under the terms of the GNU General Public License
-//as published by the Free Software Foundation; either
-//version 2 of the License, or (at your option) any later version.
-//
-//This program is distributed in the hope that it will be useful,
-//but WITHOUT ANY WARRANTY; without even the implied warranty of
-//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//GNU General Public License for more details.
-//
-//You should have received a copy of the GNU General Public License
-//along with this program; if not, write to the Free Software
-//Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
 #include "alldefs.h"
 #include <stdio.h>
 #include "FileCodes.h"
@@ -73,7 +55,7 @@ int main(int n, char *s[]) {
 			fprintf(stderr, "ERROR: %d @ %d.\n", re, i);
 	}
 	else {
-#ifdef __TEST__
+#if defined __TEST__ && __TEST__ > 0
 		for (i = 0;  i < __TEST__; i++) jsFormat();
 #endif
 		printf("%s => %s\n", args[argIndex], args[argIndex + 1]);

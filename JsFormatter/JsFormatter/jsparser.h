@@ -65,8 +65,8 @@ public:
 		// 为了配合PrepareTokenB()
 		// Comment类的token需要大于任意其它token
 		TOKEN_COMMENT_LINE = 7, // 单行注释
-		TOKEN_COMMENT_BLOCK = 8, // 多行注释
-		TOKEN_BLANK_LINE = 9, // 空行标记
+		TOKEN_BLANK_LINE = 8, // 空行标记
+		TOKEN_COMMENT_BLOCK = 9, // 多行注释
 	};
 	// .more: Token 类型
 	typedef ConstString Token;
@@ -190,8 +190,8 @@ protected:
 
 private:
 	mutable const Char *m_in_next;
-	const Char *m_in;
 	const Char *m_in_end;
+	const Char *m_in;
 
 private: // 阻止拷贝
 	JSParser(const JSParser&);
