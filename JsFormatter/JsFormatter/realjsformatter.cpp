@@ -21,41 +21,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "realjsformatter.h"
 
 // 根据后面要跟着括号的关键字的集合来判断
-RealJSFormatter::JS_TOKEN_TYPE RealJSFormatter::findSomeKeyword(const Token &str) {
-	switch(str.size()) {
+RealJSFormatter::JS_TOKEN_TYPE RealJSFormatter::findSomeKeyword() const {
+	switch(m_tokenA.size()) {
 	case 2:
-		if (str.equals(_T('i'), _T('f'))) return JS_IF;
+		if (m_tokenA.equals(_T('i'), _T('f'))) return JS_IF;
 		break;
 	case 3:
-		if (str.equals(_T("for"), 3)) return JS_FOR;
+		if (m_tokenA.equals0(_T("for"))) return JS_FOR;
 		break;
 	case 4:
-		if (str.equals(_T("with"), 4)) return JS_BLOCK; // 此返回值不该被进一步使用
+		if (m_tokenA.equals0(_T("with"))) return JS_WITH;
 		break;
 	case 5:
-		if (str.equals(_T("while"), 5)) return JS_WHILE;
-		else if (str.equals(_T("catch"), 5)) return JS_CATCH;
+		if (m_tokenA.equals0(_T("while"))) return JS_WHILE;
+		else if (m_tokenA.equals0(_T("catch"))) return JS_TRY;
 		break;
 	case 6:
-		if (str.equals(_T("return"), 6)) return JS_BRACKET; // 此返回值不该被进一步使用
-		else if (str.equals(_T("switch"), 6)) return JS_SWITCH;
-		break;
-	case 8:
-		if (str.equals(_T("function"), 8)) return JS_FUNCTION;
+		if (m_tokenA.equals0(_T("return"))) return JS_BLOCK; // 此返回值不该被进一步使用
+		else if (m_tokenA.equals0(_T("switch"))) return JS_SWITCH;
 		break;
 	default: break;
 	}
 	return JS_NULL;
 }
 
-void RealJSFormatter::Init() const {
+void RealJSFormatter::init() const {
 	m_line.expand(sc_lineBufferReservedSize);
 
 	m_nIndents = 0;
 	m_uhLineIndents = 0;
 	m_line.more = INSERT_NULL;
-	m_bMoreIndent = false;
-	m_bNeedBracket = false;
 	m_blockStack.clear();
 	m_blockStack.reserve(64);
 	m_blockStack.push_back(JS_NULL); // stay having 1 element when finished
@@ -64,28 +59,28 @@ void RealJSFormatter::Init() const {
 
 // 更改/mod: 修复';'后'{'不换行; "if"等紧跟';'时插入空格
 // 更改/mod: 补回连续换行的处理逻辑
-// TODO: 增加"var"的判定, 调整','换行逻辑, 改成var内可以不换行
+// TO_DO_MAY: 增加"var"的判定, 调整','换行逻辑, 改成var内可以不换行
 
-void RealJSFormatter::PutTokenRaw(const Char*const str, int len) const {
+void RealJSFormatter::putTokenRaw(const Char*const str, int len) const {
 	if (m_line.more >= INSERT_NEWLINE) {
 		if (m_line.more != INSERT_NULL)
-			PutBufferLine();
+			putBufferLine();
 		if (m_nIndents < 0)
 			m_nIndents = 0; // 出错修正
 		m_uhLineIndents = m_nIndents;
 	}
 	else if (m_line.more >= INSERT_SPACE) {
-		// 不需要判断m_line.nempty(), 因为要在PutTokenA()之前判断好
+		// 不需要判断m_line.nempty(), 因为要在putTokenA()之前判断好
 		m_line.addOrDouble(' ');
 	}
 	if (len > 1)
-		m_line.addLine(str, str + len, 0);
+		m_line.addStr(str, len);
 	else if (len == 1)
 		m_line.addOrDouble(*str);
 }
 
-void RealJSFormatter::PutLine(const Char *start, int len, bool insertBlank) const {
-	size_t len2 = 4;
+void RealJSFormatter::putLine(const Char *start, int len, bool insertBlank) const {
+	UInt len2 = 4;
 	bool indent = false;
 	if (len > 0) {
 		len2 += len;
@@ -115,100 +110,160 @@ void RealJSFormatter::PutLine(const Char *start, int len, bool insertBlank) cons
 		*str++ = _T('\r');
 	*str++ = _T('\n');
 	*str = 0;
-	m_out->setLength(str - m_out->c_str());
+	m_out->setLength(str - *m_out);
 }
 
-void RealJSFormatter::PopMultiBlock(const Char previousStackTop) const {
-	if (m_tokenB == _T(';')) // 如果 m_tokenB 是 ;，弹出多个块的任务留给它
-		return;
-
-	if ((previousStackTop != JS_IF  || m_tokenB.nequals(_T("else"),  4)) &&
-		(previousStackTop != JS_TRY || m_tokenB.nequals(_T("catch"), 5)) &&
-		(previousStackTop != JS_DO  || m_tokenB.nequals(_T("while"), 5)) )
-	{
-		// ; 还可能结束多个 if, do, while, for, try, catch
-		bool next = true;
-		do {
-			register Char topStack = StackTop();
-			if (topStack == JS_IF) {
-				if (m_tokenB.equals(_T("else"), 4)) { next = false; }
-			} else if (topStack <= JS_ELSE) {
-				if (topStack == JS_SWITCH) {
-					break; // TODO: check whether it's useful
-				}
-			} else if (topStack == JS_TRY) {
-				if (m_tokenB.equals(_T("catch"), 5)) { next = false; }
-			} else if (topStack == JS_DO) {
-				--m_nIndents;
-				if (m_tokenB.equals(_T("while"), 5)) { break; }
-				continue;
-			} else {
-				break;
-			}
-			--m_nIndents;
-			StackPop();
-		} while (next);
+void RealJSFormatter::popMultiBlock(const Char previousStackTop) const {
+	bool tmp = true;
+	if (previousStackTop == JS_IF) {
+		if (m_tokenB.equals(_T("else" ), 4)) { return; }
+		tmp = false;
 	}
+	//else if (previousStackTop == JS_DO) {
+	//	if (getTokenB().equals(_T("while"), 5)) { return; }
+	//	tmp &= ~4;
+	//}
+	//else if (previousStackTop == JS_TRY) {
+	//	if (m_tokenB.equals(_T("catch"), 5)) { return; }
+	//	tmp &= ~1;
+	//}
+	// ; 还可能结束多个 if, do, while, for, try, catch
+	// bool next = true;
+	for (; ; ) {
+		register Char topStack = stackTop();
+		if (topStack > JS_OthersGt) {
+			stackPop();
+			continue;
+		}
+		else if (topStack > JS_IF_LE)
+			break;
+		else if (topStack == JS_IF) {
+			if (tmp) {
+				if (getTokenB().nequals(_T("else"), 4))
+					tmp = false;
+				else {
+					--m_nIndents;
+					stackPop();
+					break;
+				}
+			}
+		}
+		else { // JS_FUNCTION, JS_TRY, JS_SWITCH不可能直接在栈里
+		}
+		//switch(stackTop()) {
+		//case JS_IF:
+		//	if (tmp & 2) {
+		//		if (getTokenB().equals(_T("else"), 4)) { next = false; }
+		//		else { tmp &= ~2; }
+		//	}
+		//	break;
+		//case JS_FOR: case JS_WHILE: case JS_CATCH: break;
+		//case JS_ELSE: break;
+		//case JS_DO:
+		//	if (tmp & 4) {
+		//		if (getTokenB().equals(_T("while"), 5)) { next = false; }
+		//		else { tmp &= ~4; }
+		//	}
+		//	break;
+		//case JS_TRY:
+		//	if (tmp & 1) {
+		//		if (getTokenB().equals(_T("catch"), 5)) { next = false; }
+		//		else { tmp &= ~1; }
+		//	}
+		//	break;
+		//default: goto L_noMorePopBlock;
+		//}
+		--m_nIndents;
+		stackPop();
+	}
+	// L_noMorePopBlock: ;
 }
 
-void RealJSFormatter::Go() const {
-	static void (RealJSFormatter::*const s_func[])() const = {NULL,
-		&RealJSFormatter::ProcessOper, &RealJSFormatter::ProcessCommonToken,
-		&RealJSFormatter::ProcessID, &RealJSFormatter::ProcessRegular,
-		&RealJSFormatter::ProcessOrPutString, &RealJSFormatter::ProcessOrPutString,
-		&RealJSFormatter::ProcessLineComment, &RealJSFormatter::ProcessAndPutBlankLine,
-		&RealJSFormatter::ProcessAndPutBlockComment,
+void RealJSFormatter::go() const {
+	static const ProcessFuncPtr s_func[] = {
+		&RealJSFormatter::processOper, &RealJSFormatter::processCommonToken,
+		&RealJSFormatter::processID, &RealJSFormatter::processOrPutMultiLineString,
+		&RealJSFormatter::processLineComment, &RealJSFormatter::processNewLineComment,
+		&RealJSFormatter::processAndPutBlankLine, &RealJSFormatter::processAndPutBlockComment,
 	};
-	StartParse();
-	while (GetToken()) {
+	startParse();
+	while (getToken()) {
 		(this->*s_func[m_tokenA.more])();
 	}
-	EndParse();
+	endParse();
 }
 
-void RealJSFormatter::ProcessOper() const {
+void RealJSFormatter::processCommonToken() const {
+	putTokenA();
+	m_line.more = (getTokenB().more != TOKEN_OPER) ? INSERT_SPACE : INSERT_UNKNOWN;
+}
+
+void RealJSFormatter::processOper() const {
 	const int alen = m_tokenA.size();
-	Char topStack = StackTop();
+	JsToken topStack = stackTop();
 
 	if (alen <= 2) {
 		if (m_tokenA.findIn(_T("()[]!~^.")) || m_tokenA.equals(_T('!'), _T('!'))) {
 			// ()[]!. 都是前后没有样式的运算符
 			const Char ach0 = m_tokenA[0];
+			if (topStack == JS_WRAP && (ach0 == _T(')') || ach0 == _T(']'))) {
+				--m_nIndents;
+				stackPop();
+				topStack = stackTop();
+			}
 			if ((topStack == JS_BRACKET && ach0 == _T(')')) ||
 				(topStack == JS_SQUARE && ach0 == _T(']')))
 			{ // )] 需要弹栈，减少缩进
 				--m_nIndents;
-				PutTokenA();
-				StackPop();
-				topStack = StackTop();
-				if (topStack == JS_BRACKET) // TODO: check
+				putTokenA();
+				stackPop();
+				topStack = stackTop();
+				if (topStack == JS_BRACKET)
 					++m_nIndents;
+				else if (topStack == JS_WRAP) {
+					// for (
+					//     ...
+					// ) {
+					//     ...
+					// }
+					// NOTE: 视为正常缩进格式, 不修改
+					stackPop();
+					topStack = stackTop();
+				}
 			}
 			else
-				PutTokenA();
+				putTokenA();
 
-			if (ach0 == _T(')') && m_bNeedBracket && topStack <= JS_SWITCH) { // !m_brcNeedStack.top()
-				// 栈顶的 if, for, while, switch, catch 正在等待 )，之后换行增加缩进
+			if (ach0 == _T(')') && topStack == JS_BRACKET_WANT) {
+				// top2应该是 if, for, while, switch, catch, 正在等待 )，之后换行增加缩进
 				m_line.more = INSERT_NEWLINE;
-				m_bNeedBracket = false; // m_brcNeedStack.pop_back();
-				//m_bBlockStmt = false; // 等待 statment
-				if (topStack == JS_WHILE && StackTop2() == JS_DO) {
-					StackPop();
-					StackPop();
-					PopMultiBlock(JS_WHILE); // 结束 do...while
-					topStack = StackTop();
+				stackPop();
+				topStack = stackTop();
+				if (topStack == JS_WHILE && stackTop2() == JS_DO) {
+					stackPop();
+					stackPop();
+					popMultiBlock(JS_WHILE); // 结束 do...while
+					topStack = stackTop();
+					m_line.more = INSERT_UNKNOWN;
 				}
-				else
-					++m_nIndents;
+				else {
+					if (topStack != JS_FUNCTION || stackTop2() != JS_BRACKET) // "(function ... {"减掉一个缩进
+						++m_nIndents;
+					stackPush(JS_BRACKET_GOT);
+				}
 			}
-			else if (ach0 == _T(')') && (m_tokenB == _T('{')))
+			else if (ach0 == _T(')') && (getTokenB() == _T('{')))
 				m_line.more = INSERT_SPACE; // { 或者换行之前留个空格
 			else if (ach0 == _T('(') || ach0 == _T('[')) {
 				// ([ 入栈，增加缩进
 				// 更改/mod: "([...])"中减少一次缩进
-				if (topStack != JS_BRACKET)
-					++m_nIndents;
-				StackPush(ach0 == _T('(') ? JS_BRACKET : JS_SQUARE);
+				if (topStack == JS_WRAP)
+					stackTop(ach0 == _T('(') ? JS_BRACKET : JS_SQUARE);
+				else {
+					if (topStack != JS_BRACKET)
+						++m_nIndents;
+					stackPush(ach0 == _T('(') ? JS_BRACKET : JS_SQUARE);
+				}
 				m_line.more = INSERT_UNKNOWN;
 			}
 			else
@@ -218,47 +273,60 @@ void RealJSFormatter::ProcessOper() const {
 		if (alen == 1) {
 			switch (m_tokenA[0]) {
 			case _T(';'):
-				//if (topStack == JS_OLD_START) { // TODO:
-				//}
-				// ; 结束 if, else, while, for, try, catch
-				if (topStack != JS_SWITCH && topStack <= JS_DO) {
-					if (topStack != JS_DO) // do 在读取到 while 后才修改计数, 对于 do{} 也一样
-						StackPop();
-					if (m_line.more == INSERT_NEWLINE)
-						m_line.more = INSERT_SPACE;
+				if (topStack == JS_WRAP) {
 					--m_nIndents;
-					PopMultiBlock(topStack);
-					topStack = StackTop();
+					stackPop();
+					topStack = stackTop();
 				}
-				//	if (topStack == _T('t'))
-				//		StackPop(); // ; 也结束变量声明，暂时不压入 t
-				// 如果不是"(...)"里的 ';' 就换行
-				if (topStack != JS_BRACKET) {
-					if (m_bMoreIndent) {
-						m_bMoreIndent = false;
+				if (topStack == JS_BRACKET_GOT || topStack == JS_BLOCK_VIRTUAL) {
+					stackPop();
+					topStack = stackTop();
+				}
+				// ; 结束 else, if, for, while, do
+				if (topStack >= JS_WHILE_GE && topStack < JS_WRAP_Lt) {
+					if (m_line.more == INSERT_NEWLINE) {
+						m_line.more = INSERT_SPACE;
+						--m_nIndents;
+						putTokenA();
+					}
+					else {
+						putTokenA();
 						--m_nIndents;
 					}
-					PutTokenA();
-					m_line.more = INSERT_NEWLINE_SHOULD;
+					if (topStack != JS_DO) { // do 在读取到 while 后才修改计数, 对于 do{} 也一样
+						stackPop();
+						popMultiBlock(topStack);
+						topStack = stackTop();
+					}
 				}
-				else {
-					PutTokenA();
-					m_line.more = INSERT_SPACE; // "(...; ...)" 空格
-				}
+				else
+					putTokenA();
+				// 如果不是"(...)"里的 ';' 就换行, 使用"_SHOULD"保证之后的 '{' 不会还在同一行
+				m_line.more = (topStack != JS_BRACKET) ? INSERT_NEWLINE_SHOULD
+					: INSERT_SPACE; // "(...; ...)" 空格
 				return; // ;
 			case _T(','):
-				//if (topStack == JS_OLD_START) { // TODO:
-				//}
-				if (topStack != JS_BRACKET && m_bMoreIndent) {
-					m_bMoreIndent = false;
+				if (topStack == JS_WRAP) {
 					--m_nIndents;
+					stackPop();
+					topStack = stackTop();
 				}
-				PutTokenA();
+				if (topStack == JS_BRACKET_GOT) {
+					stackTop(JS_BLOCK_VIRTUAL);
+					topStack = JS_BLOCK_VIRTUAL;
+				}
+				putTokenA();
 				// 如果是 "{...}" 里的就换行
-				m_line.more = topStack >= JS_BLOCK ? INSERT_NEWLINE : INSERT_SPACE;
+				m_line.more = topStack >= JS_BLOCK_GE ? INSERT_NEWLINE : INSERT_SPACE;
 				return; // ,
-			case _T('{'): {
-					INSERT_MODE eNextInsert = (m_tokenB == _T('}')) // 空 {}
+			case _T('{'): 
+				if (topStack == JS_WRAP) {
+					--m_nIndents;
+					stackPop();
+					topStack = stackTop();
+				}
+				{
+					INSERT_MODE eNextInsert = (getTokenB() == _T('}')) // 空 {}
 						? INSERT_NONE : INSERT_NEWLINE_SHOULD;
 					if (m_line.more == INSERT_NEWLINE) {
 						if (m_struOption.bBracketAtNewLine)
@@ -266,21 +334,17 @@ void RealJSFormatter::ProcessOper() const {
 						else
 							m_line.more = INSERT_SPACE;
 					}
-					if (topStack <= JS_DO)
-						--m_nIndents;
-					// TODO: check the value of JS_TOKEN_TYPE
-					else if (topStack == JS_FUNCTION) { // "(function ... {"减掉一个缩进
-						if (StackTop2() == JS_BRACKET)
-							--m_nIndents;
+					
+					if (topStack == JS_BRACKET_GOT) {
+						stackTop(JS_BLOCK);
+						topStack = stackTop2();
 					}
-					else if (topStack == JS_BRACKET) // 修正"({...})"中多一次缩进
-						--m_nIndents;
-					StackPush(JS_BLOCK); // 入栈，增加缩进
-					PutTokenA();
-					if (m_bMoreIndent && eNextInsert != INSERT_NONE)
-						m_bMoreIndent = false;
 					else
-						++m_nIndents;
+						stackPush(JS_BLOCK);
+					if (topStack <= JS_BRACKET_LE) // 包含了对"({...})"中多一次缩进的修正
+						--m_nIndents;
+					putTokenA();
+					++m_nIndents; // 入栈，增加缩进
 					m_line.more = eNextInsert;
 				}
 				return; // {
@@ -288,40 +352,38 @@ void RealJSFormatter::ProcessOper() const {
 				// 激进的策略，} 一直弹到 {
 				// 这样做至少可以使得 {} 之后是正确的
 				do {
-					StackPop();
-					if (topStack == JS_BLOCK)
-						break;
-					else if (topStack <= JS_FUNCTION)
+					stackPop();
+					if (topStack <= JS_WRAP_LE)
 						--m_nIndents;
-					topStack = StackTop();
+					else if (topStack == JS_BLOCK)
+						break;
+					topStack = stackTop();
 				} while (topStack != JS_NULL);
 				if (topStack == JS_BLOCK) {
-					topStack = StackTop();
-					if (topStack <= JS_TRY || topStack == JS_FUNCTION)
-						StackPop(); // 缩进已经处理，do 留给 while
+					topStack = stackTop();
+					// 由"(...)"和"{"三个符号的逻辑保证topStack不会是JS_WRAP
+					if (topStack < JS_DO_Lt)
+						stackPop(); // 缩进已经处理，do 留给 while
 					--m_nIndents;
 				}
 				{
 					const bool bSpace = (m_line.more != INSERT_NONE && m_line.more < INSERT_NULL)
 						&& (m_line.more = INSERT_NEWLINE, !m_struOption.bBracketAtNewLine);
-					if (m_line.more != INSERT_NONE && m_bMoreIndent) {
-						m_bMoreIndent = false;
-						--m_nIndents;
-					}
-					PutTokenA();
-					if (m_tokenB.more == TOKEN_OPER) {
-						const Char chB = m_tokenB[0];
-						if (m_tokenB.size() == 1 && (chB == _T(';') || chB == _T(',') || chB == _T(')')))
+					putTokenA();
+					if (getTokenB().more == TOKEN_OPER) {
+						const Char chB = getTokenB()[0];
+						if (getTokenB().size() == 1 && (chB == _T(';') || chB == _T(',') || chB == _T(')')))
 						{ // 更改/mod: 已经统一使(...{...})的{}前后不换行
 							m_line.more = INSERT_UNKNOWN; // }, }; })
 						}
 						else
 							m_line.more = INSERT_NEWLINE;
 					}
-					else if (m_tokenB.more == TOKEN_ID && bSpace && (
-						(topStack == JS_IF  && m_tokenB.equals(_T("else"),  4)) ||
-						(topStack == JS_TRY && m_tokenB.equals(_T("catch"), 5)) ||
-						(topStack == JS_DO  && m_tokenB.equals(_T("while"), 5)) ))
+					else if (getTokenB().more == TOKEN_ID && bSpace && (
+						(topStack == JS_IF  && getTokenB().equals(_T("else"),  4)) ||
+						(topStack == JS_DO  && getTokenB().equals(_T("while"), 5)) ||
+						(topStack == JS_TRY && ( getTokenB().equals(_T("catch"), 5) ||
+							getTokenB().equals(_T("finally"), 7) )) ))
 					{
 						m_line.more = INSERT_SPACE;
 					}
@@ -329,239 +391,265 @@ void RealJSFormatter::ProcessOper() const {
 						m_line.more = INSERT_NEWLINE;
 					// 测试发现: JS语法限制"{xxx}.xxx"总是不合法的, 无论"{xxx}"是词典还是语句块
 				}
-				if (StackTopEq(JS_BRACKET))
+				if (stackTopEq(JS_BRACKET))
 					++m_nIndents;
-				PopMultiBlock(topStack);
+				if (getTokenB() != _T(';')) // 如果 m_tokenB 是 ;，弹出多个块的任务留给它
+					popMultiBlock(topStack);
 				return; // }
-			case _T(':'):
-				PutTokenA();
-				if (topStack == JS_CASE) { // case, default
-					m_line.more = INSERT_NEWLINE;
-					StackPop();
+			case _T(':'): {
+					const JsToken oldTop = topStack;
+					if (topStack == JS_WRAP)
+						topStack = stackTop2();
+					if ((topStack < JS_CASE_Lt && m_line.nempty()) || topStack == JS_NULL)
+						m_line.more = INSERT_SPACE;
+					putTokenA();
+					if (oldTop == JS_WRAP) {
+						stackPop();
+						--m_nIndents;
+					}
 				}
-				else
+				if (topStack == JS_CASE) { // case, default
+					++m_nIndents;
+					stackPop();
+					m_line.more = INSERT_NEWLINE;
+				}
+				else {
+					if (topStack == JS_BRACKET_GOT)
+						stackTop(JS_BLOCK_VIRTUAL);
 					m_line.more = INSERT_SPACE;
+				}
 				return;
 			}
 		}
 		else {
 			const Char ach0 = m_tokenA[0];
 			const Char ach1 = m_tokenA[1];
-			if ((ach0 == _T('+') && ach1 == _T('+')) || (ach0 == _T('-') && ach1 == _T('-'))) {
-			// || (ach0 ==  _T(':') && ach1 ==  _T(':')) || (ach0 ==  _T('-') && ach1 ==  _T('>'))
-				PutTokenA();
+			if ((ach0 == _T('+') && ach1 == _T('+')) || (ach0 == _T('-') && ach1 == _T('-'))
+			//||(ach0 ==  _T(':') && ach1 ==  _T(':')) || (ach0 ==  _T('-') && ach1 ==  _T('>'))
+			) {
+				if (topStack == JS_BRACKET_GOT)
+					stackTop(JS_BLOCK_VIRTUAL);
+				putTokenA();
 				m_line.more = INSERT_UNKNOWN;
 				return;
 			}
 		}
 	}
+	if (topStack == JS_BRACKET_GOT)
+		stackTop(JS_BLOCK_VIRTUAL);
 
 	if (m_line.more < INSERT_SPACE)
 		m_line.more = INSERT_SPACE;
-	PutTokenA(); // 剩余的操作符都是 空格oper空格
+	putTokenA(); // 剩余的操作符都是 空格oper空格
 	m_line.more = INSERT_SPACE;
 }
 
-void RealJSFormatter::ProcessID() const {
+void RealJSFormatter::processID() const {
 	JS_TOKEN_TYPE token_type1 = JS_NULL;
-	if (m_tokenA.equals(_T("else"), 4) && m_tokenB.nequals(_T("if"), 2)) {
+	if (m_tokenA.equals(_T("else"), 4)) {
+		if (getTokenB().equals(_T('i'), _T('f'))) {
+			token_type1 = JS_BLOCK;
+			goto L_notKeyword; // else if 时不压栈
+		}
 		token_type1 = JS_ELSE;
 	}
-	else if (m_tokenA.equals(_T("do"), 2)) {
+	else if (m_tokenA.equals(_T('d'), _T('o')))
 		token_type1 = JS_DO;
-	}
-	else if (m_tokenA.equals(_T("try"), 3)) {
+	else if (m_tokenA.equals(_T("try"), 3))
 		token_type1 = JS_TRY;
-	}
-	else if (m_tokenA.equals(_T("finally"), 7)) {
+	else if (m_tokenA.equals(_T("finally"), 7))
 		token_type1 = JS_TRY;
-	}
 	else {
-		if (m_tokenA.equals(_T("function"), 8)) {
+		if (m_tokenA.equals(_T("function"), 8))
 			token_type1 = JS_FUNCTION;
-			StackPush(JS_FUNCTION); // 把 function 也压入栈，遇到 } 弹掉
-		}
 		else if (m_tokenA.equals(_T("case"), 4) || m_tokenA.equals(_T("default"), 7)) {
 			// case, default 往里面缩一格
 			if (m_line.more == INSERT_NEWLINE)
 				m_line.more = INSERT_SPACE;
+			else if (m_line.more < INSERT_NULL)
+				m_line.more = INSERT_NEWLINE;
+			if (stackTopEq(JS_WRAP)) {
+				stackTop(JS_CASE);
+				--m_nIndents;
+			}
+			else
+				stackPush(JS_CASE);
 			--m_nIndents;
-			PutTokenA();
-			++m_nIndents;
+			putTokenA();
 			m_line.more = (m_tokenA[0] != _T('d')) ? INSERT_SPACE : INSERT_UNKNOWN;
-			StackPush(JS_CASE);
 			return;
 		}
+		else
+			token_type1 = findSomeKeyword();
+		if (token_type1 <= JS_IF_LE) {
+			if (token_type1 == JS_IF && stackTopEq(JS_ELSE)) {
+				stackTop(JS_IF);
+				--m_nIndents;
+			}
+			else if (stackTopEq(JS_WRAP))
+				stackTop(token_type1);
+			else
+				stackPush(token_type1);
+			stackPush(JS_BRACKET_WANT);
+		}
+		else if (stackTopEq(JS_BRACKET_GOT))
+			stackTop(JS_BLOCK_VIRTUAL);
 
-		PutTokenA();
-		if (m_tokenB.more >= TOKEN_COMMON || m_tokenB == _T('{')) {
-			m_line.more = INSERT_SPACE; // '{': such as "return {'a':1};"
-			//	if (StackTop() != _T('v'))
-			//		StackPush(_T('v')); // 声明变量
-			return;
-		}
-		if (token_type1 == JS_NULL) { token_type1 = findSomeKeyword(m_tokenA); }
-		if (token_type1 <= JS_SWITCH) {
-			StackPush(token_type1);
-			m_bNeedBracket = true; // m_brcNeedStack.push_back(false);
-		}
-		m_line.more = (token_type1 != JS_NULL && m_tokenB != _T(';'))
-			? INSERT_SPACE : INSERT_UNKNOWN;
+		L_notKeyword:
+		putTokenA();
+		const Token& tokenB = getTokenB();
+		m_line.more = ((tokenB.more != TOKEN_OPER || tokenB == _T('{')) // '{': such as "return {'a':1};"
+			|| (tokenB != _T(';') && token_type1 != JS_NULL)
+			) ? INSERT_SPACE : INSERT_UNKNOWN;
 		return;
 	}
+	if (stackTopEq(JS_WRAP)) {
+		--m_nIndents;
+		stackTop(token_type1);
+	}
+	else
+		stackPush(token_type1);
 	// do, else (EXCEPT else if), try
-	PutTokenA();
-
-	StackPush(token_type1);
+	putTokenA();
 	++m_nIndents; // 无需 ()，直接缩进
-	m_line.more = (m_tokenB.more >= TOKEN_COMMON || m_struOption.bBracketAtNewLine)
+	m_line.more = (getTokenB().more != TOKEN_OPER || m_struOption.bBracketAtNewLine)
 		? INSERT_NEWLINE : INSERT_SPACE;
 }
 
-void RealJSFormatter::ProcessCommonToken() const {
-	PutTokenA();
-	m_line.more = (m_tokenB.more >= TOKEN_COMMON) ? INSERT_SPACE : INSERT_UNKNOWN;
-}
-
-void RealJSFormatter::ProcessRegular() const {
-	PutTokenA(); // 正则表达式直接输出，前后没有任何样式
-	if (m_tokenB.more == TOKEN_NULL) {
-		const Char *const end = m_tokenA.c_end();
-		register const Char *str = m_tokenA.c_str();
-		for (; str < end && *str != _T('/'); ) {
-			if (*str++ == _T('\\'))
-				++str;
-		}
-		if (str >= end) { // an error end of js document
-			if (str > end) // end with single _T('\\')
-				m_line.addOrDouble(_T('\\'));
-			m_line.addOrDouble(_T('/'));
-		}
-	}
-	m_line.more = (m_tokenB.more >= TOKEN_COMMON && (m_tokenB[0] != _T('.') ||
-		(m_tokenB.length() >= 2 && m_tokenB[1] >= _T('0') && m_tokenB[1] <= _T('9'))
-		) ) ? INSERT_SPACE : INSERT_UNKNOWN;
-}
-
-void RealJSFormatter::ProcessOrPutString() const {
+void RealJSFormatter::processOrPutMultiLineString() const {
 	const Char *const end = m_tokenA.c_end();
-	const Char *str0 = m_tokenA.c_str();
-	if (m_tokenA.more == TOKEN_STRING)
-		PutTokenA();
-	else {
-		m_out->expand(m_out->size() + m_tokenA.size() + 8);
-		for (register const Char *str = str0; ; ) {
-			++str;
-			if (*str == '\r' || *str == '\n') {
-				str0 = str;
-				break;
-			}
-		}
-		PutTokenRaw(m_tokenA.c_str(), str0 - m_tokenA.c_str());
-		if (*str0 == _T('\r'))
-			++str0;
-		if (end > str0 && *str0 == _T('\n'))
-			++str0;
-		if (end > str0)
-			PutBufferLine();
-		for (register const Char *str = str0; str < end; ) {
-			register const Char *str2 = str - 1;
-			while(++str2 < end && *str2 != '\r' && *str2 != '\n') {}
-			if (str2 < end) {
-				m_out->addLine(str, str2, m_struOption.bNotPutCR ? 1 : 3);
-				str = str2;
-				if (*str == _T('\r'))
-					++str;
-				if (end > str && *str == _T('\n'))
-					++str;
-			}
-			else {
-				m_line.addLine(str, str2, 0);
-				m_uhLineIndents = 0;
-				break;
-			}
+	const Char *str0 = m_tokenA;
+	//if (m_tokenA.more == TOKEN_STRING)
+	//	putTokenA();
+	//else {
+	getOutput().expand(getOutput().size() + m_tokenA.size() + 16);
+	for (register const Char *str = str0; ; ) {
+		++str;
+		if (*str == '\r' || *str == '\n') {
+			str0 = str;
+			break;
 		}
 	}
-	if (m_tokenB.more == TOKEN_NULL) {
-		const Char chQuote = m_tokenA[0];
-		register const Char *str = str0;
-		for (; str < end && *str != chQuote; ) {
-			if (*str++ == _T('\\'))
+	putTokenRaw(m_tokenA, str0 - m_tokenA);
+	if (*str0 == _T('\r'))
+		++str0;
+	if (end > str0 && *str0 == _T('\n'))
+		++str0;
+	if (end > str0)
+		putBufferLine();
+	for (register const Char *str = str0; str < end; ) {
+		register const Char *str2 = str - 1;
+		while(++str2 < end && *str2 != '\r' && *str2 != '\n') {}
+		if (str2 < end) {
+			getOutput().addLine(str, str2, m_struOption.bNotPutCR ? 1 : 3);
+			str = str2;
+			if (*str == _T('\r'))
+				++str;
+			if (end > str && *str == _T('\n'))
 				++str;
 		}
-		if (str >= end) { // an error end of js document
-			if (str > end) // end with single _T('\\')
-				m_line.addOrDouble(_T('\\'));
-			m_line.addOrDouble(chQuote);
+		else {
+			m_line.addStr(str, str2 - str);
+			m_uhLineIndents = 0;
+			break;
 		}
 	}
+	//}
+	//if (m_tokenB.more == TOKEN_NULL) {
+	//	const Char chQuote = m_tokenA[0];
+	//	register const Char *str = str0;
+	//	for (; str < end && *str != chQuote; ) {
+	//		if (*str++ == _T('\\'))
+	//			++str;
+	//	}
+	//	if (str >= end) { // an error end of js document
+	//		if (str > end) // end with single _T('\\')
+	//			m_line.addOrDouble(_T('\\'));
+	//		m_line.addOrDouble(chQuote);
+	//	}
+	//}
+
 	// 更改/warn: 如果'.'算进normal_char, 则"."就算不是TOKEN_OPER类型, 此处需要判断'.', 
-	m_line.more = (m_tokenB.more >= TOKEN_COMMON && (m_tokenB[0] != _T('.') ||
-		(m_tokenB.length() >= 2 && m_tokenB[1] >= _T('0') && m_tokenB[1] <= _T('9'))
-		) ) ? INSERT_SPACE : INSERT_UNKNOWN;
+	m_line.more = (m_tokenB.more != TOKEN_OPER) ? INSERT_SPACE : INSERT_UNKNOWN;
 }
 
-#define CheckMoreIndent1() (m_line.more < INSERT_NEWLINE)
-#define CheckMoreIndent2() StackTopGE(JS_BLOCK)
+//void RealJSFormatter::processRegular() const {
+//	putTokenA(); // 正则表达式直接输出，前后没有任何样式
+//	if (m_tokenB.more == TOKEN_NULL) {
+//		const Char *const end = m_tokenA.c_end();
+//		register const Char *str = m_tokenA;
+//		for (; str < end && *str != _T('/'); ) {
+//			if (*str++ == _T('\\'))
+//				++str;
+//		}
+//		if (str >= end) { // an error end of js document
+//			if (str > end) // end with single _T('\\')
+//				m_line.addOrDouble(_T('\\'));
+//			m_line.addOrDouble(_T('/'));
+//		}
+//	}
+//	m_line.more = (m_tokenB.more != TOKEN_OPER) ? INSERT_SPACE : INSERT_UNKNOWN;
+//}
 
-void RealJSFormatter::ProcessLineComment() const {
-	bool bOldMoreIndent = m_bMoreIndent;
-	// TODO: check whether to use "m_bMoreIndent == false && " in the Release mode
-	if (CheckMoreIndent1() && CheckMoreIndent2())
-		m_bMoreIndent = true;
-	if (m_line.more < INSERT_NULL)
+void RealJSFormatter::processLineComment() const {
+	if (m_line.more < INSERT_NULL) {
+		if (m_line.more < INSERT_NEWLINE && stackTop() > JS_WRAP_LE) {
+			const Char ch = m_line[m_line.size() - 1];
+			if (ch != _T('(') && ch != _T(',') && ch != _T(';')) {
+				stackPush(JS_WRAP);
+				++m_nIndents;
+			} 
+		}
 		m_line.more = INSERT_SPACE;
-	PutTokenA();
-	PutBufferLine();
+	}
+	putTokenA();
+	putBufferLine();
 	m_line.more = INSERT_NULL;
-	if (bOldMoreIndent != m_bMoreIndent)
-		++m_nIndents;
 }
 
-void RealJSFormatter::ProcessAndPutBlankLine() const {
-	bool bOldMoreIndent = m_bMoreIndent;
-	if (CheckMoreIndent1() && CheckMoreIndent2())
-		m_bMoreIndent = true;
+void RealJSFormatter::processNewLineComment() const {
 	if (m_line.more < INSERT_NULL)
-		PutBufferLine();
-	PutLine(NULL, 0, 0); // 输出空行
+		m_line.more = INSERT_NEWLINE;
+	putTokenA();
+	putBufferLine();
 	m_line.more = INSERT_NULL;
-	if (bOldMoreIndent != m_bMoreIndent)
-		++m_nIndents;
 }
 
-void RealJSFormatter::ProcessAndPutBlockComment() const {
+void RealJSFormatter::processAndPutBlankLine() const {
+	if (m_line.more < INSERT_NULL)
+		putBufferLine();
+	putLine(NULL, 0, 0); // 输出空行
+	m_line.more = INSERT_NULL;
+}
+
+void RealJSFormatter::processAndPutBlockComment() const {
 	const Char *const end = m_tokenA.c_end();
-	if (m_line.more < INSERT_NEWLINE) {
-		register const Char *str = m_tokenA.c_str();
+	if (m_line.more <= INSERT_NEWLINE) {
+		register const Char *str = m_tokenA;
 		while(end > ++str && *str != _T('\r') && *str != _T('\n')) {}
 		if (str == end) {
 			m_line.more = INSERT_SPACE; // 不用判断 m_line.nempty()
-			PutTokenA();
-			if (str[-2] != _T('*') || str[-1] != _T('/')) {
-				if (str[-1] != '*')
-					m_line.addOrDouble(_T('*'));
-				m_line.addOrDouble(_T('/'));
-			}
+			putTokenA();
+			//if (str[-2] != _T('*') || str[-1] != _T('/')) {
+			//	if (str[-1] != '*')
+			//		m_line.addOrDouble(_T('*'));
+			//	m_line.addOrDouble(_T('/'));
+			//}
 			return;
 		}
 		m_line.more = INSERT_NEWLINE;
-		if (CheckMoreIndent2() && m_bMoreIndent == false) {
-			m_bMoreIndent = true;
-			++m_nIndents;
-		}
 	}
-	m_out->expand(m_out->size() + m_tokenA.size() + m_line.size() + 64);
-	PutTokenRaw(NULL, 0);
+	m_out->expand(m_out->size() + m_tokenA.size() + m_line.size() + 80);
+	putTokenRaw(NULL, 0);
 	
-	for (register const Char *str = m_tokenA.c_str(); ; ) {
+	for (register const Char *str = m_tokenA; ; ) {
 		while (str < end && *str == _T('\t') || *str == _T(' '))
 			++str;
 		register const Char *str2 = str;
 		while(str2 < end && *str2 != '\r' && *str2 != '\n')
 			++str2;
 		if (str2 < end) {
-			PutLine(str, str2 - str, *str == _T('*'));
+			putLine(str, str2 - str, *str == _T('*'));
 			str = str2;
 			if (*str == _T('\r'))
 				++str;
@@ -570,9 +658,9 @@ void RealJSFormatter::ProcessAndPutBlockComment() const {
 			continue;
 		}
 		if (str < str2)
-			PutLine(str, str2 - str, *str == _T('*'));
-		if (str2[-2] != _T('*') || str2[-1] != _T('/'))
-			PutLine(_T("*/"), 2, true);
+			putLine(str, str2 - str, *str == _T('*'));
+		//if (str2[-2] != _T('*') || str2[-1] != _T('/'))
+		//	putLine(_T("*/"), 2, true);
 		break;
 	}
 	m_line.more = INSERT_NULL;

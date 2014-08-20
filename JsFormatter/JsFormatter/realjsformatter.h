@@ -19,73 +19,85 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #ifndef _REAL_JSFORMATTER_H_
 #define _REAL_JSFORMATTER_H_
-// #include <map>
 
 #include "jsparser.h"
 #include "CharString.h"
 #include <vector>
+// #include <stack>
 
 class RealJSFormatter: public JSParser
 {
 public:
-	static const size_t sc_lineBufferReservedSize = 4000;
-	typedef CharString<Char> CharString; // output format
+	static const UInt sc_lineBufferReservedSize = 4000;
+	typedef CharString<Char> OutputString; // output format
 
 	// 更改/warn: 严禁修改JS_xxx的编号顺序, 除非到cpp里进行完全除错
 	enum JS_TOKEN_TYPE {
-		JS_IF		=  0, // 'i'
-		// - 发现JS_FOR和JS_CATCH都没有具体出现过
-		JS_FOR		=  1, JS_CATCH	=  1, // 'f', 'h'
-		JS_WHILE	=  2, // 'w'
+		JS_FUNCTION	, // 'n'
+		JS_TRY		, // 'try'; 'catch'; 'finally'
+		JS_SWITCH	, // 's'
 		// -
-		JS_SWITCH	=  3, // 's'
+		JS_WHILE	, // 'w'
+		JS_WHILE_GE	= JS_WHILE,
+		JS_FOR		, // 'f'
+		JS_WITH		= JS_FOR, // 'h'
+		JS_IF		, // 'i'
+		JS_IF_LE	= JS_IF,
 		// -
-		JS_ELSE		=  4, // 'e'
+		JS_ELSE		, // 'e'
 		// -
-		JS_TRY		=  5, // 't'; "finally"
+		JS_DO		, // 'd'
+		JS_DO_Lt	= JS_DO,
 		// -
-		JS_DO		=  6, // 'd'
+		JS_WRAP		, // wrap the line in a statment
+		JS_WRAP_Lt	= JS_WRAP,
+		JS_WRAP_LE	= JS_WRAP,
 		// -
-		JS_FUNCTION	=  7, // 'n';
+		JS_BRACKET	, // means '('
+		JS_BRACKET_LE=JS_BRACKET,
 		// -
-		JS_CASE		=  8, // 'c'
-		JS_SQUARE	=  9, // means '['
-		JS_BRACKET	= 10, // means '('
+		JS_SQUARE	, // means '['
 		// -
-		JS_BLOCK	= 11, // means '{'
+		JS_CASE		, // 'c'
+		JS_CASE_Lt	= JS_CASE,
 		// -
-		JS_NULL		= 12
+		JS_BLOCK	, // means '{'
+		JS_BLOCK_GE	= JS_BLOCK,
+		JS_NULL		,
+		JS_OthersGt	= JS_NULL,
+		// -
+		// more items
+		JS_BLOCK_VIRTUAL, // 已经读入"()"
+		JS_BRACKET_GOT	, // 已经读入"()"
+		JS_BRACKET_WANT	, // 尚未读入"()"
 	};
-	
-	typedef std::vector<Char> ByteStack;
-	
-	static JS_TOKEN_TYPE findSomeKeyword(const Token &str);
+	typedef Byte JsToken;
+	typedef std::vector<JsToken> ByteStack;
 
 	struct FormatterOption {
-		unsigned short uhChPerInd;
 		Char chIndent;
+		unsigned short uhChPerInd;
 		bool bNotPutCR; // false: 换行使用"\r\n"; true: 换行使用'\n'
 		bool bBracketAtNewLine; // false: 括号前不换行
 		bool bEmpytLineIndent; // false: 空行不输出缩进字符
 	};
-	
-private:
-	CharString *m_out;
 
 public:
-	RealJSFormatter(const Byte* input, size_t len_in, CharString &output, const FormatterOption &option)
+	RealJSFormatter(const Byte* input, UInt len_in, OutputString &output, const FormatterOption &option)
 		: m_struOption(option), m_out(&output)
 		, JSParser(input, len_in)
 	{
-		Init();
+		init();
 	}
 
-	void Init() const;
-	inline CharString &getOutputObject() { return *m_out; }
-	inline void setInitIndents(const int initIndents) { m_nIndents = initIndents; }
-	inline void reserveLineBuffer(const size_t len) { m_line.expand(len); }
+	void init() const;
+	inline OutputString &getOutput() const { return *m_out; }
+	inline void setInitIndents(const int initIndents) const { m_nIndents = initIndents; }
+	inline void reserveLineBuffer(const UInt len) const { m_line.expand(len); }
 
-	void Go() const;
+	void go() const;
+	
+	JS_TOKEN_TYPE findSomeKeyword() const;
 
 protected:
 	// "Force"只表示需求这种, 不该起决定作用
@@ -104,59 +116,60 @@ protected:
 	};
 
 	// 带格式输出指定字符串到行缓冲区
-	void PutTokenRaw(const Char *const start, int len) const;
+	void putTokenRaw(const Char *const start, int len) const;
 	
 	// 带格式输出m_tokenA到行缓冲区
-	inline void PutTokenA() const { PutTokenRaw(m_tokenA.c_str(), m_tokenA.size()); }
+	inline void putTokenA() const { putTokenRaw(m_tokenA, m_tokenA.size()); }
 	
 	// 带缩进输出字符串及换行标志到m_out
-	void PutLine(const Char *start, int len, bool insertBlank) const;
+	void putLine(const Char *start, int len, bool insertBlank) const;
 	
 	// 带缩进输出行缓冲区到m_out
-	inline void PutBufferLine() const {
-		PutLine(m_line.c_str(), m_line.size(), false);
+	inline void putBufferLine() const {
+		putLine(m_line, m_line.size(), false);
 		m_line.setLength(0);
 	}
 
-	inline Char StackTop() const { return m_blockStack.back(); }
-	inline Char StackTop2() const { return m_blockStack.end()[-2]; }
-	inline void StackPush(const JS_TOKEN_TYPE ch) const { return m_blockStack.push_back(ch); }
-	inline void StackPop() const { return m_blockStack.pop_back(); }
-	inline bool StackTopEq(const JS_TOKEN_TYPE eq) const { return eq == m_blockStack.back(); }
-	inline bool StackTopGE(const JS_TOKEN_TYPE eq) const { return eq <= m_blockStack.back(); }
-
-	void StartParse() const {
+	inline void stackPop() const { return m_blockStack.pop_back(); }
+	inline Byte stackTop() const { return m_blockStack.back(); }
+	inline Byte stackTop2()const { return m_blockStack.end()[-2]; }
+	inline void stackTop  (const JS_TOKEN_TYPE ch) const { m_blockStack.back() = ch; }
+	inline bool stackTopEq(const JS_TOKEN_TYPE eq) const { return eq == m_blockStack.back(); }
+	inline void stackPush (const JS_TOKEN_TYPE ch) const { m_blockStack.push_back(ch); }
+	
+	void startParse() const {
 		m_line.setLength(0);
 		m_line.c_str()[0] = 0;
-		this->JSParser::StartParse();
+		this->JSParser::startParse();
 	}
-	void EndParse() const {
-		this->JSParser::EndParse();
-		PutBufferLine();
+	void endParse() const {
+		this->JSParser::endParse();
+		if (m_line.more < INSERT_NULL) {
+			m_line.more = INSERT_NULL;
+			putBufferLine();
+		}
 		m_out->c_str()[m_out->size()] = 0;
 	}
 	
 protected:
-	mutable CharString m_line;
-	mutable int m_nIndents; // 缩进数量 (计算blockStack效果不好)
+	mutable int m_nIndents; // 缩进数量
 	mutable unsigned short m_uhLineIndents;
-	mutable bool m_bMoreIndent; // 是否在语句中
-	mutable bool m_bNeedBracket; // if 之类的后面的括号 (使用栈是为了解决在判断条件中出现循环的问题)
-
-	void PopMultiBlock(const Char previousStackTop) const;
-	void ProcessOper() const;
-	void ProcessRegular() const;
-	void ProcessID() const;
-	void ProcessCommonToken() const;
-	void ProcessOrPutString() const;
-	void ProcessLineComment() const;
-	void ProcessAndPutBlockComment() const;
-	void ProcessAndPutBlankLine() const;
-
 private:
 	mutable ByteStack m_blockStack;
-	//mutable BoolStack m_brcNeedStack; // if 之类的后面的括号 (使用栈是为了解决在判断条件中出现循环的问题)
+protected:
+	mutable OutputString m_line;
 
+	void popMultiBlock(const Char previousStackTop) const;
+
+	typedef void RealJSFormatter::ProcessFunc() const;
+	typedef void (RealJSFormatter::*ProcessFuncPtr)() const;
+	ProcessFunc processOper, processCommonToken,
+				processID, processOrPutMultiLineString,
+				processLineComment, processNewLineComment,
+				processAndPutBlankLine, processAndPutBlockComment;
+	
+private:
+	OutputString *m_out;
 public:
 	FormatterOption m_struOption; // 配置项
 

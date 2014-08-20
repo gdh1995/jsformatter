@@ -10,7 +10,7 @@
 #endif
 
 RealJSFormatter::FormatterOption g_options = {
-	1, '\t',
+	_T('\t'), 1,
 	false, // bNotPutCR
 	false, // bBracketAtNewLine
 	false  // bEmpytLineIndent
@@ -21,28 +21,45 @@ extern const char *err_str;
 extern const void *err_msg;
 
 int argn;
-char **args;
-int argIndex = 1;
+const char **args;
+int argIndex;
 
 CharString<char> file;
 CharString<RealJSFormatter::Char> strJSFormat;
 
 typedef void (voidfunc)();
-voidfunc read, write, jsFormat;
+voidfunc read, write, jsFormat, print_help;
 voidfunc *p[] = {read, jsFormat, write};
 
-#define print_help() printf("%s%s%s", "\t\
-Javascript formatter ", JS_FORMATTER_VERSION_VALUE, " - by <gdh1995@qq.com>\n\
-Thanks for & core code from: JSToolNpp (www.sunjw.us/jstoolnpp).\n")
 
-
-int main(int n, char *s[]) {
-	argn = n;
-	args = s;
-	if (argn < 3) {
+int main(int n, const char *s[]) {
+	if (n < 2) {
 		print_help();
 		return 0;
 	}
+	if (n == 2) {
+		file.copyFrom(s[1], ConstString<char>::lengthOf(s[1]));
+		UInt len = file.size();
+		while (len) {
+			register const char ch = file[--len];
+			if (ch == '.' || ch == '/' || ch == '\\')
+				break;
+		}
+		if (len == 0)
+			len = file.size();
+		file.setLength(len);
+		file.addStr(".fmt.js", 8);
+		s[0] = s[1];
+		s[1] = file.c_str();
+		file.setData(NULL);
+		argn = 2;
+		args = s;
+	}
+	else {
+		argn = n - 1;
+		args = s + 1;
+	}
+	argIndex = 0;
 
 	int i = 0;
 	do {
@@ -61,6 +78,12 @@ int main(int n, char *s[]) {
 		printf("%s => %s\n", args[argIndex], args[argIndex + 1]);
 	}
 	return re;
+}
+
+void print_help() {
+	printf("%s%s%s", "\t\
+Javascript formatter ", JS_FORMATTER_VERSION_VALUE, " - by <gdh1995@qq.com>\n\
+Thanks for & core code from: JSToolNpp (www.sunjw.us/jstoolnpp).\n");
 }
 
 void read() {
@@ -98,15 +121,15 @@ RealJSFormatter jsformat(NULL, 0, strJSFormat, g_options);
 void jsFormat()
 {
 	re = 0;
-	size_t jsLen = file.size();
+	UInt jsLen = file.size();
 	if (jsLen == 0)
 		return;
 
 	// clear old result (if any)
-	strJSFormat.reset(((int) (jsLen * 1.1)) + 1024);
+	strJSFormat.reset(jsLen + jsLen / 2 + 1024);
 	strJSFormat.c_str()[0] = 0;
-	jsformat.setInput(file.c_str(), file.size());
-	jsformat.Go();
+	jsformat.setInput(file, file.size());
+	jsformat.go();
 	re = 0;
 	//catch(std::exception ex) {
 	//	re = 1;

@@ -32,7 +32,7 @@ const JSParser::Char JSParser::s_operCharBeforeReg[] = _T("(,=:[!&|?+{};");
 //		}
 //		_snprintf(m_debugOutput, sizeof(m_debugOutput) / sizeof(m_debugOutput[0])
 //			, "%s%d\n" // "%s%d%s%.3fs\n%.3f%s"
-//			, "Processed tokens: ", m_tokenCount
+//			, "processed tokens: ", m_tokenCount
 //			// , "\nTime used: ", m_duration
 //			// , m_tokenCount / m_duration, " tokens/second\n"
 //			);
@@ -101,74 +101,81 @@ const JSParser::Byte JSParser::s_singleOperMap[128] = {
 	/* 7+ */ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0
 };
 
-void JSParser::GetTokenRaw(int bFlag) const {
+void JSParser::getTokenRaw(int bFlag) const {
 	const Char * start1;
 
-	if (bFlag & BoolFlag::PosNeg)
-		start1 = CurPos() - 1;
+	if (bFlag == BoolFlag::PosNeg)
+		start1 = m_tokenB + 1;
 	else {
-		start1 = CurPos();
-		register Char chB = LastChar();
-		for (; chB == _T(' ') || chB == _T('\t'); chB = GetChar()) {}
+		register Char chB = lastChar();
+		for (; chB == _T(' ') || chB == _T('\t'); chB = getChar()) {}
 		if (chB == _T('\r') || chB == _T('\n')) {
 			if (chB == _T('\r'))
-				chB = GetChar();
+				chB = getChar();
 			if (chB == _T('\n'))
-				chB = GetChar();
-			for (; chB == _T(' ') || chB == _T('\t'); chB = GetChar()) {}
+				chB = getChar();
+			start1 = curPos();
+			for (; chB == _T(' ') || chB == _T('\t'); chB = getChar()) {}
 			if (chB == _T('\r') || chB == _T('\n')) {
 				// 更改/mod: 补回连续换行的处理逻辑
-				for (; chB = GetChar(), IsBlankChar(chB); ) {}
-				m_tokenB.setData(_T("\r\n\r\n"));
-				m_tokenB.setLength(4);
+				for (; chB = getChar(), IsBlankChar(chB); ) {}
+				lastChar(chB);
+				m_tokenB.setData(_T("\n\n"));
+				m_tokenB.setLength(2);
 				m_tokenB.more = TOKEN_BLANK_LINE;
-				return;
+				goto L_finishGetToken;
 			}
+			bFlag = BoolFlag::InNewLine;
 		}
-		start1 = CurPos();
+		checkEnd();
+		start1 = curPos();
+		lastChar(chB); // 这3行的顺序没关系
 	}
-	const Char charA = LastChar();
-	Char charB = GetChar();
+	const Char charA = lastChar();
+	Char charB = getChar();
 	if (IsNormalChar(charA)) {
 		// 更改/mod: 将_T('.')视为单词的一部分
 		// 如果要改回, 需要大范围修改若干地方, 不建议
 		if (charA >= _T('0') && charA <= _T('9')) {
 			register Char chB = charB;
-			for (; (chB >= _T('0') && chB <= _T('9')) || chB == _T('.'); chB = GetChar()) {}
+			for (; (chB >= _T('0') && chB <= _T('9')) || chB == _T('.'); chB = getChar()) {}
 			charB = chB;
 		}
 		else if (charA == _T('.') && charB >= _T('0') && charB <= _T('9')) {
 			register Char chB;
-			for (; chB = GetChar(), chB >= _T('0') && chB <= _T('9'); ) {}
+			for (; chB = getChar(), chB >= _T('0') && chB <= _T('9'); ) {}
 			charB = chB;
 		}
 		else {
 			register Char chB = charB;
-			for (; chB >= _T('a') && chB <= ('z'); chB = GetChar()) {}
-			if (IsNormalChar(chB)) {//TODO:
+			for (; chB >= _T('a') && chB <= ('z'); chB = getChar()) {}
+			if (IsNormalChar(chB)) {
 				m_tokenB.more = TOKEN_COMMON;
-				for (; chB = GetChar(), IsNormalChar(chB); ) {}
+				for (; chB = getChar(), IsNormalChar(chB); ) {}
 			}
-			else if ((bFlag & BoolFlag::PosNeg) || charA < _T('a') || charA > ('z'))
+			else if (bFlag == BoolFlag::PosNeg || charA < _T('a') || charA > ('z'))
 				m_tokenB.more = TOKEN_COMMON;
 			else
 				m_tokenB.more = TOKEN_ID;
+			lastChar(chB);
 			goto L_notNumber;
 		}
 		if ((charB | _T('\x20')) == _T('e')) { // 解决类似 82.e-2, 44.2e+6, 555E6, .32e5 的问题
-			register Char chB = GetChar();
+			register Char chB = getChar();
 			if (chB == _T('-') || chB == _T('+'))
-				chB = GetChar();
-			for (; chB >= _T('0') && chB <= _T('9'); chB = GetChar()) {}
+				chB = getChar();
+			for (; chB >= _T('0') && chB <= _T('9'); chB = getChar()) {}
+			lastChar(chB);
 #ifdef _DEBUG
 			if (IsNormalChar(chB))
 				throw chB;
 #endif
 		}
-		else { // if ((m_charB | _T('\x20')) == _T('x')) {
+		else { // else if ((m_charB | _T('\x20')) == _T('x')) {
 			// 不需要区分 0x7F 和 123434; , 因为 x 和 oper 直接用IsNormalChar()即可区分
 			register Char chB = charB;
-			for (; IsNormalChar(chB); chB = GetChar()) {}
+			for (; IsNormalChar(chB); chB = getChar()) {}
+			lastChar(chB);
 		}
 		m_tokenB.more = TOKEN_COMMON;
 
@@ -177,10 +184,10 @@ void JSParser::GetTokenRaw(int bFlag) const {
 	else if (IsQuote(charA)) { // 引号
 		const Char chQuote = charA;
 		register Char chB = charB;
-		for (; chB && chB != chQuote; chB = GetChar()) {
+		for (; chB && chB != chQuote; chB = getChar()) {
 			if (chB != _T('\\')) // 转义字符
 				continue;
-			chB = GetChar();
+			chB = getChar();
 			if (chB == _T('\r') || chB == _T('\n'))
 				goto L_whenMultiLineString;
 		}
@@ -191,75 +198,85 @@ void JSParser::GetTokenRaw(int bFlag) const {
 		{
 			for (; chB && chB != chQuote; ) { // 引号状态，全部输出，直到引号结束
 				if (chB == _T('\\')) { // 转义字符
-					chB = GetChar();
+					chB = getChar();
 					if (chB == '\r')
-						chB = GetChar();
+						chB = getChar();
 					if (chB != '\n')
 						continue;
 				}
-				chB = GetChar();
+				chB = getChar();
 			}
 			m_tokenB.more = TOKEN_STRING_MULTI_LINE;
 		}
 
 		L_finishReadString:
-		GetChar();
+		chB = getChar();
+		if (chB == '.')
+			for (; chB = getChar(), IsNormalChar(chB); ) {}
+		lastChar(chB);
 	}
 	else if (charA == _T('/') && (charB == _T('/') || charB == _T('*'))) { // 注释
 		if (charB == _T('/')) { // 直到换行
-			m_tokenB.more = TOKEN_COMMENT_LINE;
-			for (register Char chB; (chB = GetChar()) && chB != _T('\r') && chB != _T('\n'); ) {}
+			m_tokenB.more = (bFlag == BoolFlag::InNewLine) ? TOKEN_COMMENT_NEWLINE : TOKEN_COMMENT_LINE;
+			register Char chB;
+			for (; (chB = getChar()) && chB != _T('\r') && chB != _T('\n'); ) {}
+			lastChar(chB);
 		}
 		else { // 直到 */
 			m_tokenB.more = TOKEN_COMMENT_BLOCK;
-			for (register Char chB = GetChar(); chB; ) {
-				register Char chA = chB;
-				chB = GetChar();
-				if (chA == '*' && chB == '/') {
-					break;
+			for (register Char chB; chB = getChar(); ) {
+				L_continueJudgeStar:
+				if (chB == '*') {
+					chB = getChar();
+					if (chB == '/') break;
+					else goto L_continueJudgeStar;
 				}
 			}
-			GetChar();
+			lastChar(getChar());
 		}
 	}
 	else if (IsSingleOper(charA) || IsSingleOperNextChar(charB)) { // 单字符符号
 		m_tokenB.more = TOKEN_OPER;
+		lastChar(charB);
 	}
 	else if (charB == _T('=') || charB == charA) { // 多字符符号
 		m_tokenB.more = TOKEN_OPER;
-		register Char charC = GetChar();
+		register Char charC = getChar();
 		if (charC == _T('=')) {
 			if ( charB == _T('<') || charB == _T('>') || charA == _T('=') ||
 				(charA == _T('!') && charB == _T('=')) )
 			{ // 三字符 ===, !==, <<=, >>=
-				GetChar();
+				charC = getChar();
 			}
 		}
 		else if (charC == _T('>') && charB == _T('>')) {
-			if (GetChar() == _T('=')) // >>>=
-				GetChar();
+			charC = getChar();
+			if (charC == _T('=')) // >>>=
+				charC = getChar();
 		}
+		lastChar(charC);
 	}
 	// 更改/mod: ECMAScript的操作符列表不包含"->", 所以屏蔽之
 	//else if ((charA == _T('-') && m_charB == _T('>'))) {
-	//m_charB = GetChar();
+	//m_charB = getChar();
 	//}
 	else { // 还是单字符的
 		m_tokenB.more = TOKEN_OPER;
+		lastChar(charB);
 	}
 	
-	if (CheckEnd(start1)) {
-		m_tokenB.setData(_T(""));
-		m_tokenB.setLength(0);
-		m_tokenB.more = TOKEN_NULL;
-	}
-	else {
-		m_tokenB.setData(const_cast<Char *>(start1 - 1));
-		m_tokenB.setLength(CurPos() - start1);
-	}
+	checkEnd();
+	m_tokenB.setData(const_cast<Char *>(start1 - 1));
+	m_tokenB.setLength(curPos() - start1);
+L_finishGetToken: ;
 }
 
-void JSParser::PrepareTokenB() const
+#define canHaveSpecialToken() (m_tokenA.more == TOKEN_ID\
+	&& (m_tokenA.equals(_T("return"), 6) || \
+	m_tokenA.equals(_T("case"), 4)) \
+	)
+
+void JSParser::prepareTokenB() const
 {
 	if (m_tokenB.more != TOKEN_OPER)
 		return;
@@ -275,31 +292,37 @@ void JSParser::PrepareTokenB() const
 		* m_tokenA 不是 STRING (除了 m_tokenA == return)
 		* 而且 m_tokenA 的最后一个字符是下面这些
 		*/
-		if (m_tokenA.more >= TOKEN_COMMENT_LINE || m_tokenA.more == TOKEN_NULL) {
+		if (m_tokenA.more >= TOKEN_COMMENT_LINE) {
 		}
 		else if (m_tokenA.more == TOKEN_OPER) {
 			if (! ConstString::findIn(m_tokenA[m_tokenA.size() - 1], s_operCharBeforeReg))
 				return;
 		}
-		else if (! CanHaveSpecialToken())
+		else if (! canHaveSpecialToken())
 			return;
 		{
-			register Char chB = LastChar();
-			//	//	// TODO: what are '*' and '|'
-			//	//	if (chB != _T('*') && chB != _T('|')) { // 正则可能结束
-			for (; chB; chB = GetChar()) { // 正则状态全部输出，直到 /
-				if (chB == _T('\\')) // 转义字符
-					GetChar();
-				else if (chB == _T('/')) {
-					chB = GetChar();
+			register Char chB = lastChar();
+			for (; ; chB = getChar()) { // 正则状态全部输出，直到 /
+				if (!chB || chB == _T('/'))
 					break;
-				}
+				else if (chB == _T('\\')) // 转义字符
+					getChar();
+				else if (chB == _T('\r') || chB == _T('\n'))
+					break;
 			}
-			// 备注/info: 也可以只识别小写"g", "i", "m", 但用IsNormalChar可以产生更长的Token
-			while (chB >= _T('a') && chB <= _T('z')) // 正则的 flags 部分
-				chB = GetChar();
-			m_tokenB.setLength(CurPos() - m_tokenB.c_str() - 1);
-			m_tokenB.more = TOKEN_REGULAR;
+			if (chB != _T('/')) { // 更改/warn: 增加匹配失败后回退的功能
+				readBack(m_tokenB.c_end());
+				lastChar(getChar());
+				break;
+			}
+			// 备注/info: 也可以只识别小写"g", "i", "m", 不过正确语法否决了"/a/in{}"的写法
+			for (; chB = getChar(), chB >= _T('a') && chB <= _T('z'); ) {} // 正则的 flags 部分
+			if (chB == '.')
+				for (; chB = getChar(), IsNormalChar(chB); ) {} // 正则之后的部分
+			lastChar(chB);
+
+			m_tokenB.setLength(curPos() - m_tokenB - 1);
+			m_tokenB.more = TOKEN_COMMON;
 		}
 		break;
 	case _T('-'): case _T('+'):
@@ -311,7 +334,7 @@ void JSParser::PrepareTokenB() const
 		* 而且 m_charB 是一个 NormalChar
 		* 那么 m_tokenB 实际上是一个正负数
 		*/
-		if (m_tokenB.size() != 1 || !IsNormalChar(LastChar()))
+		if (m_tokenB.size() != 1 || !IsNormalChar(lastChar()))
 			return;
 		else if (m_tokenA.more == TOKEN_OPER) {
 			if (m_tokenA == _T(']') || m_tokenA == _T(')') ||
@@ -320,9 +343,9 @@ void JSParser::PrepareTokenB() const
 				return;
 			}
 		}
-		else if (! CanHaveSpecialToken())
+		else if (! canHaveSpecialToken())
 			return;
-		GetTokenRaw(BoolFlag::PosNeg);
+		getTokenRaw(BoolFlag::PosNeg);
 		break;
 	default:
 		break;

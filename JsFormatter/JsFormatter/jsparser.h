@@ -38,35 +38,39 @@ public:
 	typedef char Byte;
 	typedef unsigned char UByte;
 
+#undef _T
+#undef JS_PARSER_CHAR_SIZE
 #if defined UNICODE || defined _UNICODE
 	typedef wchar_t Char;
 	typedef unsigned short UChar;
 	#define _T(x) (L##x)
+	#define JS_PARSER_CHAR_SIZE 2
 #else
 	typedef char Char;
 	typedef unsigned char UChar;
 	#define _T(x) (x)
+	#define JS_PARSER_CHAR_SIZE 1
 #endif
 
 	typedef ConstString<Char> ConstString; // Token item
-	// typedef std::queue<Token> TokenQueue;
 	
 	// 严禁修改TOKEN_xxx的编号顺序, 除非到cpp里进行完全除错
 	enum TOKEN_TYPE {
-		TOKEN_NULL = 0,
-		TOKEN_OPER = 1,
+		TOKEN_OPER = 0,
 		
-		TOKEN_COMMON = 2,
-		TOKEN_ID = 3,
-		TOKEN_REGULAR = 4,
-		TOKEN_STRING = 5,
-		TOKEN_STRING_MULTI_LINE = 6,
+		TOKEN_COMMON = 1,
+		TOKEN_STRING = TOKEN_COMMON,
+		TOKEN_REGULAR = TOKEN_COMMON,
+		TOKEN_ID = 2,
+		TOKEN_STRING_MULTI_LINE = 3,
 
-		// 为了配合PrepareTokenB()
+		// 为了配合prepareTokenB()
 		// Comment类的token需要大于任意其它token
-		TOKEN_COMMENT_LINE = 7, // 单行注释
-		TOKEN_BLANK_LINE = 8, // 空行标记
-		TOKEN_COMMENT_BLOCK = 9, // 多行注释
+		TOKEN_COMMENT_LINE = 4, // 单行注释
+		TOKEN_COMMENT_NEWLINE = 5, // 单行注释 (位于新行)
+		TOKEN_BLANK_LINE = 6, // 空行标记
+		TOKEN_COMMENT_BLOCK = 7, // 多行注释
+		TOKEN_NULL = TOKEN_COMMENT_LINE
 	};
 	// .more: Token 类型
 	typedef ConstString Token;
@@ -100,29 +104,24 @@ public:
 	
 	// 判断正则时，正则前面可以出现的字符
 	static const  Char s_operCharBeforeReg[];
-
-	inline bool CanHaveSpecialToken() const {
-		return (m_tokenA.more == TOKEN_ID && (m_tokenA.equals(_T("return"), 6) ||
-			m_tokenA.equals(_T("case"), 4)));
-	}
 	
 public:
 	explicit JSParser() {
 		// m_debug = false;
-		Init();
+		init();
 	}
 
-	explicit JSParser(const Byte *in, size_t len_in)
+	explicit JSParser(const Byte *in, UInt len_in)
 		: m_in(in), m_in_next(in)
 		, m_in_end(in + len_in)
 	{
-		Init();
+		init();
 	}
 	
-	inline void Init() const {
+	inline void init() const {
 	}
 
-	inline void setInput(const Byte *in, size_t len_in = 0) {
+	inline void setInput(const Byte *in, UInt len_in = 0) {
 		m_in = in;
 		m_in_next = in;
 		m_in_end = in + len_in;
@@ -135,58 +134,66 @@ public:
 public:
 	// char m_debugOutput[1024];
 	
-	mutable Token m_tokenA;
-	mutable Token m_tokenB;
+public:		mutable Token m_tokenA;
+protected:	mutable Token m_tokenB;
+public:
+	inline const Token& getTokenB() const { return m_tokenB; }
 
-	inline bool GetToken() const {
-		PrepareTokenB();
+	inline bool getToken() const {
+		prepareTokenB();
 		// Attention: In the debug mode, raw() is so ugly and slow
 		//     that we have to give up it.
 		//	m_tokenA.raw() = m_tokenB.raw();
 		(Token::BaseString&)m_tokenA = (const Token::BaseString&)m_tokenB;
-		GetTokenRaw();
+		getTokenRaw();
 		return m_tokenA.nempty();
 	}
 
-	inline void StartParse() const {
+	inline void startParse() const {
 		// m_startClock = clock();
 		// m_bRegular = false;
 		m_tokenA.more = TOKEN_NULL;
 		m_tokenB.more = TOKEN_NULL;
-		GetChar();
-		GetTokenRaw();
+		lastChar(getChar());
+		getTokenRaw();
 	}
 
-	inline void EndParse() const {
+	inline void endParse() const {
 		// m_endClock = clock();
 		// m_duration = (double)(m_endClock - m_startClock) / CLOCKS_PER_SEC;
 		// PrintDebug();
 	}
 
 protected:
-	enum BoolFlag {
-		PosNeg = 0x1, // tokenB 实际是正负数
-	};
-
-	inline Char GetChar() const {
+	inline Char getChar() const {
 		return (m_in_next < m_in_end) ? (*m_in_next++) : 0;
 	}
-	inline const Char *CurPos() const { return m_in_next; }
-	inline bool CheckEnd(const Char *const pos) const {
-		if (pos == m_in_end) ++m_in_next;
-		return (pos > m_in_end);
+	
+	inline const Char *curPos() const { return m_in_next; }
+	
+	inline void readBack(const Char *const pos) const { m_in_next = pos; }
+#if		JS_PARSER_CHAR_SIZE == 1
+	inline Char lastChar() const { return m_tokenB.getFlag1(); }
+	inline void lastChar(const Char ch) const { m_tokenB.setFlag1(ch); }
+#elif	JS_PARSER_CHAR_SIZE == 2
+	inline Char lastChar() const { return m_tokenB.getFlag(); }
+	inline void lastChar(const Char ch) const { m_tokenB.setFlag(ch); }
+#endif
+	inline void checkEnd() const {
+		if (lastChar() == 0) m_in_next = m_in_end + 1;
 	}
-
-	// 一定要在StartParse()后才能调用
-	inline const Char LastChar() const {
-		return (m_in_next <= m_in_end) ? (m_in_next[-1]) : 0;
-	}
+	
+protected:
+	enum BoolFlag {
+		PosNeg = 0x1, // tokenB 实际是正负数
+		InNewLine = 0x2, // 在token之前是换行
+	};
 
 	// 获取下一个token并存储到m_tokenB
-	void GetTokenRaw(int bFlag = 0) const;
+	void getTokenRaw(int bFlag = 0) const;
 	
 	// 通过词法判断 m_tokenB 是否代表正则或者正负数等等并加以处理
-	void PrepareTokenB() const;
+	void prepareTokenB() const;
 
 private:
 	mutable const Char *m_in_next;

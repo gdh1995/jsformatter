@@ -9,89 +9,115 @@
 #endif
 #endif
 
+typedef unsigned int UInt;
+
 template <typename ttype>
 struct StringStruct {
-	/* public: */	size_t	mlength;
-	/* public: */	ttype*	mdata;
-	/* public: */	short	mflag;
-	/* public: */	short	more;
+	/* public: */
+		UInt	m_length;
+	/* public: */
+		ttype*	m_data;
+	/* public: */
+	union {
+	struct {
+		char	flag;
+		char	flag2;
+	};
+		short	m_flag;
+	};
+	/* public: */	
+	union {
+	struct {
+		char	more;
+		char	more2;
+	};
+		short	m_more;
+	};
 };
 
 template <typename ttype>
 class ConstString: protected StringStruct<ttype> {
 public:
-	using StringStruct::more;
-
-	inline void setData(ttype *start) { mdata = start; }
-	inline void setLength(size_t len) { mlength = len; }
-	inline void autoLength() { mlength = lengthOf(mdata); }
+	inline void setData(ttype *const start) { m_data = start; }
+	inline void setLength(const UInt len) { m_length = len; }
+	inline void autoLength() { m_length = lengthOf(m_data); }
 	
-	inline short getFlag() { return mflag; }
-	inline void setFlag(short flag) { mflag = flag; }
-	inline void setFlag0() { mflag = 0; }
-	inline void setFlag1() { mflag = 1; }
-
+	inline void setFlag (const short flag) { m_flag  = flag ; }
+	inline void setFlag1(const char byte1) {   flag  = byte1; }
+	inline void setFlag2(const char byte2) {   flag2 = byte2; }
+	inline short getFlag() const { return m_flag; }
+	inline char getFlag1() const { return  flag ; }
+	inline char getFlag2() const { return  flag2; }
+	
 protected:
 	// 不建议同以'\0'结尾的字符串进行直接比较
-			bool operator == (const ttype* ori) const;
-	inline  bool operator != (const ttype* ori) const { return !(this->operator==(ori)); }
+			bool operator == (const ttype* const ori) const;
+	inline  bool operator != (const ttype* const ori) const { return !(this->operator==(ori)); }
 
 public:
-	typedef ttype Char;
 	typedef StringStruct<ttype> BaseString;
+	using BaseString::more;
+	using BaseString::more2;
+	using BaseString::m_more;
 
-	inline StringStruct& raw() { return *this; }
-	inline const StringStruct& raw() const { return *this; }
-	inline ttype* c_str() { return mdata; }
-	inline const ttype*   str() const { return mdata; }
-	inline const ttype* c_str() const { return mdata; }
-	inline const ttype* c_end() const { return mdata + mlength; }
-
-	inline bool nempty() const { return 0 != mlength; }
-	inline bool empty() const { return 0 == mlength; }
+	typedef ttype Char;
 	
-	// length() === size()
-	inline size_t length() const { return mlength; }
+public:
+	inline const ttype* c_str() const { return m_data; }
+	inline const ttype* c_end() const { return m_data + m_length; }
+	inline const ttype*   str() const { return m_data; }
+	inline operator const ttype * () const { return m_data; }
+	inline const BaseString& raw() const { return *this; }
+	
+	inline bool nempty() const { return 0 != m_length; }
+	inline bool empty() const { return 0 == m_length; }
+	
 	// size() === length()
-	inline size_t size() const { return mlength; }
-	static size_t lengthOf(const ttype *str);
+	inline UInt size  () const { return m_length; }
+	// length() === size()
+	inline UInt length() const { return m_length; }
+	inline UInt len   () const { return m_length; }
+	static UInt lengthOf(const ttype * const str);
 	
-	inline ttype operator [] (size_t pos) const { return mdata[pos]; }
-	inline ttype& get(size_t pos) { return mdata[pos]; }
-	inline const ttype& get(size_t pos) const { return mdata[pos]; }
-	inline ttype& at(size_t pos) { return pos < mlength ? mdata[pos] : 0; }
-	inline const ttype& at(size_t pos) const { return pos < mlength ? mdata[pos] : 0; }
+	// inline ttype& get(const UInt pos) { return m_data[pos]; }
+	// inline ttype&  at(const UInt pos) { return pos < m_length ? m_data[pos] : 0; }
 	
-	inline bool  equals(const ttype ch1, const ttype ch2) const { return (mlength == 2) && mdata[0] == ch1 && mdata[1] == ch2; };
-	inline bool nequals(const ttype ch1, const ttype ch2) const { return (mlength != 2) || mdata[0] != ch1 || mdata[1] != ch2; };
-		   bool  equals(const ttype* str2, size_t len2) const;
-		   bool nequals(const ttype* str2, size_t len2) const;
-	inline bool operator == (const ConstString& ori) const { return this->equals(ori.mdata, ori.mlength); }
-	inline bool operator != (const ConstString& ori) const { return this->nequals(ori.mdata, ori.mlength); }
-	inline bool operator == (const ttype ch) const { return (mlength == 1) && ch == mdata[0]; }
-	inline bool operator != (const ttype ch) const { return (mlength != 1) || ch != mdata[0]; }
+	inline const ttype& get(const UInt pos) const { return m_data[pos]; }
+	inline const ttype&  at(const UInt pos) const { return pos < m_length ? m_data[pos] : 0; }
 	
-	inline bool findIn(const ttype* const str_to_find_in) const { return mlength == 1 && findIn(mdata[0], str_to_find_in); }
+
+	bool  equals0(const ttype* const str2) const;
+	bool nequals0(const ttype* const str2) const;
+	inline bool  equals(const ttype* const str2, const UInt len2) const { return m_length == len2 &&  equals0(str2); }
+	inline bool nequals(const ttype* const str2, const UInt len2) const { return m_length != len2 || nequals0(str2); }
+	inline bool  equals(const ttype ch1, const ttype ch2) const { return (m_length == 2) && m_data[0] == ch1 && m_data[1] == ch2; };
+	inline bool nequals(const ttype ch1, const ttype ch2) const { return (m_length != 2) || m_data[0] != ch1 || m_data[1] != ch2; };
+	inline bool operator == (const ConstString& ori) const { return this->equals(ori.m_data, ori.m_length); }
+	inline bool operator != (const ConstString& ori) const { return this->nequals(ori.m_data, ori.m_length); }
+	inline bool operator == (const ttype ch) const { return (m_length == 1) && ch == m_data[0]; }
+	inline bool operator != (const ttype ch) const { return (m_length != 1) || ch != m_data[0]; }
+	
+	inline bool findIn(const ttype* const str_to_find_in) const { return m_length == 1 && findIn(m_data[0], str_to_find_in); }
 	static bool findIn(const ttype ch, const ttype* const str_to_find_in);
 	// 返回值和pos均从1开始; 返回0表示未找到
-	size_t index(ttype tch, size_t pos) const;
+	UInt index(const ttype tch, const UInt pos) const;
 	
 	// return its start position
-	// * the result means an empty string if return == null or pend <= return
+	// * the result m_eans an empty string if return == null or pend <= return
 	const  ttype* trim(int* const plen) const;
 	// return its start position
-	// * the result means an empty string if return == null or pend <= return
+	// * the result m_eans an empty string if return == null or pend <= return
 	inline ttype* trim(int* const plen) { return (ttype*)((const ConstString*) this)->trim(plen); };
 	// return the offset of its end
 	int trimRight() const;
 };
 
 template <typename ttype>
-bool ConstString<ttype>::operator == (const ttype* ori) const
+bool ConstString<ttype>::operator == (const ttype* const ori) const
 {
 	if(NULL == ori)
-		return (0 == mlength);
-	register const ttype *p1 = mdata, *p2 = ori, *const end = mdata + mlength;
+		return (0 == m_length);
+	register const ttype *p1 = m_data, *p2 = ori, *const end = m_data + m_length;
 	while(p1 < end) {
 		if(*p1++ != *p2++)
 			return false;
@@ -100,11 +126,9 @@ bool ConstString<ttype>::operator == (const ttype* ori) const
 }
 
 template <typename ttype>
-bool ConstString<ttype>::equals(const ttype* str2, size_t len2) const
+bool ConstString<ttype>::equals0(const ttype* const str2) const
 {
-	if(len2 != mlength)
-		return false;
-	register const ttype *p1 = mdata, *p2 = str2, *const end = mdata + mlength;
+	register const ttype *p1 = m_data, *p2 = str2, *const end = m_data + m_length;
 	while(p1 < end) {
 		if(*p1++ != *p2++)
 			return false;
@@ -113,11 +137,9 @@ bool ConstString<ttype>::equals(const ttype* str2, size_t len2) const
 }
 
 template <typename ttype>
-bool ConstString<ttype>::nequals(const ttype* str2, size_t len2) const
+bool ConstString<ttype>::nequals0(const ttype* const str2) const
 {
-	if(len2 != mlength)
-		return true;
-	register const ttype *p1 = mdata, *p2 = str2, *const end = mdata + mlength;
+	register const ttype *p1 = m_data, *p2 = str2, *const end = m_data + m_length;
 	while(p1 < end) {
 		if(*p1++ != *p2++)
 			return true;
@@ -136,14 +158,14 @@ bool ConstString<ttype>::findIn(const ttype ch, const ttype* const str_to_find_i
 }
 
 template <typename ttype>
-size_t ConstString<ttype>::index(ttype tch, size_t pos) const
+UInt ConstString<ttype>::index(const ttype tch, const UInt pos) const
 {
 	// 为防止 pos < 0 造成 p 溢出后小于end, 有必要直接判断pos和mlength
-	if (pos <= mlength) {
-		register ttype *p = mdata + pos - 1, *end = mdata + mlength;
+	if (pos <= m_length) {
+		register ttype *p = m_data + pos - 1, *end = m_data + m_length;
 		while (p < end) {
 			if (tch == *p++)
-				return (p - mdata);
+				return (p - m_data);
 		}
 	}
 	return 0;
@@ -151,10 +173,10 @@ size_t ConstString<ttype>::index(ttype tch, size_t pos) const
 
 template <typename ttype>
 const ttype* ConstString<ttype>::trim(int* const pend) const {
-	register const ttype * end = mdata;
+	register const ttype * end = m_data;
 	register const ttype * start = end;
 	if (start != NULL) {
-		end += mlength;
+		end += m_length;
 		for(; start < end; start++) {
 			if (*start != ' ' && *start != '\t' && *start != '\n' && *start != '\r')
 				break;
@@ -171,10 +193,10 @@ const ttype* ConstString<ttype>::trim(int* const pend) const {
 
 template <typename ttype>
 int ConstString<ttype>::trimRight() const {
-	register const Char *end = mdata;
+	register const Char *end = m_data;
 	if (end != NULL) {
 		register const Char *const start = end;
-		end += mlength;
+		end += m_length;
 		while(--end >= start) {
 			if (*end != ' ' && *end != '\t' && *end != '\n' && *end != '\r')
 				break;
@@ -182,14 +204,13 @@ int ConstString<ttype>::trimRight() const {
 		}
 		++end;
 	}
-	return end - mdata;
+	return end - m_data;
 }
 
 template <typename ttype>
-size_t ConstString<ttype>::lengthOf(const ttype* str) {
-	register size_t size = 0u;
-	while(*str++)
-		size++;
+UInt ConstString<ttype>::lengthOf(const ttype* const str) {
+	register UInt size = 0u;
+	for(register const ttype* s = str; *s++; ) { size++; }
 	return size;
 }
 

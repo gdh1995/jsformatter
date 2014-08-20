@@ -9,7 +9,7 @@ namespace KMP
 {
 
 	template <typename ttype>
-	void get_next(ttype* str, size_t len, int nextval[])
+	void get_next(ttype* str, UInt len, int nextval[])
 	{
 		nextval[0] = -1;
 		for (int i = 1; i < len; i++)
@@ -24,7 +24,7 @@ namespace KMP
 		}
 		// nextval[1] = 0;
 		// str--;
-		// register size_t i = 1, j = 0;
+		// register UInt i = 1, j = 0;
 		// while(i < len)
 		// {
 		//   if(j == 0 || str[i] == str[j])
@@ -45,7 +45,7 @@ namespace KMP
 	}
 
 	template <typename ttype>
-	size_t index_kmp(ttype* s, ttype* t, size_t lens, size_t lent, int next[], size_t pos2)
+	UInt index_kmp(ttype* s, ttype* t, UInt lens, UInt lent, int next[], UInt pos2)
 	{
 		register int Lindex = pos2 - 1;
 		register int pos = 0;
@@ -63,7 +63,7 @@ namespace KMP
 		else
 			return -1;
 		/*s--; t--;
-		register size_t i = pos, j = 0;
+		register UInt i = pos, j = 0;
 		while(i < lens && j < lent)
 		{
 		if((0 == j) || (s[i] == t[j])) { ++i; ++j; }
@@ -77,8 +77,8 @@ template <typename ttype>
 class CharString: public ConstString<ttype>
 {
 protected:
-	size_t mcapacity;
-	static const size_t sc_step_autoalloc = (4096 / sizeof(ttype)) > 4
+	UInt m_capacity;
+	static const UInt sc_step_autoalloc = (4096 / sizeof(ttype)) > 4
 		? (4096 / sizeof(ttype)) : 4;
 
 //*
@@ -94,10 +94,10 @@ public:
 	typedef ConstString<ttype> BaseString;
 
 	explicit inline CharString() {
-		mdata = NULL; mlength = 0; mflag = 0; more = 0; mcapacity = 0;
+		m_data = NULL; m_length = 0; m_flag = 0; more = 0; m_capacity = 0;
 	}
-	explicit inline CharString(ttype* ori, size_t len, size_t capa, short flag = 0, short more = 0) {
-		mdata = ori; mlength = len; mflag = flag; more = more; mcapacity = capa;
+	explicit inline CharString(ttype* ori, UInt len, UInt capa, short flag = 0, short more = 0) {
+		m_data = ori; m_length = len; m_flag = flag; more = more; m_capacity = capa;
 	}
 	explicit CharString(const ttype* ori);
 	// copy the value
@@ -105,82 +105,89 @@ public:
 	explicit CharString(const CharString& ori);
 	explicit CharString(CharString&& ori);
 	inline ~ CharString() {
-		if(mdata && !mflag)
-			free(mdata);
-		// remove 'mdata = NULL' to speed up
+		if(m_data && !m_flag)
+			free(m_data);
+#ifdef _DEBUG
+		m_data = NULL; // remove 'm_data = NULL' to speed up
+#endif
 	}
+
+public:
+	using BaseString::c_str;
+	inline ttype* c_str() { return m_data; }
 	
 	// Attention: below are some dangerous functions
-	inline void reset(size_t size) {
-		if(size > mcapacity || mflag) {
-			if (mdata && !mflag) {
-				free(mdata);
+	inline void reset(UInt size) {
+		if(size > m_capacity || m_flag) {
+			if (m_data && !m_flag) {
+				free(m_data);
 			}
-			mdata = (ttype*)malloc(sizeof(ttype) * size);
-			mcapacity = size;
-			mflag = 0;
+			m_data = (ttype*)malloc(sizeof(ttype) * size);
+			m_capacity = size;
+			m_flag = 0;
 		}
-		mlength = 0;
+		m_length = 0;
 	}
-	protected:inline void expand0(size_t size) {
-		mdata = (ttype*)realloc(mdata, sizeof(ttype) * size);
-		mcapacity = size;
+	protected:inline void expand0(UInt size) {
+		m_data = (ttype*)realloc(m_data, sizeof(ttype) * size);
+		m_capacity = size;
 	}
 	public:
-	inline void expand(size_t size) {
-		if(size > mcapacity) {
+	inline void expand(UInt size) {
+		if(size > m_capacity) {
 #ifdef _DEBUG
-			if (mflag)
-				throw mflag;
+			if (m_flag)
+				throw m_flag;
 #endif
-			mdata = (ttype*)realloc(mdata, sizeof(ttype) * size);
-			mcapacity = size;
+			m_data = (ttype*)realloc(m_data, sizeof(ttype) * size);
+			m_capacity = size;
 		}
 	}
-	inline void reserve(size_t size) { expand(size); }
-	inline size_t capacity() const { return mcapacity; }
+	inline void reserve(UInt size) { expand(size); }
+	inline UInt capacity() const { return m_capacity; }
 	
 	void operator = (CharString&& ori);
 	// 使用“右值构造”和“右值赋值”还不能完全代替它，因为要有减少内存分配的考虑;
-	void copyFrom(const CharString&) { copyFrom(ori.mdata, ori.mlength); }
-	void copyFrom(const ttype* ori, size_t newlen);
+	void copyFrom(const CharString&) { copyFrom(ori.m_data, ori.m_length); }
+	void copyFrom(const ttype* ori, UInt newlen);
 	void operator += (const CharString& ori);
 	inline void push_back(const ttype ch) { addOrDouble(ch); }
 	inline void addOrDouble(const ttype ch) {
-		if(mcapacity <= mlength + 2) { // TODO
-			expand0(mlength * 2 + 4);
+		if(m_capacity <= m_length + 2) {
+			expand0(m_length * 2 + 4);
 		}
-		mdata[mlength++] = ch;
+		m_data[m_length++] = ch;
 	}
 	// 将begin指向的以end为结束位置的字符串复制到自身末尾;
 	// addCrLf: 3表示附加CRLF, 2表示附加CR, 1表示附加LF, 0表示什么都不附加
 	void addLine(const ttype* begin, const ttype* end, char addCrLf);
+	void addStr(const ttype* begin, const UInt len);
 	static CharString Concat(const CharString& s1, const CharString& s2);
 
-	int subString(size_t pos, size_t len, CharString& target) const;
-	CharString subString(size_t pos, size_t pos2) const;
-	size_t index_kmp(ttype *tstr, size_t pos) const;
-	size_t index_kmp(const CharString& T, size_t pos) const;
-	size_t index_nokmp(const CharString& tstr, size_t pos) const;
+	int subString(UInt pos, UInt len, CharString& target) const;
+	CharString subString(UInt pos, UInt pos2) const;
+	UInt index_kmp(ttype *tstr, UInt pos) const;
+	UInt index_kmp(const CharString& T, UInt pos) const;
+	UInt index_nokmp(const CharString& tstr, UInt pos) const;
 };
 
 template <typename ttype>
 CharString<ttype>::CharString(const ttype* ori)
 {
-	register size_t size = 0u;
+	register UInt size = 0u;
 	register const ttype* end = ori;
 	while(*end++)
 		size++;
-	mlength = size;
+	m_length = size;
 	size++;
 	if(size < sc_step_autoalloc)
 		size = sc_step_autoalloc;
-	register ttype *p = mdata = (ttype*)malloc(sizeof(ttype) * size);
+	register ttype *p = m_data = (ttype*)malloc(sizeof(ttype) * size);
 	register const ttype *pori = ori;
 	for(; end > pori; )
 		*p++ = *pori++;
-	mcapacity = size;
-	mflag = 0;
+	m_capacity = size;
+	m_flag = 0;
 	more = 0;
 }
 
@@ -188,20 +195,20 @@ template <typename ttype>
 CharString<ttype>::CharString(const ttype* ori, const ttype* end)
 {
 	if(end < ori) {
-		mdata = NULL;
-		mlength = 0;
-		mcapacity = 0;
+		m_data = NULL;
+		m_length = 0;
+		m_capacity = 0;
 	}
 	else {
-		mlength = end - ori;
-		mcapacity = mlength + 1;
-		mdata = (ttype*)malloc(sizeof(ttype) * mcapacity);
-		ttype* po = mdata;
+		m_length = end - ori;
+		m_capacity = m_length + 1;
+		m_data = (ttype*)malloc(sizeof(ttype) * m_capacity);
+		ttype* po = m_data;
 		for(; end > ori; )
 			*po++ = *ori++;
 		*po = 0;
 	}
-	mflag = 0;
+	m_flag = 0;
 	more = 0;
 }
 
@@ -209,87 +216,87 @@ template <typename ttype>
 CharString<ttype>::CharString(const CharString& ori)
 	: SimpleString((const SimpleString &)ori)
 {
-	// register const ttype *end = ori.mdata + ori.mlength, *pori = ori.mdata;
-	// register ttype *p = mdata = (ttype*)malloc(sizeof(ttype) * (ori.mlength + 1));
+	// register const ttype *end = ori.m_data + ori.m_length, *pori = ori.m_data;
+	// register ttype *p = m_data = (ttype*)malloc(sizeof(ttype) * (ori.m_length + 1));
 	// for(; end >= pori; )
 	// 	*p++ = *pori++;
-	mcapacity = ori.mcapacity;
+	m_capacity = ori.m_capacity;
 	register CharString *const p = const_cast<CharString *>(&ori);
-	p->mdata = NULL;
-	p->mlength = 0;
-	p->mcapacity = 0;
-	p->mflag = 0;
+	p->m_data = NULL;
+	p->m_length = 0;
+	p->m_capacity = 0;
+	p->m_flag = 0;
 }
 
 template <typename ttype>
 CharString<ttype>::CharString(CharString&& ori)
 	: SimpleString((const SimpleString &)ori)
 {
-	mcapacity = ori.mcapacity;
-	ori.mdata = NULL;
-	ori.mlength = 0;
-	ori.mcapacity = 0;
-	ori.mflag = 0;
+	m_capacity = ori.m_capacity;
+	ori.m_data = NULL;
+	ori.m_length = 0;
+	ori.m_capacity = 0;
+	ori.m_flag = 0;
 }
 
 template <typename ttype>
-void CharString<ttype>::copyFrom(const ttype* ori, size_t newlen)
+void CharString<ttype>::copyFrom(const ttype* ori, UInt newlen)
 {
-	if(mdata != ori)
+	if(m_data != ori)
 	{
 		expand(newlen + 1);
 		register const ttype *end = ori + newlen, *pori = ori;
-		register ttype *p = mdata;
+		register ttype *p = m_data;
 		for(; end >= pori; )
 			*p++ = *pori++;
-		mlength = newlen;
+		m_length = newlen;
 	}
 }
 
 template <typename ttype>
 void CharString<ttype>::operator = (const CharString& ori) {
-	if(mdata && !mflag)
-		free(mdata);
-	mdata = ori.mdata;
-	mlength = ori.mlength;
-	mcapacity = ori.mcapacity;
-	mflag = ori.mflag;
+	if(m_data && !m_flag)
+		free(m_data);
+	m_data = ori.m_data;
+	m_length = ori.m_length;
+	m_capacity = ori.m_capacity;
+	m_flag = ori.m_flag;
 	more = ori.more;
 	register CharString *const p = const_cast<CharString *>(&ori);
-	p->mdata = NULL;
-	p->mlength = 0;
-	p->mcapacity = 0;
-	p->mflag = 0;
+	p->m_data = NULL;
+	p->m_length = 0;
+	p->m_capacity = 0;
+	p->m_flag = 0;
 }
 
 template <typename ttype>
 void CharString<ttype>::operator = (CharString&& ori)
 {
-	if(mdata && !mflag)
-		free(mdata);
-	mdata = ori.mdata;
-	ori.mdata = NULL;
-	mlength = ori.mlength;
-	ori.mlength = 0;
-	mcapacity = ori.mcapacity;
-	ori.mcapacity = 0;
-	mflag = ori.mflag;
-	ori.mflag = 0;
+	if(m_data && !m_flag)
+		free(m_data);
+	m_data = ori.m_data;
+	ori.m_data = NULL;
+	m_length = ori.m_length;
+	ori.m_length = 0;
+	m_capacity = ori.m_capacity;
+	ori.m_capacity = 0;
+	m_flag = ori.m_flag;
+	ori.m_flag = 0;
 	more = ori.more;
 }
 
 template <typename ttype>
 void CharString<ttype>::operator += (const CharString& ori)
 {
-	if(0 != ori.mlength)
+	if(0 != ori.m_length)
 	{
-		size_t x = mlength + ori.mlength;
+		UInt x = m_length + ori.m_length;
 		expand(x + 1);
-		register ttype *p1 = mdata + mlength;
-		for(register ttype *p2 = ori.mdata, *const end = p2 + ori.mlength; end > p2; )
+		register ttype *p1 = m_data + m_length;
+		for(register ttype *p2 = ori.m_data, *const end = p2 + ori.m_length; end > p2; )
 			*p1++ = *p2++;
 		*p1 = 0;
-		mlength = x;
+		m_length = x;
 	}
 }
 
@@ -298,9 +305,9 @@ void CharString<ttype>::addLine(const ttype* begin, const ttype*const end, char 
 {
 	if(end > begin)
 	{
-		if((end - begin) + 4 >= (int) (mcapacity - mlength))
-			expand0(mlength + ((end - begin) + 4));
-		register ttype *p1 = mdata + mlength;
+		if((end - begin) + 4 >= (int) (m_capacity - m_length))
+			expand0(m_length + ((end - begin) + 4));
+		register ttype *p1 = m_data + m_length;
 		for(register const ttype *p2 = begin, *const end2 = end; end2 > p2; )
 			*p1++ = *p2++;
 		if (addCrLf & 0x2)
@@ -308,7 +315,21 @@ void CharString<ttype>::addLine(const ttype* begin, const ttype*const end, char 
 		if (addCrLf & 0x1)
 			*p1++ = '\n';
 		*p1 = 0;
-		mlength = p1 - mdata;
+		m_length = p1 - m_data;
+	}
+}
+
+template <typename ttype>
+void CharString<ttype>::addStr(const ttype* begin, const UInt len)
+{
+	if(len) {
+		if(len + 2 >= (int) (m_capacity - m_length))
+			expand0(m_length + (len + 2));
+		register ttype *p1 = m_data + m_length;
+		for(register const ttype *p2 = begin, *const end2 = begin + len; end2 > p2; )
+			*p1++ = *p2++;
+		*p1 = 0;
+		m_length = p1 - m_data;
 	}
 }
 
@@ -322,12 +343,12 @@ CharString<ttype> CharString<ttype>::Concat(const CharString<ttype>& s1, const C
 
 // 偏特化未能实现，只好暂时只用strncpy函数
 template <typename ttype>
-int CharString<ttype>::subString(size_t pos, size_t len, CharString<ttype>& target) const
+int CharString<ttype>::subString(UInt pos, UInt len, CharString<ttype>& target) const
 {
-	if(pos > 0 && len > 0 && (--pos) + len <= mlength)
+	if(pos > 0 && len > 0 && (--pos) + len <= m_length)
 	{
 		target.expand(len + 1);
-		strncpy(target.c_str(), mdata + pos, len);
+		strncpy(target.c_str(), m_data + pos, len);
 		target.c_str()[len] = 0;
 		return 0;
 	}
@@ -337,13 +358,13 @@ int CharString<ttype>::subString(size_t pos, size_t len, CharString<ttype>& targ
 
 // 偏特化未能实现，只好暂时只用strncpy函数
 template <typename ttype>
-CharString<ttype> CharString<ttype>::subString(size_t pos, size_t pos2) const
+CharString<ttype> CharString<ttype>::subString(UInt pos, UInt pos2) const
 {
-	if(pos2 > pos && --pos > 0 && pos2 <= mlength)
+	if(pos2 > pos && --pos > 0 && pos2 <= m_length)
 	{
-		register size_t size = pos2 - pos;
+		register UInt size = pos2 - pos;
 		ttype* t1 = (ttype*)malloc(sizeof(ttype) * size);
-		strncpy(t1, mdata + pos, --size);
+		strncpy(t1, m_data + pos, --size);
 		t1[size] = 0;
 		return CharString(t1, size , 1 + size, 0);
 	}
@@ -352,25 +373,25 @@ CharString<ttype> CharString<ttype>::subString(size_t pos, size_t pos2) const
 }
 
 template <typename ttype>
-size_t CharString<ttype>::index_kmp(ttype *tstr, size_t pos) const
+UInt CharString<ttype>::index_kmp(ttype *tstr, UInt pos) const
 {
-	if(*tstr && pos <= mlength)
+	if(*tstr && pos <= m_length)
 	{
-		if(tstr == mdata)
+		if(tstr == m_data)
 			return (pos == 1);
 		else
 		{
-			register size_t size = 0u;
+			register UInt size = 0u;
 			register const ttype* end = tstr;
 			while(*end++)
 				size++;
-			if(mlength + 1 < size + pos)
+			if(m_length + 1 < size + pos)
 				return 0;
 			else
 			{
 				int next[] = new int [size];
 				KMP::get_next(tstr, size, next);
-				size_t re = KMP::index_kmp(mdata, tstr, mlength, size, next, pos);
+				UInt re = KMP::index_kmp(m_data, tstr, m_length, size, next, pos);
 				delete [] next;
 				return re;
 			}
@@ -381,33 +402,33 @@ size_t CharString<ttype>::index_kmp(ttype *tstr, size_t pos) const
 }
 
 template <typename ttype>
-size_t CharString<ttype>::index_kmp(const CharString<ttype>& tstr, size_t pos) const
+UInt CharString<ttype>::index_kmp(const CharString<ttype>& tstr, UInt pos) const
 {
-	if(0 == tstr.mlength || mlength - pos < tstr.mlength - 1)
+	if(0 == tstr.m_length || m_length - pos < tstr.m_length - 1)
 		return 0;
-	else if(tstr.mdata == mdata)
+	else if(tstr.m_data == m_data)
 		return (pos == 1);
 	else
 	{
-		int next[] = new int [tstr.mlength];
-		KMP::get_next(tstr.mdata, tstr.mlength, next);
-		size_t re = KMP::index_kmp(mdata, tstr.mdata, mlength, tstr.mlength, next, pos);
+		int next[] = new int [tstr.m_length];
+		KMP::get_next(tstr.m_data, tstr.m_length, next);
+		UInt re = KMP::index_kmp(m_data, tstr.m_data, m_length, tstr.m_length, next, pos);
 		delete [] next;
 		return re;
 	}
 }
 
 template <typename ttype>
-size_t CharString<ttype>::index_nokmp(const CharString<ttype>& tstr, size_t pos) const
+UInt CharString<ttype>::index_nokmp(const CharString<ttype>& tstr, UInt pos) const
 {
-	if(0 == tstr.mlength || mlength - pos < tstr.mlength - 1)
+	if(0 == tstr.m_length || m_length - pos < tstr.m_length - 1)
 		return 0;
-	else if(tstr.mdata == mdata)
+	else if(tstr.m_data == m_data)
 		return (pos == 1);
 	else
 	{
-		register size_t i = pos, j = 1, lens = mlength, lent = tstr.mlength;
-		register ttype *s = mdata - 1, *t = tstr.mdata - 1;
+		register UInt i = pos, j = 1, lens = m_length, lent = tstr.m_length;
+		register ttype *s = m_data - 1, *t = tstr.m_data - 1;
 		while(i <= lens && j <= lent)
 		{
 			if(s[i] == t[j]) {++i; ++j;}

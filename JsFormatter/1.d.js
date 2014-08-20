@@ -1,3 +1,11 @@
+if (1) {
+	a = 2;
+} else //
+if (2)
+	b = 2;
+return;
+a in B;
+//
 with (a //
 ) {
 	b = a
@@ -6,10 +14,21 @@ a = b = b = c = d = e = f = gOJBBPK4GAk //
 	= ds = fsd = sdf = 1;
 a //
 	in B;
-with //
-	(a) {
-	b = a
+a = 2 //
+try {
+	1
+} catch (e) {
+	2
 }
+if (1)
+	for
+	/*d*
+	 */
+	(; ; ) //
+		//sdf
+	{
+		b = a
+	};
 with ( //
 	a) {
 	b = a
@@ -37,7 +56,7 @@ case ab:
 case //
 	Ab:
 	a = 1;
-	break;
+	break //
 case .213 //
 	:
 	a = 1;
@@ -45,7 +64,7 @@ case .213 //
 case +0123.5e6:
 	a = 1;
 	break;
-case "":
+case "": //
 	a = 1;
 	break;
 case '':
@@ -68,9 +87,9 @@ default:
 a //
 	.b;
 /123123/.sdfsd;
-/123123/ .5655;
+/123123/.5655;
 "dfds".cc;
-"dsfdsf" .0129;
+"dsfdsf".0129;
 {
 	s = s *= d = f = g = h = j = //
 		q //
@@ -80,8 +99,7 @@ a //
 	s *= //
 		12 //
 		in[12, 123];
-	12 //
-		in[12, 123];
+	12 in[12, 123]; //
 	return //
 		sdf;
 	( //
@@ -99,21 +117,21 @@ f*/
 //
 [[1, //
 		function ($)
-		/*s
-		 */
+			/*s
+			 */
 		{
 			a = 1
-				/*s
-				 */
+			/*s
+			 */
 		}
 	], [1, //
 		function ($)
-		/*s
-		 */
+			/*s
+			 */
 		{
 			a = 1
-				/*s
-				 */
+			/*s
+			 */
 		}
 	]];
 ([1, 2, {
@@ -131,7 +149,9 @@ if (1) ;
 a = b = c = 1;
 if (2) {},
 if (3) {} //
-(function a() { //asdfsdfdsafdsfa
+(function a() //
+	//sdfdsf
+{ //asdfsdfdsafdsfa
 	if (1) ;
 	{
 		1 = 2;
@@ -141,8 +161,10 @@ if (3) {} //
 		1: 2
 	};
 	if ( //
-		b >= 1) //asdfsdfdsafdsfa
-		for (var c in d) //do {}while(1);
+		b >= 1)
+		//asdfsdfdsafdsfa
+		for (var c in d)
+			//do {}while(1);
 			a = (function () {});
 	;
 	;
@@ -159,12 +181,12 @@ if (3) {} //
 });
 [[1, //
 		function ($)
-		/*s
-		 */
+			/*s
+			 */
 		{
 			a = 1
-				/*s
-				 */
+			/*s
+			 */
 		}
 	]];
 (function ($) //
@@ -180,17 +202,17 @@ if (3) {} //
 	var browser = (function () //
 	{
 		var browser = function ()
-		/*s1
-		df*/
+			/*s1
+			df*/
 		{
 			var self =
-				/*s1
-				df*/
-				1 =
+			/*s1
+			df*/
+			1 =
 
-				/*s1
-				df*/
-				this;
+			/*s1
+			df*/
+			this;
 			self.init()
 		};
 		browser.prototype = {
@@ -231,8 +253,8 @@ if (3) {} //
 				self.liebao = !self.msie && !!window.external && !!window.external.LiebaoAutoFill_CopyToClipboard;
 				self.ee360 = !self.msie && !self.chrome && !self.liebao && self._plugin("filename", "pepflashplayer.dll");
 				self.se360 = !self._plugin("filename", "pepflashplayer.dll") && !self.ee360 && self._mime("suffixes", "dll", "description", /fancy/);
-				self.cssType = self.webkit ? "webkit": (self.mozilla ? "moz": self.opera ? "o": "ms");
-				self.protocol = self.opera ? "opera": (self.chrome ? "chrome": (self.dragon ? "dragon": (self.taobao ? "taobrowser": (self.liebao ? "liebao": "http"))))
+				self.cssType = self.webkit ? "webkit": (self.mozilla ? "moz" : self.opera ? "o" : "ms");
+				self.protocol = self.opera ? "opera": (self.chrome ? "chrome" : (self.dragon ? "dragon" : (self.taobao ? "taobrowser" : (self.liebao ? "liebao" : "http"))))
 			},
 			_ie: function () {
 				var ieAX = window.ActiveXObject;
@@ -882,7 +904,7 @@ function rstr2b64(input) {
 	var output = "";
 	var len = input.length;
 	for (var i = 0; i < len; i += 3) {
-		var triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8: 0) | (i + 2 < len ? input.charCodeAt(i + 2): 0);
+		var triplet = (input.charCodeAt(i) << 16) | (i + 1 < len ? input.charCodeAt(i + 1) << 8 : 0) | (i + 2 < len ? input.charCodeAt(i + 2) : 0);
 		for (var j = 0; j < 4; j++) {
 			if (i * 8 + j * 6 > input.length * 8)
 				output += b64pad;
@@ -3410,9 +3432,9 @@ _dialogCy = 0;
 				var isCloseNum = self.closeAll();
 				if ($("#" + self.id).length == 0) {
 					if (this.caption == "") {
-						var dbox = $('<div><button class="close' + (self.hideClose == true ? ' hide': '') + '"></button><div class="main"></div></div>')
+						var dbox = $('<div><button class="close' + (self.hideClose == true ? ' hide' : '') + '"></button><div class="main"></div></div>')
 					} else {
-						var dbox = $('<div><div class="head"><div class="title">' + this.caption + '</div><button class="close' + (self.hideClose == true ? ' hide': '') + '"></button></div><div class="main"></div></div>')
+						var dbox = $('<div><div class="head"><div class="title">' + this.caption + '</div><button class="close' + (self.hideClose == true ? ' hide' : '') + '"></button></div><div class="main"></div></div>')
 					}
 					dbox.find(".main").append(this.content);
 					var iframe = dbox.find('iframe');
@@ -3456,7 +3478,7 @@ _dialogCy = 0;
 				window.setTimeout(function () {
 					dbox.addClass('dialog-visible');
 					dbox.find('.close').get(0).focus()
-				}, isCloseNum > 0 ? 210: 10);
+				}, isCloseNum > 0 ? 210 : 10);
 				window.setTimeout(function () {
 					$(document).unbind('click').bind('click', function (e) {
 						var targetObj = $(e.target);
@@ -3809,7 +3831,7 @@ var _bookmarksDialogFun = "";
 									$('.cloudBody .aboutContainer').hide();
 									$('.cloudBody .classificationsContainer').show();
 									createWebsite.initClassificationsContainer();
-									createWebsite.initWebsite(targetObj.attr('url'), targetObj.find('.boxTitle').text(), targetObj.find('.boxLogo').css('backgroundImage').replace("url(", "").replace(")", "").replace(/\"/g, ""), targetObj.hasClass('quick') ? 'quick': 'normal', targetObj.attr('id'))
+									createWebsite.initWebsite(targetObj.attr('url'), targetObj.find('.boxTitle').text(), targetObj.find('.boxLogo').css('backgroundImage').replace("url(", "").replace(")", "").replace(/\"/g, ""), targetObj.hasClass('quick') ? 'quick' : 'normal', targetObj.attr('id'))
 								} else {
 									$('.cloudBody .menu').removeClass('hide');
 									$(".cloudHeader .cloudSwitch").text(getI18nMsg('websiteAdd'));
@@ -3834,7 +3856,7 @@ var _bookmarksDialogFun = "";
 								$('.cloudBody .aboutContainer').hide();
 								$('.cloudBody .classificationsContainer').show();
 								createWebsite.initClassificationsContainer();
-								createWebsite.initWebsite(targetObj.attr('url'), targetObj.find('.boxTitle').text(), targetObj.find('.boxLogo').css('backgroundImage').replace("url(", "").replace(")", "").replace(/\"/g, ""), targetObj.hasClass('quick') ? 'quick': 'normal', targetObj.attr('id'))
+								createWebsite.initWebsite(targetObj.attr('url'), targetObj.find('.boxTitle').text(), targetObj.find('.boxLogo').css('backgroundImage').replace("url(", "").replace(")", "").replace(/\"/g, ""), targetObj.hasClass('quick') ? 'quick' : 'normal', targetObj.attr('id'))
 							} else {
 								$('.cloudBody .menu').removeClass('hide');
 								$(".cloudHeader .cloudSwitch").text(getI18nMsg('websiteAdd'));
@@ -4094,9 +4116,9 @@ var _bookmarksDialogFun = "";
 								var oUrl = typeof oUrls[appId] == "undefined" ? "": oUrls[appId];
 								if (oUrl != "") {
 									if (typeof event != "undefined" && event.button == 1) {
-										openTab(_browser.liebao ? false: targetSwitch, oUrl, tabID, true)
+										openTab(_browser.liebao ? false : targetSwitch, oUrl, tabID, true)
 									} else {
-										openTab(_browser.liebao ? false: targetSwitch, oUrl, tabID, ctrlKey)
+										openTab(_browser.liebao ? false : targetSwitch, oUrl, tabID, ctrlKey)
 									}
 								}
 							}
@@ -4225,9 +4247,9 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 			init: function () {
 				var self = this;
 				if (self.boxOptions.isApp) {
-					var boxItem = $('<div class="appBox ' + self.boxOptions.type + (self.boxOptions.isNew ? ' new': '') + (self.boxOptions.isFixed ? ' boxFixed': '') + (self.boxOptions.isApp.length == 32 ? ' chromeApp': '') + '" id="appBox_' + self.boxOptions.id + '" appType="' + (self.boxOptions.appType ? self.boxOptions.appType: '') + '" url="' + self.getUrl() + '" appId="' + self.boxOptions.isApp + '"></div>').append($('<div class="boxLogo" notes="' + self.boxOptions.title + '"></div>')).append(self.boxOptions.title == "" ? "": $('<div class="boxTitle"></div>').html('<a>' + self.boxOptions.title + '</a>')).append($('<button class="boxClose' + (self.boxOptions.isFixed ? ' hide': '') + '"></button>'))
+					var boxItem = $('<div class="appBox ' + self.boxOptions.type + (self.boxOptions.isNew ? ' new' : '') + (self.boxOptions.isFixed ? ' boxFixed' : '') + (self.boxOptions.isApp.length == 32 ? ' chromeApp' : '') + '" id="appBox_' + self.boxOptions.id + '" appType="' + (self.boxOptions.appType ? self.boxOptions.appType : '') + '" url="' + self.getUrl() + '" appId="' + self.boxOptions.isApp + '"></div>').append($('<div class="boxLogo" notes="' + self.boxOptions.title + '"></div>')).append(self.boxOptions.title == "" ? "" : $('<div class="boxTitle"></div>').html('<a>' + self.boxOptions.title + '</a>')).append($('<button class="boxClose' + (self.boxOptions.isFixed ? ' hide' : '') + '"></button>'))
 				} else {
-					var boxItem = $('<div class="appBox ' + self.boxOptions.type + (self.boxOptions.isNew ? ' new': '') + (self.boxOptions.isFixed ? ' boxFixed': '') + '" id="appBox_' + self.boxOptions.id + '" url="' + self.getUrl() + '"></div>').append($('<div class="boxLogo" notes="' + self.boxOptions.title + '"></div>')).append(self.boxOptions.title == "" ? "": $('<div class="boxTitle"></div>').html('<a>' + self.boxOptions.title + '</a>')).append($('<button class="boxClose' + (self.boxOptions.isFixed ? ' hide': '') + '"></button>')).append($('<button class="boxEdit ' + (self.boxOptions.isFixed ? ' hide': '') + '" title="' + getI18nMsg('editDialbox') + '"></button>'))
+					var boxItem = $('<div class="appBox ' + self.boxOptions.type + (self.boxOptions.isNew ? ' new' : '') + (self.boxOptions.isFixed ? ' boxFixed' : '') + '" id="appBox_' + self.boxOptions.id + '" url="' + self.getUrl() + '"></div>').append($('<div class="boxLogo" notes="' + self.boxOptions.title + '"></div>')).append(self.boxOptions.title == "" ? "" : $('<div class="boxTitle"></div>').html('<a>' + self.boxOptions.title + '</a>')).append($('<button class="boxClose' + (self.boxOptions.isFixed ? ' hide' : '') + '"></button>')).append($('<button class="boxEdit ' + (self.boxOptions.isFixed ? ' hide' : '') + '" title="' + getI18nMsg('editDialbox') + '"></button>'))
 				}
 				if (self.boxOptions.html != "") {
 					boxItem.append($('<div class="boxHtml"></div>').html(self.boxOptions.html))
@@ -4341,7 +4363,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					}
 					_wheelFun = setTimeout(function () {
 						_wheelEvent = true
-					}, self.page3DSwitcherOpen == true ? 400: 460)
+					}, self.page3DSwitcherOpen == true ? 400 : 460)
 				}
 			};
 			window.onmousewheel = wheel;
@@ -4607,7 +4629,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				thisBox.boxObject.find('.boxLogo').css('backgroundImage', 'url(' + logoImgUrl + ')');
 				var iframeDialboxUrl = getIframeDialboxUrl(thisBox.boxOptions.url);
 				if (iframeDialboxUrl) {
-					var iframeOptions = "target=" + (targetSwitch ? "top": "blank");
+					var iframeOptions = "target=" + (targetSwitch ? "top" : "blank");
 					if (typeof thisBox.boxOptions.img != "undefined" && thisBox.boxOptions.img != "") {
 						iframeOptions += "&img=" + escape(thisBox.boxOptions.img)
 					}
@@ -4699,7 +4721,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 					var minDiff = '';
 					$.each(matrix, function (i, n) {
 						var itemWidth = self.width + self.spacing + 2 * self.border,
-						itemHeight = (self.titleShow == true ? (self.height + 32): self.height) + self.spacing + 2 * self.border,
+						itemHeight = (self.titleShow == true ? (self.height + 32) : self.height) + self.spacing + 2 * self.border,
 						curDiff = Math.abs((bodyWidth - n.cols * itemWidth - self.spacing) / 2 - (bodyHeight - 100 - n.rows * itemHeight - self.spacing));
 						if (curDiff < minDiff || minDiff == '') {
 							minDiff = curDiff;
@@ -4804,9 +4826,9 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							}
 							$(not_boxDrag[i]).css({
 								"width": self.width + "px",
-								"height": (self.titleShow == true ? (self.height + 32): self.height) + "px",
+								"height": (self.titleShow == true ? (self.height + 32) : self.height) + "px",
 								"left": self.spacing + (i % self.cols) * (self.spacing + self.width + 2 * self.border) + 'px',
-								"top": self.spacing + parseInt(i / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32): self.height) + 2 * self.border) + 'px',
+								"top": self.spacing + parseInt(i / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32) : self.height) + 2 * self.border) + 'px',
 								"display": "block"
 							})
 						}
@@ -5049,7 +5071,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							eventObj.removeClass('quick').addClass('normal');
 							eventObj.css({
 								"width": self.width + 'px',
-								"height": (self.titleShow == true ? (self.height + 32): self.height) + "px"
+								"height": (self.titleShow == true ? (self.height + 32) : self.height) + "px"
 							});
 							eventObj.find('.boxLogo').css({
 								"borderBottomWidth": (self.spacing == 0 || self.radius > 30) ? '0px': '2px',
@@ -5109,9 +5131,9 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 								}
 								eclone.css({
 									"width": self.width + 'px',
-									"height": (self.titleShow == true ? (self.height + 32): self.height) + "px",
+									"height": (self.titleShow == true ? (self.height + 32) : self.height) + "px",
 									"left": self.spacing + (l % self.cols) * (self.spacing + self.width + 2 * self.border) + 'px',
-									"top": self.spacing + parseInt(l / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32): self.height) + 2 * self.border) + 'px',
+									"top": self.spacing + parseInt(l / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32) : self.height) + 2 * self.border) + 'px',
 								});
 								if (self.page3DSwitcherOpen == true) {
 									if (self.cols % 2 == 0) {
@@ -5303,7 +5325,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							var l = normalBoxlist.length;
 							if (_moveQuickDialBox && _removeLastDialBox) {
 								var lastLeft = self.spacing + (l % self.cols) * (self.spacing + self.width + 2 * self.border) + 'px',
-								lastTop = self.spacing + parseInt(l / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32): self.height) + 2 * self.border) + 'px';
+								lastTop = self.spacing + parseInt(l / self.cols) * (self.spacing + (self.titleShow == true ? (self.height + 32) : self.height) + 2 * self.border) + 'px';
 								if (self.page3DSwitcherOpen == true) {
 									if (self.cols % 2 == 0) {
 										var midIndex = parseInt(self.cols / 2);
@@ -5455,7 +5477,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 							self.loadBoxes($(this).attr('pageSwitch'))
 						}).insertBefore(self.container.parent())
 					}
-					self.container.parent().siblings(".pageSwitcher").css("display", self.pageSwitcherShow != false ? "block": "none");
+					self.container.parent().siblings(".pageSwitcher").css("display", self.pageSwitcherShow != false ? "block" : "none");
 					if (self.page == 1) {
 						self.container.parent().siblings('.pageSwitcher.up').css("display", "none")
 					} else if (self.page == self.totalPage) {
@@ -5675,7 +5697,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 						box.boxObject.css({
 							"background": "-webkit-linear-gradient(top, rgba(0,0,0,0.2), rgba(0,0,0,1), rgba(0,0,0,0.2))",
 							"height": "0px",
-							"marginTop": parseInt((self.titleShow == true ? (self.height + 32): self.height) / 2) + "px",
+							"marginTop": parseInt((self.titleShow == true ? (self.height + 32) : self.height) / 2) + "px",
 							"borderRadius": "8px"
 						})
 					}, 0);
@@ -5754,7 +5776,7 @@ var dragExcludeClassList = ['boxClose', 'boxEdit', 'searchCenter', 'searchItem']
 				}
 				thisBox.boxObject.css({
 					"width": self.width + "px",
-					"height": (self.titleShow == true ? (self.height + 32): self.height) + "px",
+					"height": (self.titleShow == true ? (self.height + 32) : self.height) + "px",
 					"top": top,
 					"left": left,
 					"display": "block",
@@ -5920,8 +5942,8 @@ if (window.location.hash == "#synchronize") {
 	$(function () {
 		initChromeI18n();
 		targetSwitch = PDI.get('privateSetup', 'targetSwitch');
-		$('#baseTarget').attr('target', targetSwitch ? "_self": "_blank");
-		$('#searchForm').attr('target', targetSwitch ? "_self": "_blank");
+		$('#baseTarget').attr('target', targetSwitch ? "_self" : "_blank");
+		$('#searchForm').attr('target', targetSwitch ? "_self" : "_blank");
 		DBOX = $.dialbox({
 			container: $('.normalDialbox'),
 			QContainer: $('.quickDialbox'),
@@ -6132,7 +6154,7 @@ $(function () {
 				var toIndex = DBOX.getDialboxIndex('normal', data.url)
 			}
 			DBOX.getBoxes();
-			DBOX.loadBoxes(((toIndex + 1) % DBOX.num == 0) ? (toIndex + 1) / DBOX.num: (parseInt((toIndex + 1) / DBOX.num) + 1))
+			DBOX.loadBoxes(((toIndex + 1) % DBOX.num == 0) ? (toIndex + 1) / DBOX.num : (parseInt((toIndex + 1) / DBOX.num) + 1))
 		}
 	};
 	var extensionActHandle = function (ops) {
@@ -6172,10 +6194,10 @@ $(function () {
 					var toIndex = DBOX.getDialboxIndex('normal', data.url)
 				}
 				DBOX.getBoxes();
-				DBOX.loadBoxes(((toIndex + 1) % DBOX.num == 0) ? (toIndex + 1) / DBOX.num: (parseInt((toIndex + 1) / DBOX.num) + 1))
+				DBOX.loadBoxes(((toIndex + 1) % DBOX.num == 0) ? (toIndex + 1) / DBOX.num : (parseInt((toIndex + 1) / DBOX.num) + 1))
 			} else {
 				if (_dialboxType != 'quick') {
-					DBOX.loadBoxes((_installIndex % DBOX.num == 0) ? _installIndex / DBOX.num: (parseInt(_installIndex / DBOX.num) + 1))
+					DBOX.loadBoxes((_installIndex % DBOX.num == 0) ? _installIndex / DBOX.num : (parseInt(_installIndex / DBOX.num) + 1))
 				}
 			}
 		} else if (act == "unstalled" || act == "disabled") {
@@ -6185,7 +6207,7 @@ $(function () {
 						$(".dialog-visible").find(".close").get(0).click()
 					}
 					if (_dialboxType != 'quick') {
-						DBOX.loadBoxes((_installIndex % DBOX.num == 0) ? _installIndex / DBOX.num: (parseInt(_installIndex / DBOX.num) + 1));
+						DBOX.loadBoxes((_installIndex % DBOX.num == 0) ? _installIndex / DBOX.num : (parseInt(_installIndex / DBOX.num) + 1));
 						setTimeout(function () {
 							$("." + _dialboxType + "Dialbox").find('.appBox[appid="' + data.id + '"]').find(".boxClose").get(0).click()
 						}, 500)

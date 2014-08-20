@@ -1,13 +1,32 @@
 #include "FileCodes.h"
+#include <windows.h>
 
 const char *err_str = NULL;
 const void *err_msg = NULL;
 
+inline void FileAnaly::strMToWide(CharString<char>& dest, const CharString<char>& ori, DWORD codepage)
+{
+	int len = ori.size();
+	dest.reset(len * 2 + 4);
+	dest.setLength( MultiByteToWideChar(codepage, 0, ori.c_str(), len, (wchar_t*) dest.c_str(), len + 2) * 2 );
+	char * str = dest.c_str() + dest.size();
+	str[1] = str[0] = '\0';
+}
+
+inline void FileAnaly::strWideToM(CharString<char>& dest, const CharString<char>& ori,DWORD codepage)
+{
+	int len = (ori.size() + 1) / 2;
+	dest.reset(len * 3 + 4);
+	dest.setLength(WideCharToMultiByte(codepage, 0, (wchar_t*) ori.c_str(), len, dest.c_str(), len * 3 + 2, NULL, NULL) );
+	char * str = dest.c_str() + dest.size();
+	str[0] = 0;
+}
+
 int codec(CharString<char> *file, DWORD oldpage, DWORD const newpage) {
 	int re = 0x8;
 	if (oldpage == CP_UNKNOWN) {
-		register const char *str = file->c_str();
-		const char *const end = str + file->length();
+		register const char *str = *file;
+		const char *const end = str + file->size();
 		--str;
 		while (*++str) {
 			register char ch = *str;
@@ -54,12 +73,12 @@ int codec(CharString<char> *file, DWORD oldpage, DWORD const newpage) {
 	} else if (1) {
 		CharString<char> temp;
 		if (oldpage != CP_UNICODE) {
-			FileAnaly::MToWide(temp, *file, oldpage);
+			FileAnaly::strMToWide(temp, *file, oldpage);
 		} else {
 			temp = (CharString<char> &&) *file;
 		}
 		if (newpage != CP_UNICODE) {
-			FileAnaly::WideToM(*file, temp, newpage);
+			FileAnaly::strWideToM(*file, temp, newpage);
 		} else {
 			*file = (CharString<char> &&) temp;
 		}
@@ -100,7 +119,7 @@ int FileAnaly::readAndEnsureCode(const char* const file, CharString<char>* dest,
 				fseek(fp, 3, SEEK_SET);
 				len -= 3;
 			}
-			size_t size = (size_t)len;
+			UInt size = (UInt)len;
 			dest->expand(size + 4);
 			if(len > 0 && fread(dest->c_str(), size, 1, fp) != 1)
 			{

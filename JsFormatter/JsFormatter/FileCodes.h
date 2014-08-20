@@ -2,16 +2,13 @@
 #define _GDH_FILE_CODES_
 #include <stdio.h>
 #include <windows.h>
-#include <locale.h>
 #include "CharString.h"
 
 namespace FileAnaly
 {
-// "CP_UNICODE" := little-endian
-#define CP_UNICODE ((DWORD)(-1))
-#define CP_UNKNOWN 0
-
-	const char*const locale = setlocale(LC_ALL, "");
+	// "CP_UNICODE" := little-endian
+	#define CP_UNICODE ((DWORD)(-1))
+	#define CP_UNKNOWN ((DWORD)(-2))
 
 	inline long getFileSize(FILE*fp)
 	{
@@ -43,23 +40,9 @@ namespace FileAnaly
 		return re;
 	}
 
-	inline void MToWide(CharString<char>& dest, const CharString<char>& ori, DWORD codepage)
-	{
-		int len = ori.size();
-		dest.reset(len * 2 + 4);
-		dest.setLength( MultiByteToWideChar(codepage, 0, ori.c_str(), len, (wchar_t*) dest.c_str(), len + 2) * 2 );
-		char * str = dest.c_str() + dest.size();
-		str[1] = str[0] = '\0';
-	}
+	inline void strMToWide(CharString<char>& dest, const CharString<char>& ori, DWORD codepage);
 
-	inline void WideToM(CharString<char>& dest, const CharString<char>& ori,DWORD codepage)
-	{
-		int len = (ori.size() + 1) / 2;
-		dest.reset(len * 3 + 4);
-		dest.setLength(WideCharToMultiByte(codepage, 0, (wchar_t*) ori.c_str(), len, dest.c_str(), len * 3 + 2, NULL, NULL) );
-		char * str = dest.c_str() + dest.size();
-		str[0] = 0;
-	}
+	inline void strWideToM(CharString<char>& dest, const CharString<char>& ori,DWORD codepage);
 
 	int readAndEnsureCode(const char* file, CharString<char>* dest, DWORD const codepage);
 
