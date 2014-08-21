@@ -6,32 +6,19 @@
 #define JS_FORMATTER_VERSION_VALUE "0.9"
 #define JS_FORMATTER_VERSION_DIGITALVALUE 0, 9, 0, 0
 
+#undef	 UNICODE
+#undef	_UNICODE
+#undef	_MBCS
 //*/
-#ifdef UNICODE
-#undef UNICODE
-#endif
-#ifdef _UNICODE
-#undef _UNICODE
-#endif
-#ifndef _MBCS
 #define _MBCS
-#endif
 /*/
-#ifdef _MBCS
-#undef _MBCS
-#endif
-#ifndef UNICODE
-#define UNICODE
-#endif
-#ifndef _UNICODE
+#define  UNICODE
 #define _UNICODE
-#endif
 // */
 
 #ifdef _DEBUG
 #define __TEST__ 0
 #else
-#define __TEST__ 0
 #endif
 
 #endif
