@@ -49,7 +49,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="js_icon_x3.ico">
+    <Image Include="js_icon.ico">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

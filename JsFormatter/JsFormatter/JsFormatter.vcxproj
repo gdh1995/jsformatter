@@ -108,7 +108,7 @@
     <ResourceCompile Include="JsFormatter.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="js_icon_x3.ico" />
+    <Image Include="js_icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
