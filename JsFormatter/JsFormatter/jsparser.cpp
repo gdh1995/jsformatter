@@ -309,6 +309,16 @@ void JSParser::prepareTokenB() const
 					getChar();
 				else if (chB == _T('\r') || chB == _T('\n'))
 					break;
+				else if (chB == _T('[')) {
+					while ((chB = getChar()) && chB != _T(']')) { // 正则状态全部输出，直到 /
+						if (chB == _T('\\')) // 转义字符
+							getChar();
+						else if (chB == _T('\r') || chB == _T('\n'))
+							break;
+					}
+					if (chB != _T(']'))
+						break;
+				}
 			}
 			if (chB != _T('/')) { // 更改/warn: 增加匹配失败后回退的功能
 				readBack(m_tokenB.c_end());
