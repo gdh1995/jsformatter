@@ -3,11 +3,7 @@
 #include "FileCodes.h"
 #include "realjsformatter.h"
 
-#if defined UNICODE || defined _UNICODE
-	DWORD out_codec = CP_UNICODE;
-#else
-	DWORD out_codec = CP_THREAD_ACP;
-#endif
+DWORD out_codec = CP_UTF8;
 
 RealJSFormatter::FormatterOption g_options = {
 	_T('\t'), 1,
