@@ -351,14 +351,14 @@ void RealJSFormatter::processOper() const {
 			case _T('}'):
 				// 激进的策略，} 一直弹到 {
 				// 这样做至少可以使得 {} 之后是正确的
-				do {
+				while (topStack != JS_NULL) {
 					stackPop();
 					if (topStack <= JS_WRAP_LE)
 						--m_nIndents;
 					else if (topStack == JS_BLOCK)
 						break;
 					topStack = stackTop();
-				} while (topStack != JS_NULL);
+				}
 				if (topStack == JS_BLOCK) {
 					topStack = stackTop();
 					// 由"(...)"和"{"三个符号的逻辑保证topStack不会是JS_WRAP

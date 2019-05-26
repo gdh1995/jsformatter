@@ -130,6 +130,7 @@ protected:
 		m_line.setLength(0);
 	}
 
+	inline bool stackEmpty() const { return m_blockStack.empty(); }
 	inline void stackPop() const { return m_blockStack.pop_back(); }
 	inline Byte stackTop() const { return m_blockStack.back(); }
 	inline Byte stackTop2()const { return m_blockStack.end()[-2]; }
