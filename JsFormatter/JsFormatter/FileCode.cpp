@@ -62,8 +62,18 @@ int codec(CharString<char> *file, DWORD oldpage, DWORD const newpage) {
 			oldpage = CP_THREAD_ACP;
 			for (; str < end; str++) {
 				if (*str == '\0') {
-					oldpage = CP_UNICODE;
-					break;
+					int tick = 1;
+					for (; str + tick < end && tick <= 16; tick += 2) {
+						// continous 8 english characters
+						if (str[tick] != '\0' && str[tick + 1] == '\0') {
+							oldpage = CP_UNICODE;
+							tick = -1;
+							break;
+						}
+					}
+					if (oldpage != CP_THREAD_ACP) {
+						break;
+					}
 				}
 			}
 		}
