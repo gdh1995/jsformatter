@@ -24,37 +24,79 @@ CharString<char> file;
 CharString<RealJSFormatter::Char> strJSFormat;
 
 typedef void (voidfunc)();
+extern "C" __declspec(dllexport) int real_main();
 voidfunc read, write, jsFormat, print_help;
 voidfunc *p[] = {read, jsFormat, write};
 
+// release
+extern "C" __declspec(dllexport) int main0(int n, const char *s[]) {
+  if (n < 2) {
+    print_help();
+    return 0;
+  }
+  if (n == 2) {
+    file.copyFrom(s[1], ConstString<char>::lengthOf(s[1]));
+    UInt len = file.size();
+    while (len) {
+      register const char ch = file[--len];
+      if (ch == '.' || ch == '/' || ch == '\\')
+        break;
+    }
+    if (len == 0)
+      len = file.size();
+    file.setLength(len);
+    file.addStr(".fmt.js", 8);
+    s[0] = s[1];
+    s[1] = file.c_str();
+    file.setData(NULL);
+    argn = 2;
+    args = s;
+  }
+  else {
+    argn = n - 1;
+    args = s + 1;
+  }
+  return real_main();
+}
 
-int main(int n, const char *s[]) {
-	if (n < 2) {
-		print_help();
-		return 0;
-	}
-	if (n == 2) {
-		file.copyFrom(s[1], ConstString<char>::lengthOf(s[1]));
-		UInt len = file.size();
-		while (len) {
-			register const char ch = file[--len];
-			if (ch == '.' || ch == '/' || ch == '\\')
-				break;
-		}
-		if (len == 0)
-			len = file.size();
-		file.setLength(len);
-		file.addStr(".fmt.js", 8);
-		s[0] = s[1];
-		s[1] = file.c_str();
-		file.setData(NULL);
-		argn = 2;
-		args = s;
-	}
-	else {
-		argn = n - 1;
-		args = s + 1;
-	}
+extern "C" __declspec(dllexport) int __declspec(noinline) test_target(char *input_path, char *argv_0) {
+  static char dest[512], *(local_args[3]);
+  strcpy(dest, input_path);
+  strcat(dest, ".out");
+  local_args[0] = input_path;
+  local_args[1] = dest;
+  local_args[2] = NULL;
+  args = (const char**)local_args;
+  argn = 2;
+  return real_main();
+}
+
+// test main
+extern "C" __declspec(dllexport)
+int main(int argc, char** argv)
+{
+  if (argc < 2) {
+    printf("Usage: %s <input file>\n", argv[0]);
+    return 0;
+  }
+
+  if (argc == 3 && !strcmp(argv[2], "loop"))
+  {
+    //loop inside application and call target infinitey
+    while (true)
+    {
+      test_target(argv[1], argv[0]);
+    }
+  }
+  else
+  {
+    //regular single target call
+    return test_target(argv[1], argv[0]);
+  }
+}
+
+
+extern "C" __declspec(dllexport) int real_main() {
 	argIndex = 0;
 
 	int i = 0;
@@ -73,6 +115,22 @@ int main(int n, const char *s[]) {
 #endif
 		printf("%s => %s\n", args[argIndex], args[argIndex + 1]);
 	}
+  /* {
+    FILE* fp = fopen("R:\\working\\log.txt", "a+");
+    if (re != 0) {
+      if (err_str)
+        fprintf(fp, "ERROR: %s.\n%s\n", err_str, err_msg ? ((const char *)err_msg) : "");
+      else
+        fprintf(fp, "ERROR: %d @ %d.\n", re, i);
+    }
+    else {
+#if defined __TEST__ && __TEST__ > 0
+      for (i = 0; i < __TEST__; i++) jsFormat();
+#endif
+      fprintf(fp, "%s => %s\n", args[argIndex], args[argIndex + 1]);
+    }
+    fclose(fp);
+  } //*/
 	return re;
 }
 
@@ -84,6 +142,9 @@ Thanks for & core code from: JSToolNpp (www.sunjw.us/jstoolnpp).\n");
 
 void read() {
 	re = FileAnaly::readAndEnsureCode(args[argIndex], &file, out_codec);
+  /* FILE* fp = fopen("R:\\working\\log.txt", "a+");
+  fprintf(fp, "read %s and len=%d, re=%d\n", args[argIndex], file.length(), re);
+  fclose(fp); //*/
 }
 
 void write() {
@@ -110,7 +171,12 @@ void write() {
 		re = 0x14;
 		err_str = "fail to save the data";
 		err_msg = args[argIndex + 1];
-	}
+  }
+  /* {
+    FILE* fp = fopen("R:\\working\\log.txt", "a+");
+    fprintf(fp, "write %s and len=%d, re=%d\n", args[argIndex + 1], strJSFormat.size() * sizeof(RealJSFormatter::Char), re);
+    fclose(fp);
+  } //*/
 }
 
 RealJSFormatter jsformat(NULL, 0, strJSFormat, g_options);
