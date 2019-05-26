@@ -28,6 +28,8 @@ extern "C" __declspec(dllexport) int real_main();
 voidfunc read, write, jsFormat, print_help;
 voidfunc *p[] = {read, jsFormat, write};
 
+RealJSFormatter jsformat(NULL, 0, strJSFormat, g_options);
+
 // release
 extern "C" __declspec(dllexport) int main0(int n, const char *s[]) {
   if (n < 2) {
@@ -68,6 +70,7 @@ extern "C" __declspec(dllexport) int __declspec(noinline) test_target(char *inpu
   local_args[2] = NULL;
   args = (const char**)local_args;
   argn = 2;
+  jsformat.init();
   return real_main();
 }
 
@@ -150,7 +153,7 @@ void read() {
 void write() {
 	re = 0;
 	FILE *fp = fopen(args[argIndex + 1], "wb");
-	if (fp == NULL) {
+	if (fp == NULL || fseek(fp, 0, SEEK_SET) != 0) {
 		re = 0x11;
 		err_str = "fail to open the file to write";
 		err_msg = args[argIndex + 1];
@@ -179,7 +182,6 @@ void write() {
   } //*/
 }
 
-RealJSFormatter jsformat(NULL, 0, strJSFormat, g_options);
 void jsFormat()
 {
 	re = 0;
