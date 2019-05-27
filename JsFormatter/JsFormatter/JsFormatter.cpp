@@ -31,7 +31,8 @@ voidfunc *p[] = {read, jsFormat, write};
 RealJSFormatter jsformat(NULL, 0, strJSFormat, g_options);
 
 // release
-extern "C" __declspec(dllexport) int main0(int n, const char *s[]) {
+//extern "C" __declspec(dllexport)
+int main(int n, const char *s[]) {
   if (n < 2) {
     print_help();
     return 0;
@@ -61,7 +62,8 @@ extern "C" __declspec(dllexport) int main0(int n, const char *s[]) {
   return real_main();
 }
 
-extern "C" __declspec(dllexport) int __declspec(noinline) test_target(char *input_path, char *argv_0) {
+// extern "C" __declspec(dllexport)
+int __declspec(noinline) test_target(char *input_path, char *argv_0) {
   static char dest[512], *(local_args[3]);
   strcpy(dest, input_path);
   strcat(dest, ".out");
@@ -75,8 +77,8 @@ extern "C" __declspec(dllexport) int __declspec(noinline) test_target(char *inpu
 }
 
 // test main
-extern "C" __declspec(dllexport)
-int main(int argc, char** argv)
+//extern "C" __declspec(dllexport)
+int main1(int argc, char** argv)
 {
   if (argc < 2) {
     printf("Usage: %s <input file>\n", argv[0]);
@@ -99,7 +101,8 @@ int main(int argc, char** argv)
 }
 
 
-extern "C" __declspec(dllexport) int real_main() {
+//extern "C" __declspec(dllexport)
+int real_main() {
 	argIndex = 0;
 
 	int i = 0;
