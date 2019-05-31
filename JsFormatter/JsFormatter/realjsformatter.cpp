@@ -252,7 +252,7 @@ void RealJSFormatter::processOper() const {
 					stackPush(JS_BRACKET_GOT);
 				}
 			}
-			else if (ach0 == _T(')') && (getTokenB() == _T('{')))
+			else if (ach0 == _T(')') && (getTokenB() == _T('{') || getTokenB().equals(_T('='), _T('>'))))
 				m_line.more = INSERT_SPACE; // { 或者换行之前留个空格
 			else if (ach0 == _T('(') || ach0 == _T('[')) {
 				// ([ 入栈，增加缩进
@@ -421,7 +421,19 @@ void RealJSFormatter::processOper() const {
 				return;
 			}
 		}
-		else {
+    else if (m_tokenA.equals(_T('='), _T('>'))) {
+      if (topStack == JS_BRACKET_GOT)
+        stackTop(JS_BLOCK_VIRTUAL);
+      if (m_line.more < INSERT_SPACE)
+        m_line.more = INSERT_SPACE;
+      putTokenA(); // 剩余的操作符都是 空格oper空格
+      m_line.more = INSERT_SPACE;
+      if (m_tokenB == _T('{')) {
+        stackPush(JS_BRACKET_GOT);
+      }
+      return;
+    }
+    else {
 			const Char ach0 = m_tokenA[0];
 			const Char ach1 = m_tokenA[1];
 			if ((ach0 == _T('+') && ach1 == _T('+')) || (ach0 == _T('-') && ach1 == _T('-'))
@@ -498,7 +510,8 @@ void RealJSFormatter::processID() const {
 		L_notKeyword:
 		putTokenA();
 		const Token& tokenB = getTokenB();
-		m_line.more = ((tokenB.more != TOKEN_OPER || tokenB == _T('{')) // '{': such as "return {'a':1};"
+		m_line.more = tokenB.more == TOKEN_STRING && tokenB[0] == _T('`') ? INSERT_NONE
+      : ((tokenB.more != TOKEN_OPER || tokenB == _T('{')) // '{': such as "return {'a':1};"
 			|| (tokenB != _T(';') && token_type1 != JS_NULL)
 			) ? INSERT_SPACE : INSERT_UNKNOWN;
 		return;

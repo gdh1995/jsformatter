@@ -16,6 +16,7 @@ int re = 0;
 extern const char *err_str;
 extern const void *err_msg;
 
+bool put_result_to_std_out = false;
 int argn;
 const char **args;
 int argIndex;
@@ -38,22 +39,30 @@ int main(int n, const char *s[]) {
     return 0;
   }
   if (n == 2) {
-    file.copyFrom(s[1], ConstString<char>::lengthOf(s[1]));
-    UInt len = file.size();
-    while (len) {
-      register const char ch = file[--len];
-      if (ch == '.' || ch == '/' || ch == '\\')
-        break;
+    if (!strcmp(s[1], "-")) {
+      s[0] = s[1];
+      argn = 2;
+      args = s;
     }
-    if (len == 0)
-      len = file.size();
-    file.setLength(len);
-    file.addStr(".fmt.js", 8);
-    s[0] = s[1];
-    s[1] = file.c_str();
-    file.setData(NULL);
-    argn = 2;
-    args = s;
+    else {
+      CharString<char> dest;
+      dest.copyFrom(s[1], ConstString<char>::lengthOf(s[1]));
+      UInt len = dest.size();
+      while (len) {
+        register const char ch = dest[--len];
+        if (ch == '.' || ch == '/' || ch == '\\')
+          break;
+      }
+      if (len == 0 || dest[len] != '.')
+        len = dest.size();
+      dest.setLength(len);
+      dest.addStr(".fmt.js", 8);
+      s[0] = s[1];
+      s[1] = dest.c_str();
+      dest.setData(NULL);
+      argn = 2;
+      args = s;
+    }
   }
   else {
     argn = n - 1;
@@ -119,8 +128,10 @@ int real_main() {
 #if defined __TEST__ && __TEST__ > 0
 		for (i = 0;  i < __TEST__; i++) jsFormat();
 #endif
-		printf("%s => %s\n", args[argIndex], args[argIndex + 1]);
 	}
+  if (!put_result_to_std_out && re == 0) {
+    printf("%s => %s\n", args[argIndex], args[argIndex + 1]);
+  }
   /* {
     FILE* fp = fopen("R:\\working\\log.txt", "a+");
     if (re != 0) {
@@ -147,6 +158,17 @@ Thanks for & core code from: JSToolNpp (www.sunjw.us/jstoolnpp).\n");
 }
 
 void read() {
+  if (!strcmp(args[argIndex], "-")) {
+    int offset = 0, line = 0;
+    do {
+      offset += line;
+      file.expand(offset / sizeof(char) + 202);
+      line = fread(((char*)file.c_str()) + offset, 1, 200, stdin);
+    } while (line > 0);
+    file.setLength(offset / sizeof(char));
+    re = 0;
+    return;
+  }
 	re = FileAnaly::readAndEnsureCode(args[argIndex], &file, out_codec);
   /* FILE* fp = fopen("R:\\working\\log.txt", "a+");
   fprintf(fp, "read %s and len=%d, re=%d\n", args[argIndex], file.length(), re);
@@ -155,6 +177,16 @@ void read() {
 
 void write() {
 	re = 0;
+  put_result_to_std_out = !strcmp(args[argIndex + 1], "-");
+  if (put_result_to_std_out) {
+    if (strJSFormat.size() > 0) {
+      fwrite(strJSFormat.str(), strJSFormat.size() * sizeof(RealJSFormatter::Char), 1, stdout);
+      if (strJSFormat[strJSFormat.len() - 1] != '\r' && strJSFormat[strJSFormat.len() - 1] != '\n') {
+        puts("");
+      }
+    }
+    return;
+  }
 	FILE *fp = fopen(args[argIndex + 1], "wb");
 	if (fp == NULL || fseek(fp, 0, SEEK_SET) != 0) {
 		re = 0x11;

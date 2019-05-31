@@ -181,6 +181,31 @@ void JSParser::getTokenRaw(int bFlag) const {
 
 		L_notNumber: ;
 	}
+  else if (charA == _T('`')) {
+    const Char chQuote = charA;
+    register Char chB = charB;
+    for (; chB && chB != chQuote; chB = getChar()) {
+      if (chB == _T('\\')) // 转义字符
+        chB = getChar();
+      else if (chB == _T('$') && (chB = getChar() == _T('{'))) {
+        Char last = chB;
+        int nested = 1;
+        for (; chB = getChar(); last = chB) {
+          if (chB == _T('{') && last != _T('\\')) {
+            nested++;
+          }
+          else if (chB == _T('}') && last != _T('\\')) {
+            nested--;
+            if (nested == 0) {
+              break;
+            }
+          }
+        }
+      }
+    }
+    m_tokenB.more = TOKEN_STRING;
+    goto L_finishReadString;
+  }
 	else if (IsQuote(charA)) { // 引号
 		const Char chQuote = charA;
 		register Char chB = charB;
@@ -256,6 +281,11 @@ void JSParser::getTokenRaw(int bFlag) const {
 		}
 		lastChar(charC);
 	}
+  else if (charA == _T('=') && charB == _T('>')) {
+    // "=>" in an arrow function
+    m_tokenB.more = TOKEN_OPER;
+    lastChar(getChar());
+  }
 	// 更改/mod: ECMAScript的操作符列表不包含"->", 所以屏蔽之
 	//else if ((charA == _T('-') && m_charB == _T('>'))) {
 	//m_charB = getChar();
