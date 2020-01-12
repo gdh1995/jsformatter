@@ -303,7 +303,7 @@ L_finishGetToken: ;
 
 #define canHaveSpecialToken() (m_tokenA.more == TOKEN_ID\
 	&& (m_tokenA.equals(_T("return"), 6) || \
-	m_tokenA.equals(_T("case"), 4)) \
+	m_tokenA.equals(_T("case"), 4) || m_tokenA.equals(_T("void"), 4)) \
 	)
 
 void JSParser::prepareTokenB() const

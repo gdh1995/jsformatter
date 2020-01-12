@@ -510,9 +510,9 @@ void RealJSFormatter::processID() const {
 		L_notKeyword:
 		putTokenA();
 		const Token& tokenB = getTokenB();
-		m_line.more = tokenB.more == TOKEN_STRING && tokenB[0] == _T('`') ? INSERT_NONE
+		m_line.more = tokenB.more == TOKEN_STRING && tokenB[0] == _T('`') ? INSERT_SPACE
       : ((tokenB.more != TOKEN_OPER || tokenB == _T('{')) // '{': such as "return {'a':1};"
-			|| (tokenB != _T(';') && token_type1 != JS_NULL)
+			|| (tokenB != _T(';') && (token_type1 != JS_NULL || m_tokenA.equals(_T("void"), 4)))
 			) ? INSERT_SPACE : INSERT_UNKNOWN;
 		return;
 	}
