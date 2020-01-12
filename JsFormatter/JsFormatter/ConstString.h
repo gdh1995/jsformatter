@@ -11,43 +11,40 @@
 
 typedef unsigned int UInt;
 
-template <typename ttype>
+template <typename ttype, typename ftype = char, typename mtype = unsigned char>
 struct StringStruct {
+  typedef ttype DataType;
+  typedef ftype FlagType;
+  typedef mtype MoreType;
+  /* public: */
+  ttype*	m_data;
 	/* public: */
 		UInt	m_length;
 	/* public: */
-		ttype*	m_data;
-	/* public: */
 	union {
-	struct {
-		char	flag;
-		char	flag2;
-	};
+    ftype	flag;
 		short	m_flag;
 	};
 	/* public: */	
 	union {
-	struct {
-		char	more;
-		char	more2;
-	};
+    mtype	more;
 		short	m_more;
 	};
+  static_assert(sizeof(flag) <= sizeof(ttype*), "sizeof(ftype) must be smaller than a pointer");
+  static_assert(sizeof(mtype) + sizeof(ftype) <= sizeof(ttype*), "sizeof(mtype) must be smaller than a pointer");
 };
 
-template <typename ttype>
-class ConstString: protected StringStruct<ttype> {
+template <typename ttype, typename ftype = char, typename mtype = unsigned char>
+class ConstString: protected StringStruct<ttype, ftype, mtype> {
 public:
 	inline void setData(ttype *const start) { m_data = start; }
 	inline void setLength(const UInt len) { m_length = len; }
 	inline void autoLength() { m_length = lengthOf(m_data); }
 	
 	inline void setFlag (const short flag) { m_flag  = flag ; }
-	inline void setFlag1(const char byte1) {   flag  = byte1; }
-	inline void setFlag2(const char byte2) {   flag2 = byte2; }
+	inline void setFlag1(const FlagType byte1) {   flag  = byte1; }
 	inline short getFlag() const { return m_flag; }
-	inline char getFlag1() const { return  flag ; }
-	inline char getFlag2() const { return  flag2; }
+	inline FlagType getFlag1() const { return  flag ; }
 	
 protected:
 	// 不建议同以'\0'结尾的字符串进行直接比较
@@ -55,9 +52,11 @@ protected:
 	inline  bool operator != (const ttype* const ori) const { return !(this->operator==(ori)); }
 
 public:
-	typedef StringStruct<ttype> BaseString;
-	using BaseString::more;
-	using BaseString::more2;
+	typedef StringStruct<ttype, ftype, mtype> BaseString;
+  using BaseString::DataType;
+  using BaseString::FlagType;
+  using BaseString::MoreType;
+  using BaseString::more;
 	using BaseString::m_more;
 
 	typedef ttype Char;
@@ -112,8 +111,8 @@ public:
 	int trimRight() const;
 };
 
-template <typename ttype>
-bool ConstString<ttype>::operator == (const ttype* const ori) const
+template <typename ttype, typename ftype, typename mtype>
+bool ConstString<ttype, ftype, mtype>::operator == (const ttype* const ori) const
 {
 	if(NULL == ori)
 		return (0 == m_length);
@@ -125,8 +124,8 @@ bool ConstString<ttype>::operator == (const ttype* const ori) const
 	return (0 == *p2);
 }
 
-template <typename ttype>
-bool ConstString<ttype>::equals0(const ttype* const str2) const
+template <typename ttype, typename ftype, typename mtype>
+bool ConstString<ttype, ftype, mtype>::equals0(const ttype* const str2) const
 {
 	register const ttype *p1 = m_data, *p2 = str2, *const end = m_data + m_length;
 	while(p1 < end) {
@@ -136,8 +135,8 @@ bool ConstString<ttype>::equals0(const ttype* const str2) const
 	return true;
 }
 
-template <typename ttype>
-bool ConstString<ttype>::nequals0(const ttype* const str2) const
+template <typename ttype, typename ftype, typename mtype>
+bool ConstString<ttype, ftype, mtype>::nequals0(const ttype* const str2) const
 {
 	register const ttype *p1 = m_data, *p2 = str2, *const end = m_data + m_length;
 	while(p1 < end) {
@@ -147,8 +146,8 @@ bool ConstString<ttype>::nequals0(const ttype* const str2) const
 	return false;
 }
 
-template <typename ttype>
-bool ConstString<ttype>::findIn(const ttype ch, const ttype* const str_to_find_in) {
+template <typename ttype, typename ftype, typename mtype>
+bool ConstString<ttype, ftype, mtype>::findIn(const ttype ch, const ttype* const str_to_find_in) {
 	for (register const ttype *s = str_to_find_in; *s; ) {
 		if (*s++ == ch) {
 			return true;
@@ -157,8 +156,8 @@ bool ConstString<ttype>::findIn(const ttype ch, const ttype* const str_to_find_i
 	return false;
 }
 
-template <typename ttype>
-UInt ConstString<ttype>::index(const ttype tch, const UInt pos) const
+template <typename ttype, typename ftype, typename mtype>
+UInt ConstString<ttype, ftype, mtype>::index(const ttype tch, const UInt pos) const
 {
 	// 为防止 pos < 0 造成 p 溢出后小于end, 有必要直接判断pos和mlength
 	if (pos <= m_length) {
@@ -171,8 +170,8 @@ UInt ConstString<ttype>::index(const ttype tch, const UInt pos) const
 	return 0;
 }
 
-template <typename ttype>
-const ttype* ConstString<ttype>::trim(int* const pend) const {
+template <typename ttype, typename ftype, typename mtype>
+const ttype* ConstString<ttype, ftype, mtype>::trim(int* const pend) const {
 	register const ttype * end = m_data;
 	register const ttype * start = end;
 	if (start != NULL) {
@@ -191,8 +190,8 @@ const ttype* ConstString<ttype>::trim(int* const pend) const {
 	return start;
 }
 
-template <typename ttype>
-int ConstString<ttype>::trimRight() const {
+template <typename ttype, typename ftype, typename mtype>
+int ConstString<ttype, ftype, mtype>::trimRight() const {
 	register const Char *end = m_data;
 	if (end != NULL) {
 		register const Char *const start = end;
@@ -207,8 +206,8 @@ int ConstString<ttype>::trimRight() const {
 	return end - m_data;
 }
 
-template <typename ttype>
-UInt ConstString<ttype>::lengthOf(const ttype* const str) {
+template <typename ttype, typename ftype, typename mtype>
+UInt ConstString<ttype, ftype, mtype>::lengthOf(const ttype* const str) {
 	register UInt size = 0u;
 	for(register const ttype* s = str; *s++; ) { size++; }
 	return size;

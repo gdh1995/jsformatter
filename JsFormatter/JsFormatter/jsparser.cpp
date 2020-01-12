@@ -325,7 +325,7 @@ void JSParser::prepareTokenB() const
 		if (m_tokenA.more >= TOKEN_COMMENT_LINE) {
 		}
 		else if (m_tokenA.more == TOKEN_OPER) {
-			if (! ConstString::findIn(m_tokenA[m_tokenA.size() - 1], s_operCharBeforeReg))
+			if (! Token::findIn(m_tokenA[m_tokenA.size() - 1], s_operCharBeforeReg))
 				return;
 		}
 		else if (! canHaveSpecialToken())
@@ -355,7 +355,7 @@ void JSParser::prepareTokenB() const
 				lastChar(getChar());
 				break;
 			}
-			// 备注/info: 也可以只识别小写"g", "i", "m", 不过正确语法否决了"/a/in{}"的写法
+			// 备注/info: 也可以只识别小写"g", "i", "m", 但为了兼容ES6，匹配所有字母更适合
 			for (; chB = getChar(), chB >= _T('a') && chB <= _T('z'); ) {} // 正则的 flags 部分
 			if (chB == '.')
 				for (; chB = getChar(), IsNormalChar(chB); ) {} // 正则之后的部分

@@ -8,7 +8,7 @@
 namespace KMP
 {
 
-	template <typename ttype>
+	template <typename ttype, typename ftype, typename mtype>
 	void get_next(ttype* str, UInt len, int nextval[])
 	{
 		nextval[0] = -1;
@@ -44,7 +44,7 @@ namespace KMP
 		// }
 	}
 
-	template <typename ttype>
+	template <typename ttype, typename ftype, typename mtype>
 	UInt index_kmp(ttype* s, ttype* t, UInt lens, UInt lent, int next[], UInt pos2)
 	{
 		register int Lindex = pos2 - 1;
@@ -73,8 +73,8 @@ namespace KMP
 	}
 };
 
-template <typename ttype>
-class CharString: public ConstString<ttype>
+template <typename ttype, typename ftype = char, typename mtype = unsigned char>
+class CharString: public ConstString<ttype, ftype, mtype>
 {
 protected:
 	UInt m_capacity;
@@ -91,10 +91,10 @@ public:
 //*/
 
 public:
-	typedef ConstString<ttype> BaseString;
+	typedef ConstString<ttype, ftype, mtype> BaseString;
 
 	explicit inline CharString() {
-		m_data = NULL; m_length = 0; m_flag = 0; more = 0; m_capacity = 0;
+		m_data = NULL; m_length = 0; m_flag = ftype(); more = mtype(); m_capacity = 0;
 	}
 	explicit inline CharString(ttype* ori, UInt len, UInt capa, short flag = 0, short more = 0) {
 		m_data = ori; m_length = len; m_flag = flag; more = more; m_capacity = capa;
@@ -171,8 +171,8 @@ public:
 	UInt index_nokmp(const CharString& tstr, UInt pos) const;
 };
 
-template <typename ttype>
-CharString<ttype>::CharString(const ttype* ori)
+template <typename ttype, typename ftype, typename mtype>
+CharString<ttype, ftype, mtype>::CharString(const ttype* ori)
 {
 	register UInt size = 0u;
 	register const ttype* end = ori;
@@ -191,8 +191,8 @@ CharString<ttype>::CharString(const ttype* ori)
 	more = 0;
 }
 
-template <typename ttype>
-CharString<ttype>::CharString(const ttype* ori, const ttype* end)
+template <typename ttype, typename ftype, typename mtype>
+CharString<ttype, ftype, mtype>::CharString(const ttype* ori, const ttype* end)
 {
 	if(end < ori) {
 		m_data = NULL;
@@ -212,8 +212,8 @@ CharString<ttype>::CharString(const ttype* ori, const ttype* end)
 	more = 0;
 }
 
-template <typename ttype>
-CharString<ttype>::CharString(const CharString& ori)
+template <typename ttype, typename ftype, typename mtype>
+CharString<ttype, ftype, mtype>::CharString(const CharString& ori)
 	: SimpleString((const SimpleString &)ori)
 {
 	// register const ttype *end = ori.m_data + ori.m_length, *pori = ori.m_data;
@@ -228,8 +228,8 @@ CharString<ttype>::CharString(const CharString& ori)
 	p->m_flag = 0;
 }
 
-template <typename ttype>
-CharString<ttype>::CharString(CharString&& ori)
+template <typename ttype, typename ftype, typename mtype>
+CharString<ttype, ftype, mtype>::CharString(CharString&& ori)
 	: SimpleString((const SimpleString &)ori)
 {
 	m_capacity = ori.m_capacity;
@@ -239,8 +239,8 @@ CharString<ttype>::CharString(CharString&& ori)
 	ori.m_flag = 0;
 }
 
-template <typename ttype>
-void CharString<ttype>::copyFrom(const ttype* ori, UInt newlen)
+template <typename ttype, typename ftype, typename mtype>
+void CharString<ttype, ftype, mtype>::copyFrom(const ttype* ori, UInt newlen)
 {
 	if(m_data != ori)
 	{
@@ -253,8 +253,8 @@ void CharString<ttype>::copyFrom(const ttype* ori, UInt newlen)
 	}
 }
 
-template <typename ttype>
-void CharString<ttype>::operator = (const CharString& ori) {
+template <typename ttype, typename ftype, typename mtype>
+void CharString<ttype, ftype, mtype>::operator = (const CharString& ori) {
 	if(m_data && !m_flag)
 		free(m_data);
 	m_data = ori.m_data;
@@ -269,8 +269,8 @@ void CharString<ttype>::operator = (const CharString& ori) {
 	p->m_flag = 0;
 }
 
-template <typename ttype>
-void CharString<ttype>::operator = (CharString&& ori)
+template <typename ttype, typename ftype, typename mtype>
+void CharString<ttype, ftype, mtype>::operator = (CharString&& ori)
 {
 	if(m_data && !m_flag)
 		free(m_data);
@@ -285,8 +285,8 @@ void CharString<ttype>::operator = (CharString&& ori)
 	more = ori.more;
 }
 
-template <typename ttype>
-void CharString<ttype>::operator += (const CharString& ori)
+template <typename ttype, typename ftype, typename mtype>
+void CharString<ttype, ftype, mtype>::operator += (const CharString& ori)
 {
 	if(0 != ori.m_length)
 	{
@@ -300,8 +300,8 @@ void CharString<ttype>::operator += (const CharString& ori)
 	}
 }
 
-template <typename ttype>
-void CharString<ttype>::addLine(const ttype* begin, const ttype*const end, char addCrLf)
+template <typename ttype, typename ftype, typename mtype>
+void CharString<ttype, ftype, mtype>::addLine(const ttype* begin, const ttype*const end, char addCrLf)
 {
 	if(end > begin)
 	{
@@ -319,8 +319,8 @@ void CharString<ttype>::addLine(const ttype* begin, const ttype*const end, char 
 	}
 }
 
-template <typename ttype>
-void CharString<ttype>::addStr(const ttype* begin, const UInt len)
+template <typename ttype, typename ftype, typename mtype>
+void CharString<ttype, ftype, mtype>::addStr(const ttype* begin, const UInt len)
 {
 	if(len) {
 		if(len + 2 >= (int) (m_capacity - m_length))
@@ -333,17 +333,17 @@ void CharString<ttype>::addStr(const ttype* begin, const UInt len)
 	}
 }
 
-template <typename ttype>
-CharString<ttype> CharString<ttype>::Concat(const CharString<ttype>& s1, const CharString<ttype>& s2)
+template <typename ttype, typename ftype, typename mtype>
+CharString<ttype, ftype, mtype> CharString<ttype, ftype, mtype>::Concat(const CharString<ttype, ftype, mtype>& s1, const CharString<ttype, ftype, mtype>& s2)
 {
-	CharString<ttype> temp(s1);
+	CharString<ttype, ftype, mtype> temp(s1);
 	temp += s2;
-	return (CharString<ttype>&&)temp;
+	return (CharString<ttype, ftype, mtype>&&)temp;
 }
 
 // 偏特化未能实现，只好暂时只用strncpy函数
-template <typename ttype>
-int CharString<ttype>::subString(UInt pos, UInt len, CharString<ttype>& target) const
+template <typename ttype, typename ftype, typename mtype>
+int CharString<ttype, ftype, mtype>::subString(UInt pos, UInt len, CharString<ttype, ftype, mtype>& target) const
 {
 	if(pos > 0 && len > 0 && (--pos) + len <= m_length)
 	{
@@ -357,8 +357,8 @@ int CharString<ttype>::subString(UInt pos, UInt len, CharString<ttype>& target) 
 }
 
 // 偏特化未能实现，只好暂时只用strncpy函数
-template <typename ttype>
-CharString<ttype> CharString<ttype>::subString(UInt pos, UInt pos2) const
+template <typename ttype, typename ftype, typename mtype>
+CharString<ttype, ftype, mtype> CharString<ttype, ftype, mtype>::subString(UInt pos, UInt pos2) const
 {
 	if(pos2 > pos && --pos > 0 && pos2 <= m_length)
 	{
@@ -372,8 +372,8 @@ CharString<ttype> CharString<ttype>::subString(UInt pos, UInt pos2) const
 		return CharString();
 }
 
-template <typename ttype>
-UInt CharString<ttype>::index_kmp(ttype *tstr, UInt pos) const
+template <typename ttype, typename ftype, typename mtype>
+UInt CharString<ttype, ftype, mtype>::index_kmp(ttype *tstr, UInt pos) const
 {
 	if(*tstr && pos <= m_length)
 	{
@@ -401,8 +401,8 @@ UInt CharString<ttype>::index_kmp(ttype *tstr, UInt pos) const
 		return 0;
 }
 
-template <typename ttype>
-UInt CharString<ttype>::index_kmp(const CharString<ttype>& tstr, UInt pos) const
+template <typename ttype, typename ftype, typename mtype>
+UInt CharString<ttype, ftype, mtype>::index_kmp(const CharString<ttype, ftype, mtype>& tstr, UInt pos) const
 {
 	if(0 == tstr.m_length || m_length - pos < tstr.m_length - 1)
 		return 0;
@@ -418,8 +418,8 @@ UInt CharString<ttype>::index_kmp(const CharString<ttype>& tstr, UInt pos) const
 	}
 }
 
-template <typename ttype>
-UInt CharString<ttype>::index_nokmp(const CharString<ttype>& tstr, UInt pos) const
+template <typename ttype, typename ftype, typename mtype>
+UInt CharString<ttype, ftype, mtype>::index_nokmp(const CharString<ttype, ftype, mtype>& tstr, UInt pos) const
 {
 	if(0 == tstr.m_length || m_length - pos < tstr.m_length - 1)
 		return 0;

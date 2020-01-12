@@ -52,10 +52,8 @@ public:
 	#define JS_PARSER_CHAR_SIZE 1
 #endif
 
-	typedef ConstString<Char> ConstString; // Token item
-	
 	// 严禁修改TOKEN_xxx的编号顺序, 除非到cpp里进行完全除错
-	enum TOKEN_TYPE {
+	enum TOKEN_TYPE: unsigned char {
 		TOKEN_OPER = 0,
 		
 		TOKEN_COMMON = 1,
@@ -73,7 +71,7 @@ public:
 		TOKEN_NULL = TOKEN_COMMENT_LINE
 	};
 	// .more: Token 类型
-	typedef ConstString Token;
+  typedef ConstString<Char, char, TOKEN_TYPE> Token;
 
 	// 一般字符 (包括数字和 . ) 的bool映射
 	static const  Byte s_normalCharMap[128];

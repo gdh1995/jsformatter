@@ -22,7 +22,7 @@ const char **args;
 int argIndex;
 
 CharString<char> file;
-CharString<RealJSFormatter::Char> strJSFormat;
+RealJSFormatter::OutputString strJSFormat;
 
 typedef void (voidfunc)();
 extern "C" __declspec(dllexport) int real_main();

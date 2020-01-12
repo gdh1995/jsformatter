@@ -29,7 +29,23 @@ class RealJSFormatter: public JSParser
 {
 public:
 	static const UInt sc_lineBufferReservedSize = 4000;
-	typedef CharString<Char> OutputString; // output format
+
+  // "Force"只表示需求这种, 不该起决定作用
+  // 严禁修改INSERT_xxx的编号顺序, 除非到cpp里进行完全除错
+  enum INSERT_MODE: unsigned char {
+    INSERT_NONE = 0,
+    INSERT_UNKNOWN = 1,
+    // -
+    INSERT_SPACE = 2, // 要提前输出一个空格
+    // -
+    INSERT_NEWLINE = 3, // 准备换行, 但有可能变成空格
+    // -
+    INSERT_NEWLINE_SHOULD = 4, // 更应该输出换行
+    // -
+    INSERT_NULL = 5 // 已经输出换行过了
+  };
+
+	typedef CharString<Char, char, INSERT_MODE> OutputString; // output format
 
 	// 更改/warn: 严禁修改JS_xxx的编号顺序, 除非到cpp里进行完全除错
 	enum JS_TOKEN_TYPE {
@@ -100,21 +116,6 @@ public:
 	JS_TOKEN_TYPE findSomeKeyword() const;
 
 protected:
-	// "Force"只表示需求这种, 不该起决定作用
-	// 严禁修改INSERT_xxx的编号顺序, 除非到cpp里进行完全除错
-	enum INSERT_MODE {
-		INSERT_NONE = 0,
-		INSERT_UNKNOWN = 1,
-		// -
-		INSERT_SPACE = 2, // 要提前输出一个空格
-		// -
-		INSERT_NEWLINE = 3, // 准备换行, 但有可能变成空格
-		// -
-		INSERT_NEWLINE_SHOULD = 4, // 更应该输出换行
-		// -
-		INSERT_NULL = 5 // 已经输出换行过了
-	};
-
 	// 带格式输出指定字符串到行缓冲区
 	void putTokenRaw(const Char *const start, int len) const;
 	
