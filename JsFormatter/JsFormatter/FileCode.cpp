@@ -106,7 +106,7 @@ int FileAnaly::readAndEnsureCode(const char* const file, CharString<char>* dest,
 		FILE *fp = fopen(file, "rb");
 		if(NULL == fp)
 		{
-			err_str = "fail to open the file to read";
+			err_str = "failed in opening the file to read";
 			err_msg = file;
 			return -1;
 		}
@@ -134,7 +134,7 @@ int FileAnaly::readAndEnsureCode(const char* const file, CharString<char>* dest,
 			if(len > 0 && fread(dest->c_str(), size, 1, fp) != 1)
 			{
 				re = -3;
-				err_str = "fail to read all data of the file";
+				err_str = "failed in reading all data of the file";
 				err_msg = file;
 			}
 			else

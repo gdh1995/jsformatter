@@ -154,7 +154,7 @@ int real_main() {
 void print_help() {
 	printf("%s%s%s", "\t\
 Javascript formatter ", JS_FORMATTER_VERSION_VALUE, " - by <gdh1995@qq.com>\n\
-Thanks for & core code from: JSToolNpp (www.sunjw.us/jstoolnpp).\n");
+Thanks for & core code from: JSToolNpp <www.sunjw.us/jstoolnpp>.\n");
 }
 
 void read() {
@@ -190,24 +190,24 @@ void write() {
 	FILE *fp = fopen(args[argIndex + 1], "wb");
 	if (fp == NULL || fseek(fp, 0, SEEK_SET) != 0) {
 		re = 0x11;
-		err_str = "fail to open the file to write";
+		err_str = "failed in opening the file to write";
 		err_msg = args[argIndex + 1];
 	}
 	else if (strJSFormat.size() > 0 &&
 		fwrite(strJSFormat.str(), strJSFormat.size() * sizeof(RealJSFormatter::Char), 1, fp) != 1)
 	{
 		re = 0x12;
-		err_str = "fail to write data into the file";
+		err_str = "failed in writing data into the file";
 		err_msg = args[argIndex + 1];
 	}
 	else if (fflush(fp) != 0) {
 		re = 0x13;
-		err_str = "fail to save the data";
+		err_str = "failed in saving the data";
 		err_msg = args[argIndex + 1];
 	}
 	else if (fclose(fp) != 0) {
 		re = 0x14;
-		err_str = "fail to save the data";
+		err_str = "failed in closing the file";
 		err_msg = args[argIndex + 1];
   }
   /* {
