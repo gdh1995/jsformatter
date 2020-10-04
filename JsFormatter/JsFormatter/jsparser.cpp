@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "jsparser.h"
 
 // 更改/mod: 除去'\n', 因为OPER_TOKEN下属字符串不会包含'\n'
-const JSParser::Char JSParser::s_operCharBeforeReg[] = _T("(,=:[!&|?+{};");
+const JSParser::Char JSParser::s_operCharBeforeReg[] = _T("(,=:[!&|?+{};<>~%^*-/");
 
 //	void JSParser::PrintDebug()
 //	{
